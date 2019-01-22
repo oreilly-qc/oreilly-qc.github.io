@@ -253,7 +253,7 @@ function load_json_from_url(file_url)
           }
 
           // Examine the text in the response
-          json_data = response.json().then(function(data) {
+          json_data = await response.json().then(function(data) {
             return data;
           });
           return json_data;
