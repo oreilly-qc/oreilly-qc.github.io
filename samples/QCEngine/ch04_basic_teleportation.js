@@ -1,7 +1,7 @@
 // Chapter 4: Teleportation
 
 // To run this online: http://oreilly-qc.github.io?p=teleport1
-// Github code link:http://oreilly-qc/oreilly-qc.github.io/master/samples/QCEngine/ch04_basic_teleportation.js
+// Github: http://github.com/oreilly-qc/oreilly-qc.github.io/glob/master/samples/QCEngine/ch04_basic_teleportation.js
 
 qc.reset(3);
 var alice = qint.new(1, 'alice');
