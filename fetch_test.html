@@ -249,19 +249,18 @@ function load_json_from_url(file_url)
         function(response) {
           if (response.status !== 200) {
             console.log('Looks like there was a problem. Status Code: ' + response.status);
-            return null;
+            return false;
           }
 
-          // Examine the text in the response
-          json_data = response.json().then(function(data) {
-            return data;
-          }).resolve();
-          return json_data;
+          response.json().then(function(data) {
+            console.log(data);
+          });
+          return true;
         }
       )
       .catch(function(err) {
         console.log('Fetch Error :-S', err);
-        return null;
+        return false;
       });
 }
 
@@ -271,15 +270,20 @@ function load_code_from_url(file_url)
       .then(
         function(response) {
           if (response.status !== 200) {
-            console.log('Looks like there was a problem. Status Code: ' + response.status);
-            return null;
+            console.log('Error loading ' + file_url + '. Status Code: ' + response.status);
+            return false;
           }
-          return response.text().resolve();
+          response.text().then(function(data) {
+            editor.focus();
+            editor.setValue(data);
+            editor.gotoLine(0);
+          });
+          return true;
         }
       )
       .catch(function(err) {
         console.log('Fetch Error :-S', err);
-        return null;
+        return false;
       });
 }
 
@@ -341,14 +345,15 @@ function try_to_get_program_from_url()
         //     }
         // }
         // console.log('testing ' + code_url + ' from ' + get_url_param('p'))
-        code_str = load_code_from_url(code_url);
-        if (code_str == null)
-            code_str = '// sample ' + code_url + ' could not be loaded.\n';
-        else
-            ok = true;
-        editor.focus();
-        editor.setValue(code_str);
-        editor.gotoLine(0);
+        ok = load_code_from_url(code_url);
+
+        if (!ok)
+        {
+            var code_str = '// sample ' + code_url + ' could not be loaded.\n';
+            editor.focus();
+            editor.setValue(code_str);
+            editor.gotoLine(0);
+        }
     }
     return ok;
 }
