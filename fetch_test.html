@@ -253,10 +253,10 @@ function load_json_from_url(file_url)
           }
 
           // Examine the text in the response
-          // response.json().then(function(data) {
-          //   return data;
-          // });
-          return response.json();
+          response.json().then(function(data) {
+            return data;
+          });
+//          return response.json();
         }
       )
       .catch(function(err) {
