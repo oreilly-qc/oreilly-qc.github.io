@@ -244,7 +244,7 @@ window.onload = function() {
 
 function load_json_from_url(file_url)
 {
-    fetch(file_url)
+    fetch(file_url, {cache: 'reload'})
       .then(
         function(response) {
           if (response.status !== 200) {
@@ -266,7 +266,7 @@ function load_json_from_url(file_url)
 
 function load_code_from_url(file_url)
 {
-    fetch(file_url)
+    fetch(file_url, {cache: 'reload'})
       .then(
         function(response) {
           if (response.status !== 200) {
