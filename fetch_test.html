@@ -253,9 +253,9 @@ function load_json_from_url(file_url)
           }
 
           // Examine the text in the response
-          json_data = await response.json().then(function(data) {
+          json_data = response.json().then(function(data) {
             return data;
-          });
+          }).resolve();
           return json_data;
         }
       )
@@ -325,8 +325,8 @@ function try_to_get_program_from_url()
     var code_url = get_url_param('p');
     if (code_url)
     {
-        sample_shortcuts = load_json_from_url('https://oreilly-qc.github.io/sample_shortcuts.json');
-        if (sample_shortcuts && sample_shortcuts[code_url])
+        // sample_shortcuts = load_json_from_url('https://oreilly-qc.github.io/sample_shortcuts.json');
+        if (sample_shortcuts[code_url])
             code_url = sample_shortcuts[code_url];
         // if (shortcut_list.has(code_url))
         //     code_url = shortcut_list.get(code_url);
@@ -566,6 +566,7 @@ function show_state_vector()
 
 
 
+<script type="text/javascript" src="./sample_shortcuts.js"></script>
 
 <script type="text/javascript" src="http://machinelevel.com/qc/qcengine_bitfield.js"></script>
 <script type="text/javascript" src="http://machinelevel.com/qc/qcengine_reg.js"></script>
