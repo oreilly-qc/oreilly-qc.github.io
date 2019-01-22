@@ -242,10 +242,8 @@ window.onload = function() {
 <!-- ////////////////////////////////////////////////////////////////////// -->
 <script> 
 
-function load_code_from_url(file_url)
+function load_json_from_url(file_url)
 {
-    if (file_url == null)
-        file_url = './samples/QCEngine/ch04_simple_teleport.js';
     fetch(file_url)
       .then(
         function(response) {
@@ -258,6 +256,24 @@ function load_code_from_url(file_url)
           response.json().then(function(data) {
             return data;
           });
+        }
+      )
+      .catch(function(err) {
+        console.log('Fetch Error :-S', err);
+        return null;
+      });
+}
+
+function load_code_from_url(file_url)
+{
+    fetch(file_url)
+      .then(
+        function(response) {
+          if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' + response.status);
+            return null;
+          }
+          return response.text();
         }
       )
       .catch(function(err) {
@@ -301,11 +317,6 @@ function get_url_param(param) {
   return vars;
 }
 
-var github_raw_url = 'https://github.com/oreilly-qc/oreilly-qc.github.io/raw/master/samples/';
-var shortcut_list = {
-    'teleport1' : './samples/QCEngine/ch04_simple_teleport.js',
-    'teleport2' : github_raw_url + 'QCEngine/ch04_basic_teleportation.js',
-    };
 
 function try_to_get_program_from_url()
 {
@@ -313,8 +324,9 @@ function try_to_get_program_from_url()
     var code_url = get_url_param('p');
     if (code_url)
     {
-        if (shortcut_list[code_url])
-            code_url = shortcut_list[code_url];
+        sample_shortcuts = load_json_from_url('https://oreilly-qc.github.io/sample_shortcuts.json');
+        if (sample_shortcuts && sample_shortcuts[code_url])
+            code_url = sample_shortcuts[code_url];
         // if (shortcut_list.has(code_url))
         //     code_url = shortcut_list.get(code_url);
         // for (var i = 0; i < shortcut_list.length; ++i)
