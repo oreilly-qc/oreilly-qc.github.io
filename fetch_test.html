@@ -274,7 +274,7 @@ function load_code_from_url(file_url)
             console.log('Looks like there was a problem. Status Code: ' + response.status);
             return null;
           }
-          return response.text();
+          return response.text().resolve();
         }
       )
       .catch(function(err) {
