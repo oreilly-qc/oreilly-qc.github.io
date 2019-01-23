@@ -1,17 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>
+
 <title>Book Samples</title>
 <style type="text/css" media="screen">
-    #editor_div { 
+
+* {
+  box-sizing:border-box;
+}
+
+.left {
+  background-color:#2196F3;
+  padding:20px;
+  float:left;
+  width:20%; /* The width is 20%, by default */
+}
+
+.main {
+  background-color:#f1f1f1;
+  padding:5px;
+  float:left;
+  width:60%; /* The width is 60%, by default */
+}
+
+.right {
+  background-color:#4CAF50;
+  padding:20px;
+  float:left;
+  width:20%; /* The width is 20%, by default */
+}
+
+.editor {
+  background-color:#f1f1f1;
+  padding:5px;
+  float:left;
+  width:100%; /* The width is 60%, by default */
+}
+
+
+/* Use a media query to add a break point at 800px: */
+@media screen and (max-width:800px) {
+  .left, .main, .right {
+    width:100%; /* The width is 100%, when the viewport is 800px or smaller */
+  }
+}
+
+
+
+
+/*    #editor_div { 
         position: absolute;
         display: block;
-        top: 64px;
+        top: 264px;
         right: 0;
         bottom: 10px;
         left: 0;
     }
-
+*/
 /*    #controls_div { 
         position: absolute;
         display: block;
@@ -88,18 +134,49 @@
 </head>
 <body>
 
+<img src="images/cs-title-bar.jpg" style="max-width:100%;height:auto;">
+<br/>
+
+<div class="left">
+  <p>Samples List</p>
+</div>
+
+<div class="main">
+<!--   <p>Main Content</p>
+ -->
+  <input type="button" id="btn_run" value="Run Program" onclick="handle_run_button();">
+  <br/>
+  <div class="editor" id="editor_div">
+  </div>
+</div>
+
+<div class="right">
+  <p>Quantum Gates</p>
+</div>
+
 <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script> -->
 
-
+<!-- https://www.w3schools.com/html/html_responsive.asp
+ -->
 <!-- Editor info: https://ace.c9.io/#nav=embedding
  -->
+
+<!-- <picture>
+  <source srcset="img_smallflower.jpg" media="(max-width: 600px)">
+  <source srcset="img_flowers.jpg" media="(max-width: 1500px)">
+  <source srcset="flowers.jpg">
+  <img src="img_smallflower.jpg" alt="Flowers">
+</picture>
+ -->
+<br/>
+<p style="font-size:2.0vw">
 <b>To our technical reviewers:</b> Hello! Thank you for your help.
 The cosmetics and location of this page will change, but all of the book samples should be available to run
 within this page. If you find issues, please let us know.
 
 Cheers,
 <i>EJ, Nic, Mercedes</i>
-
+</p>
 <br/>
         <span id="example_choice_span">
             <select id="example_choice_sel">
