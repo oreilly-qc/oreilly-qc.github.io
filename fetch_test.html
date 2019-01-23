@@ -474,6 +474,7 @@ function try_to_get_program_from_passed_in_url()
     var engine = get_engine_from_string(engine_str);
     menu = document.getElementById('example_choice_sel');
     menu.value = sample.sample_file;
+    example_menu_changed();
 }
 
 function load_code_sample(sample_str)
@@ -481,7 +482,7 @@ function load_code_sample(sample_str)
     var sample = get_sample_from_string(sample_str);
 
     var qce = engine_list[0];
-    var raw_qce_code_url = 'samples/'+qce.name+'/'+sample.sample_file+qce.suffix;
+    var raw_qce_code_url = qce.subdir + sample.sample_file + qce.suffix;
 
     var github_links_str = '';
 
