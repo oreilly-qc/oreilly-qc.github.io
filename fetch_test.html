@@ -11,31 +11,48 @@
 }
 
 .left {
-  background-color:#2196F3;
-  padding:20px;
+  background-color:#e5e5e5;
+  padding:5px;
+  margin-top:7px;
   float:left;
-  width:20%; /* The width is 20%, by default */
+  width:5%; /* The width is 20%, by default */
 }
 
 .main {
-  background-color:#f1f1f1;
-  padding:5px;
+  background-color:#e5e5e5;
+  padding:0px;
+  margin-top:0px;
   float:left;
-  width:60%; /* The width is 60%, by default */
+  width:45%;
+  max-width:700px;
+  height:250px;
 }
 
 .right {
-  background-color:#4CAF50;
-  padding:20px;
+  background-color:#e5e5e5;
+  padding:5px;
+  margin-top:7px;
   float:left;
-  width:20%; /* The width is 20%, by default */
+  width:50%; /* The width is 20%, by default */
 }
 
-.editor {
-  background-color:#f1f1f1;
-  padding:5px;
-  float:left;
+.editor_controls {
+  background-color:#e5e5e5;
+  padding:0px;
+  float:top;
   width:100%; /* The width is 60%, by default */
+  height:20%;
+}
+.editor {
+  background-color:#e5e5e5;
+  padding:0px;
+  margin-top:1%;
+  margin-left:1%;
+  margin-right:1%;
+  margin-bottom:1%;
+  float:bottom;
+  width:98%;
+  height:76%;
 }
 
 
@@ -110,7 +127,7 @@
         height:500px;
     }
 */
-    #btn_run {
+    #xxxbtn_run {
 /*
         background-color: #4CAF50;
         border: none;
@@ -120,10 +137,26 @@
         text-align: center;
         text-decoration: none;
         display: inline-block;
-        font-size: 32px;
+        font-size: 100px;
         font-family: Arial, Helvetica, sans-serif;
         font-weight: bold;
     }
+
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 1vw 1vw;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 1vw 1vw;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+.button_run {font-size: 2vw;}
+
     input:disabled+label {
       color: #aaa;
     }
@@ -137,23 +170,36 @@
 <img src="images/cs-title-bar.jpg" style="max-width:100%;height:auto;">
 <br/>
 
-<div class="left">
-  <p>Samples List</p>
-</div>
-
-<div class="main">
-<!--   <p>Main Content</p>
+<div style="display: inline-block; width:100%;">
+    <div class="left">
+<!--         what goes here?
  -->
-  <input type="button" id="btn_run" value="Run Program" onclick="handle_run_button();">
-  <br/>
-  <div class="editor" id="editor_div">
-  </div>
-</div>
+ <!--       <p>Samples List</p>
+            <span id="example_choice_span">
+                <select id="example_choice_sel">
+                </select>
+            </span>
+ -->    </div>
 
-<div class="right">
-  <p>Quantum Gates</p>
-</div>
+    <div class="main">
+    <!--   <p>Main Content</p>
+     -->
+      <div class="editor_controls" id="editor_controls_div">
+        <input type="button" class="button button_run" id="btn_run" value="Run Program" onclick="handle_run_button();">
+            <span id="example_choice_span">
+                <select id="example_choice_sel">
+                </select>
+            </span>
+      </div>
+      <div class="editor" id="editor_div">
+      </div>
+    </div>
 
+    <div class="right">
+      <p>Quantum Gates</p>
+    </div>
+</div>
+<br/>
 <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script> -->
 
 <!-- https://www.w3schools.com/html/html_responsive.asp
@@ -177,20 +223,21 @@ within this page. If you find issues, please let us know.
 Cheers,
 <i>EJ, Nic, Mercedes</i>
 </p>
-<br/>
+
+<!-- <br/>
         <span id="example_choice_span">
             <select id="example_choice_sel">
             </select>
         </span>
 <br/>
-
-<br/>
+ -->
+<!-- <br/>
 <input type="button" id="btn_run" value="Run Program" onclick="handle_run_button();">
 <br/>
 
 <div id="editor_div">
 </div>
-
+ -->
 <!-- <div id="editor_frame_div">
     <div id="controls_div">
         <table>
@@ -245,31 +292,31 @@ Cheers,
 var editor_div = document.getElementById('editor_div');
 var editor_frame_div = document.getElementById('editor_frame_div');
 var example_choice_span = document.getElementById('example_choice_span');
-var language_choice_span = document.getElementById('language_choice_span');
+// var language_choice_span = document.getElementById('language_choice_span');
 var script_output_textarea = document.getElementById('script_output_textarea');
-var current_language = 'javascript';
-var button_js = document.getElementById('lang_js');
-var button_py = document.getElementById('lang_py');
-var button_asm = document.getElementById('lang_asm');
+// var current_language = 'javascript';
+// var button_js = document.getElementById('lang_js');
+// var button_py = document.getElementById('lang_py');
+// var button_asm = document.getElementById('lang_asm');
 
 function handle_run_button()
 {
-    if (current_language != 'javascript')
-    {
-        var message;
-        if (current_language == 'python')
-            message = 'To run the Python QISKit examples, please install QISKit at https://qiskit.org and then paste the sample code into your local editor.';
-        if (current_language == 'asm')
-            message = 'To run the QASM examples, please visit the IBM Quantum Experience website at https://quantumexperience.ng.bluemix.net';
-        panel_staff.setVisible(false);
-        panel_chart.setVisible(false);
-        alert(message);
-    }
-    else
-    {
-        run_script();
-        show_state_vector();
-    }
+    // if (current_language != 'javascript')
+    // {
+    //     var message;
+    //     if (current_language == 'python')
+    //         message = 'To run the Python QISKit examples, please install QISKit at https://qiskit.org and then paste the sample code into your local editor.';
+    //     if (current_language == 'asm')
+    //         message = 'To run the QASM examples, please visit the IBM Quantum Experience website at https://quantumexperience.ng.bluemix.net';
+    //     panel_staff.setVisible(false);
+    //     panel_chart.setVisible(false);
+    //     alert(message);
+    // }
+    // else
+    // {
+    run_script();
+    show_state_vector();
+    // }
 }
 
 function handle_checkboxes()
@@ -366,21 +413,19 @@ function load_code_from_url(file_url)
 
 function make_sample_menu()
 {
-    sample_list = []
-//    test_load('');
     str = '';
     str += '<select id="example_choice_sel" onchange="example_menu_changed();">';
-    for (i = 0; i < sample_list.length; ++i)
+    for (i = 0; i < sample_menu.length; ++i)
     {
-        sample = sample_list[i];
-        str += '<option value="' + sample.id + '">';
-        str += sample.menu_name;
+        sample = sample_menu[i];
+        str += '<option value="' + sample.sample_file + '">';
+        str += sample.menu_title;
         str += '</option>';
     }
     str += '</select>';
     example_choice_span.innerHTML = str;
 
-    try_to_get_program_from_url()
+    // try_to_get_program_from_url()
     example_menu_changed();
 }
 
@@ -402,35 +447,44 @@ function get_url_param(param) {
 
 function try_to_get_program_from_url()
 {
-    var ok = false;
-    var code_url = get_url_param('p');
-    if (code_url)
+    var sample_str = get_url_param('p');
+    var engine_str = get_url_param('e');
+
+    var engine = engine_list[0];
+    var sample = sample_menu[0];
+
+    for (var i = 0; i < engine_list.length; ++i)
     {
-        // sample_shortcuts = load_json_from_url('https://oreilly-qc.github.io/sample_shortcuts.json');
-        if (sample_shortcuts[code_url])
-            code_url = sample_shortcuts[code_url];
-        // if (shortcut_list.has(code_url))
-        //     code_url = shortcut_list.get(code_url);
-        // for (var i = 0; i < shortcut_list.length; ++i)
-        // {
-        //     console.log('shortcut ' + i + ' is ' + shortcut_list[i][0] + ' , ' + shortcut_list[i][1]);
-
-        //     if (program_url == shortcut_list[i][0])
-        //     {
-        //         program_url = shortcut_list[i][1];
-        //         break;
-        //     }
-        // }
-        // console.log('testing ' + code_url + ' from ' + get_url_param('p'))
-        ok = load_code_from_url(code_url);
-
-        if (!ok)
+        var e = engine_list[i];
+        if (engine_str == e.name)
         {
-            var code_str = '// sample ' + code_url + ' could not be loaded.\n';
-            editor.focus();
-            editor.setValue(code_str);
-            editor.gotoLine(0);
+            engine = e;
+            break;
         }
+    }
+
+    for (var i = 0; i < sample_menu.length; ++i)
+    {
+        var s = sample_menu[i];
+        if (sample_str == s.sample_file || sample_str == s.shortcut)
+        {
+            sample = s;
+            break;
+        }
+    }
+
+    var qce = engine_list[0];
+    var raw_qce_code_url = 'samples/'+qce.name+'/'+sample.sample_file+qce.suffix;
+
+    var github_links_str = '';
+
+    ok = load_code_from_url(raw_qce_code_url);
+    if (!ok)
+    {
+        var code_str = '// sample ' + raw_qce_code_url + ' could not be loaded.\n';
+        editor.focus();
+        editor.setValue(code_str);
+        editor.gotoLine(0);
     }
     return ok;
 }
@@ -479,56 +533,56 @@ function example_menu_changed()
     clear_output();
 }
 
-function load_example(id)
-{
-    for (i = 0; i < sample_list.length; ++i)
-    {
-        sample = sample_list[i];
-        if (sample.id == id)
-        {
-            var id_lang = setup_program_in_language(id);
-            source_area = document.getElementById(id_lang);
-            if (source_area != null)
-            {
-                editor.focus();
-                editor.setValue(source_area.value);
-                editor.gotoLine(0);
-                setup_script_panels(sample);
-            }
-            return;
-        }
-    }
-}
+// function load_example(id)
+// {
+//     for (i = 0; i < sample_list.length; ++i)
+//     {
+//         sample = sample_list[i];
+//         if (sample.id == id)
+//         {
+//             var id_lang = setup_program_in_language(id);
+//             source_area = document.getElementById(id_lang);
+//             if (source_area != null)
+//             {
+//                 editor.focus();
+//                 editor.setValue(source_area.value);
+//                 editor.gotoLine(0);
+//                 setup_script_panels(sample);
+//             }
+//             return;
+//         }
+//     }
+// }
 
-function setup_program_in_language(id)
-{
-    var src_js = document.getElementById(id + '_javascript');
-    var src_py = document.getElementById(id + '_python');
-    var src_asm = document.getElementById(id + '_asm');
-    button_js.disabled = (src_js == null);
-    button_py.disabled = (src_py == null);
-    button_asm.disabled = (src_asm == null);
-    var id_lang = id + '_' + current_language;
-    source_area = document.getElementById(id_lang);
-    if (source_area == null)
-    {
-        // If the language isn't supported, switch to JavaScript
-        current_language = 'javascript'
-        id_lang = id + '_' + current_language;
-    }
-    set_current_language_checkbox();
-    return id_lang;
-}
+// function setup_program_in_language(id)
+// {
+//     var src_js = document.getElementById(id + '_javascript');
+//     var src_py = document.getElementById(id + '_python');
+//     var src_asm = document.getElementById(id + '_asm');
+//     button_js.disabled = (src_js == null);
+//     button_py.disabled = (src_py == null);
+//     button_asm.disabled = (src_asm == null);
+//     var id_lang = id + '_' + current_language;
+//     source_area = document.getElementById(id_lang);
+//     if (source_area == null)
+//     {
+//         // If the language isn't supported, switch to JavaScript
+//         current_language = 'javascript'
+//         id_lang = id + '_' + current_language;
+//     }
+//     set_current_language_checkbox();
+//     return id_lang;
+// }
 
-function set_current_language_checkbox()
-{
-    if (current_language == 'javascript')
-        button_js.checked = true;
-    if (current_language == 'python')
-        button_py.checked = true;
-    if (current_language == 'asm')
-        button_asm.checked = true;
-}
+// function set_current_language_checkbox()
+// {
+//     if (current_language == 'javascript')
+//         button_js.checked = true;
+//     if (current_language == 'python')
+//         button_py.checked = true;
+//     if (current_language == 'asm')
+//         button_asm.checked = true;
+// }
 
 function LoadUserName() {}
 
@@ -536,12 +590,12 @@ function setup_script_panels(sample)
 {
     if (panel_staff)
     {
-        if (current_language != 'javascript')
-        {
-            panel_staff.setVisible(false);
-            panel_chart.setVisible(false);
-            return;
-        }
+        // if (current_language != 'javascript')
+        // {
+        //     panel_staff.setVisible(false);
+        //     panel_chart.setVisible(false);
+        //     return;
+        // }
         // panel_staff.div.parentNode.removeChild(panel_staff.div);
         // console.log('div');
         // console.log(panel_staff);
@@ -605,8 +659,8 @@ function clear_output()
 
 function rewind_to_beginning()
 {
-  if (current_language != 'javascript')
-    return;
+  // if (current_language != 'javascript')
+  //   return;
   console.log('instructions: ' + qc.qReg.staff.insertionStart);
   qc.qReg.staff.rewind_insertion_to_start();
 }
