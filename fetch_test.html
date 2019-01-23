@@ -425,8 +425,7 @@ function make_sample_menu()
     str += '</select>';
     example_choice_span.innerHTML = str;
 
-    // try_to_get_program_from_url()
-    example_menu_changed();
+    try_to_get_program_from_passed_in_url();
 }
 
 // get_url_param() is adapted from JeffreyCrofte's work here: https://www.creativejuiz.fr/blog/en/javascript-en/read-url-get-parameters-with-javascript
@@ -444,34 +443,42 @@ function get_url_param(param) {
   return vars;
 }
 
+function get_sample_from_string(sample_str)
+{
+    for (var i = 0; i < sample_menu.length; ++i)
+    {
+        var sample = sample_menu[i];
+        if (sample_str == sample.sample_file || sample_str == sample.shortcut)
+            return sample;
+    }
+    return sample_menu[0];
+}
 
-function try_to_get_program_from_url()
+function get_engine_from_string(engine_str)
+{
+    for (var i = 0; i < engine_list.length; ++i)
+    {
+        var engine = engine_list[i];
+        if (engine_str == engine.sample_file || sample_str == engine.shortcut)
+            return engine;
+    }
+    return engine_list[0];
+}
+
+function try_to_get_program_from_passed_in_url()
 {
     var sample_str = get_url_param('p');
     var engine_str = get_url_param('e');
 
-    var engine = engine_list[0];
-    var sample = sample_menu[0];
+    var sample = get_sample_from_string(sample_str);
+    var engine = get_engine_from_string(engine_str);
+    menu = document.getElementById('example_choice_sel');
+    menu.value = sample.sample_file;
+}
 
-    for (var i = 0; i < engine_list.length; ++i)
-    {
-        var e = engine_list[i];
-        if (engine_str == e.name)
-        {
-            engine = e;
-            break;
-        }
-    }
-
-    for (var i = 0; i < sample_menu.length; ++i)
-    {
-        var s = sample_menu[i];
-        if (sample_str == s.sample_file || sample_str == s.shortcut)
-        {
-            sample = s;
-            break;
-        }
-    }
+function load_code_sample(sample_str)
+{
+    var sample = get_sample_from_string(sample_str);
 
     var qce = engine_list[0];
     var raw_qce_code_url = 'samples/'+qce.name+'/'+sample.sample_file+qce.suffix;
@@ -530,6 +537,8 @@ function example_menu_changed()
     //     panel_chart.setVisible(false);
     // }
 
+    menu = document.getElementById('example_choice_sel');
+    load_code_sample(menu.value);
     clear_output();
 }
 
