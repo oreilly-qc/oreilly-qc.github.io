@@ -331,6 +331,7 @@ function handle_run_button()
     // }
     // else
     // {
+    setup_script_panels(null)
     run_script();
     show_state_vector();
     // }
@@ -635,6 +636,8 @@ function setup_script_panels(sample)
         // qc.reset(sample.num_qubits);
         // qc.write(0);
         // qint.new(sample.num_qubits, 'reg');
+
+        sample = {num_instructions:20,num_qubits:18,num_circle_cols:8,num_circle_rows:2};
 
         var left = 510;
         var top = 260;
