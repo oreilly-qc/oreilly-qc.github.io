@@ -2,33 +2,8 @@
 //   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
 //   O'Reilly Media
 
-// To run this online, go to http://oreilly-qc.github.io?p=8-2
-// Implementing the phase_est primitive
-
-function phase_est(theta, out_res)
-{
-    // Main phase estimation single run
-    // var theta = 80 // The val we want to find
-    // var out_res = 5
-    qc.reset(out_res+1);
-    // The output register that will read phi
-    var q_out = qint.new(out_res, 'q_out');
-    // The register that we will apply conditional u on
-    var q_in = qint.new(1, 'q_in');
-    // Prepare the input register in eigenstate
-    q_in.write(0);
-    // HAD the output register
-    q_out.had();
-    // Apply conditional powers of u
-    for (j = 0; j < out_res; j++) 
-        cont_u(theta, 2**j, 2**(out_res), 2**j);
-
-    // Inverse QFT on output register
-    // (Note qft backwards and doesn't include 
-    // exchanges in QCEngine at the moment)
-    qft_flip(out_res);
-    q_out.QFT();
-}
+// To run this online, go to http://oreilly-qc.github.io?p=8-1
+// Using the phase_est primitive
 
 function main()
 {
@@ -63,6 +38,31 @@ function cont_u(theta, q1, q2, iter)
             qc.phase(-theta / 2, q2);
         }
     }
+}
+
+function phase_est(theta, out_res)
+{
+    // Main phase estimation single run
+    // var theta = 80 // The val we want to find
+    // var out_res = 5
+    qc.reset(out_res+1);
+    // The output register that will read phi
+    var q_out = qint.new(out_res, 'q_out');
+    // The register that we will apply conditional u on
+    var q_in = qint.new(1, 'q_in');
+    // Prepare the input register in eigenstate
+    q_in.write(0);
+    // HAD the output register
+    q_out.had();
+    // Apply conditional powers of u
+    for (j = 0; j < out_res; j++) 
+        cont_u(theta, 2**j, 2**(out_res), 2**j);
+
+    // Inverse QFT on output register
+    // (Note qft backwards and doesn't include 
+    // exchanges in QCEngine at the moment)
+    qft_flip(out_res);
+    q_out.QFT();
 }
 
 var qft_flip = function(N, flipqint)
