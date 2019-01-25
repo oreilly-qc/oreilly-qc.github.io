@@ -20,8 +20,10 @@ var sample_menu = [
     {shortcut:'3-2', menu_title:'Ex 3-2: Entangled qubits', sample_file: 'ch03_entangled_qubits',          num_qubits: 2, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'3-3', menu_title:'Ex 3-3: Remote-controlled randomness', sample_file: 'ch03_remote_random', num_qubits: 2, num_instructions: 8, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 
-    {shortcut:'4-1', menu_title:'Ex 4-1: Basic teleportation',     sample_file: 'ch04_basic_teleportation', num_qubits: 3, num_instructions: 24, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'4-2', menu_title:'Ex 4-2: A fly in the teleporter', sample_file: 'ch04_teleport_fly',        num_qubits: 24, num_instructions: 60, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'4-1', menu_title:'Ex 4-1: Basic teleportation',            sample_file: 'ch04_basic_teleportation',   num_qubits: 3, num_instructions: 24, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'4-2', menu_title:'Ex 4-2: A fly in the teleporter',        sample_file: 'ch04_teleport_fly',          num_qubits: 24, num_instructions: 60, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'4-3', menu_title:'Ex 4-3: Quantum computing in the cloud', sample_file: 'ch04_teleport_cloud',        num_qubits: 3, num_instructions: 24, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'4-4', menu_title:'Ex 4-4: Teleporting entanglement',       sample_file: 'ch04_teleport_entanglement', num_qubits: 3, num_instructions: 24, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 
     {shortcut:'5-1', menu_title:'Ex 5-1: Increment and decrement',        sample_file: 'ch05_increment',             num_qubits: 4, num_instructions: 18, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'5-2', menu_title:'Ex 5-2: Adding two quantum integers',    sample_file: 'ch05_quantum_add',           num_qubits: 8, num_instructions: 20, num_circle_cols: 8, num_circle_rows: 8, circle_scale: 1.0, gate_scale: 1.0},
