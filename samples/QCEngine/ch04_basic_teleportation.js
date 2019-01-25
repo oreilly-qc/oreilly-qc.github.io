@@ -1,7 +1,10 @@
-// Chapter 4: Teleportation
+// Programming Quantum Computers
+//   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
+//   O'Reilly Media
 
-// To run this online: http://oreilly-qc.github.io?p=teleport1
-// Github: http://github.com/oreilly-qc/oreilly-qc.github.io/glob/master/samples/QCEngine/ch04_basic_teleportation.js
+// To run this online, go to http://oreilly-qc.github.io?p=4-1
+
+// This sample demonstrates basic teleportation.
 
 qc.reset(3);
 var alice = qint.new(1, 'alice');

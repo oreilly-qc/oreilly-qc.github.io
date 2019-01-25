@@ -1,0 +1,39 @@
+// Programming Quantum Computers
+//   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
+//   O'Reilly Media
+
+// To run this online, go to http://oreilly-qc.github.io?p=5-2
+
+// In this sample, b will be incremented, but ONLY
+// for terms where a is less than 3
+
+// Initialize
+num_qubits = 6;
+qc.reset(num_qubits);
+a = qint.new(3, 'a');
+b = qint.new(3, 'b');
+
+// prepare
+qc.codeLabel('a = (1, 5)');
+a.write(1);
+a.hadamard(0x4);
+qc.codeLabel('');
+qc.nop();
+qc.codeLabel('b = (1, 3)');
+b.write(1);
+b.hadamard(0x2);
+b.phase(45, 0x2);
+qc.codeLabel('');
+qc.nop();
+
+// if a < 3 then b += 1
+qc.codeLabel('a -= 3');
+a.subtract(3);
+qc.codeLabel('');
+qc.nop();
+qc.codeLabel('if (a < 0) then b++');
+b.add(1, a.bits(0x4));
+qc.codeLabel('');
+qc.nop();
+qc.codeLabel('a += 3');
+a.add(3);
