@@ -460,8 +460,26 @@ function load_code_from_url(file_url)
                 }
             }
         };
-
+        xmlhttp.onreadystatechange = function()
+        {
+            if (xmlhttp.readyState === 4)
+            {
+                var response = JSON.parse(xmlhttp.responseText);
+                if (xmlhttp.status === 200 && response.status === 'OK')
+                {
+                   // console.log('successful');
+                }
+                else
+                {
+                    var code_str = '// sample ' + file_url + ' could not be loaded.\n';
+                    editor.focus();
+                    editor.setValue(code_str);
+                    editor.gotoLine(0);
+                }
+            }
+        };
         xhr_http_request.send(null);
+        return true;
     }
 }
 
