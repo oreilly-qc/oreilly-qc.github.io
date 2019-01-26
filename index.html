@@ -412,27 +412,57 @@ function load_json_from_url(file_url)
       });
 }
 
+var xhr_http_request = null; // The http request
 function load_code_from_url(file_url)
 {
-    fetch(file_url, {cache: 'reload'})
-      .then(
-        function(response) {
-          if (response.status !== 200) {
-            console.log('Error loading ' + file_url + '. Status Code: ' + response.status);
+    var use_fetch = false; // fetch is not supported on Kindles
+    if (use_fetch)
+    {
+        fetch(file_url, {cache: 'reload'})
+          .then(
+            function(response) {
+              if (response.status !== 200) {
+                console.log('Error loading ' + file_url + '. Status Code: ' + response.status);
+                return false;
+              }
+              response.text().then(function(data) {
+                editor.focus();
+                editor.setValue(data);
+                editor.gotoLine(0);
+              });
+              return true;
+            }
+          )
+          .catch(function(err) {
+            console.log('Fetch Error :-S', err);
             return false;
-          }
-          response.text().then(function(data) {
-            editor.focus();
-            editor.setValue(data);
-            editor.gotoLine(0);
           });
-          return true;
-        }
-      )
-      .catch(function(err) {
-        console.log('Fetch Error :-S', err);
-        return false;
-      });
+    }
+    else
+    {
+        xhr_http_request = new XMLHttpRequest();
+        xhr_http_request.open('GET', file_url, true);
+
+        // If specified, responseType must be empty string or "text"
+        xhr_http_request.responseType = 'text';
+
+        xhr_http_request.onload = function ()
+        {
+            if (xhr_http_request.readyState === xhr_http_request.DONE)
+            {
+                if (xhr_http_request.status === 200)
+                {
+                    // console.log(xhr_http_request.response);
+                    // console.log(xhr_http_request.responseText);
+                    editor.focus();
+                    editor.setValue(xhr_http_request.responseText);
+                    editor.gotoLine(0);
+                }
+            }
+        };
+
+        xhr_http_request.send(null);
+    }
 }
 
 function make_sample_menu()
