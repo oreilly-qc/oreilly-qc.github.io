@@ -460,12 +460,12 @@ function load_code_from_url(file_url)
                 }
             }
         };
-        xmlhttp.onreadystatechange = function()
+        xhr_http_request.onreadystatechange = function()
         {
-            if (xmlhttp.readyState === 4)
+            if (xhr_http_request.readyState === 4)
             {
-                var response = JSON.parse(xmlhttp.responseText);
-                if (xmlhttp.status === 200 && response.status === 'OK')
+                var response = JSON.parse(xhr_http_request.responseText);
+                if (xhr_http_request.status === 200 && response.status === 'OK')
                 {
                    // console.log('successful');
                 }
