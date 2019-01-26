@@ -208,7 +208,7 @@
     <!--   <p>Main Content</p>
      -->
       <div class="editor_controls" id="editor_controls_div">
-        <input type="button" class="button button_run" id="btn_run" value="Run Program" onclick="handle_run_button();">
+        <input type="button" class="button button_run" id="btn_run" value="Run Program" onclick="handle_run_button();" title="Hotkey: pressing shift-Enter will also run the program.">
             <span id="example_choice_span">
                 <select id="example_choice_sel">
                 </select>
@@ -311,6 +311,13 @@ Cheers,
 <script>    
     var editor = ace.edit("editor_div");
     editor.session.setMode("ace/mode/javascript");
+    editor.commands.addCommand({
+        name: "run",
+        bindKey: {win: "Shift-Enter", mac: "Shift-Enter"},
+        exec: function(editor) {
+            handle_run_button();
+        }
+    });
 
 var editor_div = document.getElementById('editor_div');
 var editor_frame_div = document.getElementById('editor_frame_div');
