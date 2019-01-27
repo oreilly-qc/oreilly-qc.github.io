@@ -40,7 +40,7 @@
   padding:0px;
   margin-top:0px;
   float:left;
-  width:45%;
+  width:50%;
   max-width:700px;
   height:250px;
 }
@@ -56,6 +56,7 @@
 .editor_controls {
   background-color:#e5e5e5;
   padding:0px;
+  margin:0px;
   float:top;
   width:100%; /* The width is 60%, by default */
   height:20%;
@@ -63,18 +64,18 @@
 .editor {
   background-color:#e5e5e5;
   padding:0px;
-  margin-top:1%;
+  margin-top:0%;
   margin-left:1%;
   margin-right:1%;
-  margin-bottom:1%;
+  margin-bottom:0%;
   float:bottom;
   width:98%;
-  height:76%;
+  height:80%;
 }
 
 
 /* Use a media query to add a break point at 800px: */
-@media screen and (max-width:800px) {
+@media screen and (max-aspect-ratio:4/3) {
   .left, .main, .right {
     width:100%; /* The width is 100%, when the viewport is 800px or smaller */
   }
@@ -163,14 +164,15 @@
   background-color: #4CAF50; /* Green */
   border: none;
   color: white;
-  padding: 1vw 1vw;
+  padding: 0vw 1vw;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  margin: 1vw 1vw;
+  margin: 0vw 0vw;
   cursor: pointer;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
+  height: 100%;
 }
 .button_run {font-size: 2vw;}
 
@@ -194,25 +196,35 @@
 <br/>
 
 <div style="display: inline-block; width:100%;">
-    <div class="left">
-<!--         what goes here?
+<!--    <div class="left">
+         what goes here?
  -->
  <!--       <p>Samples List</p>
             <span id="example_choice_span">
                 <select id="example_choice_sel">
                 </select>
             </span>
- -->    </div>
-
+    </div>
+ -->
     <div class="main">
     <!--   <p>Main Content</p>
      -->
       <div class="editor_controls" id="editor_controls_div">
-        <input type="button" class="button button_run" id="btn_run" value="Run Program" onclick="handle_run_button();" title="Hotkey: pressing shift-Enter will also run the program.">
-            <span id="example_choice_span">
-                <select id="example_choice_sel">
-                </select>
-            </span>
+        <table>
+            <tr>
+                <td>
+                    <input type="button" class="button button_run" id="btn_run" value="Run Program" onclick="handle_run_button();" title="Hotkey: pressing shift-Enter will also run the program.">
+                </td>
+                <td>
+                    <span id="example_choice_span">
+                        <select id="example_choice_sel">
+                        </select>
+                    </span>
+                    <span id="example_github_span">
+                    </span>
+                </td>
+            </tr>
+        </table>
       </div>
       <div class="editor" id="editor_div">
       </div>
@@ -322,6 +334,7 @@ Cheers,
 var editor_div = document.getElementById('editor_div');
 var editor_frame_div = document.getElementById('editor_frame_div');
 var example_choice_span = document.getElementById('example_choice_span');
+var example_github_span = document.getElementById('example_github_span');
 // var language_choice_span = document.getElementById('language_choice_span');
 var script_output_textarea = document.getElementById('script_output_textarea');
 // var current_language = 'javascript';
@@ -387,6 +400,7 @@ function check_for_editor_resize()
 }
 window.onload = function() {
     check_for_editor_resize();
+    fetch_sample_contents();
     make_sample_menu();
 };
 
@@ -419,7 +433,6 @@ function load_json_from_url(file_url)
       });
 }
 
-var xhr_http_request = null; // The http request
 function load_code_from_url(file_url)
 {
     var use_fetch = false; // fetch is not supported on Kindles
@@ -447,22 +460,22 @@ function load_code_from_url(file_url)
     }
     else
     {
-        xhr_http_request = new XMLHttpRequest();
-        xhr_http_request.open('GET', file_url, true);
+        var http_request = new XMLHttpRequest();
+        http_request.open('GET', file_url, true);
 
         // If specified, responseType must be empty string or "text"
-        xhr_http_request.responseType = 'text';
+        http_request.responseType = 'text';
 
-        xhr_http_request.onload = function ()
+        http_request.onload = function ()
         {
-            if (xhr_http_request.readyState === xhr_http_request.DONE)
+            if (http_request.readyState === http_request.DONE)
             {
-                if (xhr_http_request.status === 200)
+                if (http_request.status === 200)
                 {
-                    // console.log(xhr_http_request.response);
-                    // console.log(xhr_http_request.responseText);
+                    // console.log(http_request.response);
+                    // console.log(http_request.responseText);
                     editor.focus();
-                    editor.setValue(xhr_http_request.responseText);
+                    editor.setValue(http_request.responseText);
                     editor.gotoLine(0);
                 }
                 else
@@ -472,11 +485,48 @@ function load_code_from_url(file_url)
                     editor.setValue(code_str);
                     editor.gotoLine(0);
                 }
+                make_github_source_links();
             }
         };
-        xhr_http_request.send(null);
+        http_request.send(null);
         return true;
     }
+    make_github_source_links();
+}
+
+var current_sample = null;
+var all_sample_contents = {};
+function fetch_one_sample_dir(engine)
+{
+    var base_url = 'https://api.github.com/repos/oreilly-qc/oreilly-qc.github.io/contents/samples/';
+    var http_request = new XMLHttpRequest();
+    http_request.open('GET', base_url + engine.name, true);
+
+    // If specified, responseType must be empty string or "text"
+    http_request.responseType = 'text';
+
+    http_request.onload = function ()
+    {
+        if (http_request.readyState === http_request.DONE)
+        {
+            if (http_request.status === 200)
+            {
+                engine.dir_list = http_request.responseText;
+                make_github_source_links();
+            }
+            else
+            {
+                engine.dir_list = '';
+            }
+        }
+    };
+    http_request.send(null);
+}
+
+function fetch_sample_contents()
+{
+    for (var i = 0; i < engine_list.length; ++i)
+        fetch_one_sample_dir(engine_list[i]);
 }
 
 function make_sample_menu()
@@ -496,8 +546,37 @@ function make_sample_menu()
     try_to_get_program_from_passed_in_url();
 }
 
+function make_github_source_links()
+{
+    var sample = current_sample;
+    str = '<br/>';
+//    if (sample != null)
+    {
+        str += 'View source in Github: ';
+        for (i = 0; i < engine_list.length; ++i)
+        {
+            engine = engine_list[i];
+            if (i > 0)
+                str += ' / ';
+            var sample_ok = engine.dir_list.includes(sample.sample_file);
+            if (sample_ok)
+            {
+                var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/blob/master/samples/';
+                link += engine.name + '/' + sample.sample_file + engine.suffix;
+                str += '<b><a href="'+link+'">'+engine.name+'</a></b>';
+            }
+            else
+            {
+                str += '<span style="color:#aaa">' + engine.name + '</span>';
+            }
+        }
+    }
+    example_github_span.innerHTML = str;
+}
+
 // get_url_param() is adapted from JeffreyCrofte's work here: https://www.creativejuiz.fr/blog/en/javascript-en/read-url-get-parameters-with-javascript
-function get_url_param(param) {
+function get_url_param(param)
+{
   var vars = {};
   window.location.href.replace( location.hash, '' ).replace( 
     /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
@@ -548,6 +627,7 @@ function try_to_get_program_from_passed_in_url()
 function load_code_sample(sample_str)
 {
     var sample = get_sample_from_string(sample_str);
+    current_sample = sample;
 
     var qce = engine_list[0];
     var raw_qce_code_url = qce.subdir + sample.sample_file + qce.suffix;

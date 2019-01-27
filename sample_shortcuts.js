@@ -5,9 +5,9 @@
 // };
 
 var engine_list = [
-    {name : 'QCEngine', suffix : '.js',   subdir : 'samples/QCEngine/'},
-    {name : 'Qiskit',   suffix : '.py',   subdir : 'samples/Qiskit/'},
-    {name : 'QASM',     suffix : '.qasm', subdir : 'samples/QASM/'},
+    {name : 'QCEngine', suffix : '.js',   subdir : 'samples/QCEngine/', dir_list : ''},
+    {name : 'Qiskit',   suffix : '.py',   subdir : 'samples/Qiskit/',   dir_list : ''},
+    {name : 'QASM',     suffix : '.qasm', subdir : 'samples/QASM/',     dir_list : ''},
 ];
 
 var sample_menu = [
