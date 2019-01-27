@@ -45,9 +45,9 @@
 }
 
 .right {
-  background-color:#e5e5e5;
-  padding:5px;
-  margin-top:7px;
+  background-color:#fff;
+  padding:0px;
+  margin-top:0px;
   float:left;
   width:50%; /* The width is 20%, by default */
 }
@@ -68,14 +68,32 @@
   margin-bottom:1%;
   float:bottom;
   width:98%;
-  height:250px;
+  height:500px;
+}
+.samplechoice {
+    font-size: 14pt;
+}
+/*
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 10px;
 }
 
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: rgba(0,0,0,.5);
+  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+*/
 
 /* Use a media query to add a break point at 800px: */
 @media screen and (max-aspect-ratio:4/3) {
   .left, .main, .right {
-    width:100%; /* The width is 100%, when the viewport is 800px or smaller */
+    width:100%;
+    max-width: 100%;
+  }
+  .editor {
+    height:250px;
   }
 }
 
@@ -158,8 +176,8 @@
         font-weight: bold;
     }
 
-.button {
-  background-color: #4CAF50; /* Green */
+/*.button {
+  background-color: #4CAF50;
   border: none;
   border-radius: 20px;
   color: white;
@@ -173,14 +191,49 @@
   font-weight: bold;
   height: 100%;
 }
-.button_run {font-size: 14pt;}
+*/
+/* some styling tips from https://css-tricks.com/overriding-default-button-styles/ */
+.button {
+    display: inline-block;
+    border: none;
+    padding: 1rem 1rem;
+    margin: 0;
+    text-decoration: none;
+    background: #0069ed;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background 250ms ease-in-out, 
+                transform 150ms ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
 
-    input:disabled+label {
-      color: #aaa;
-    }
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-    }
+.button:hover {
+    background: #0053ba;
+}
+
+.button:focus {
+    outline: 1px solid #fff;
+    outline-offset: -4px;
+}
+
+.button:active {
+    transform: scale(0.95);
+}
+
+.button_run {font-size: 16pt;}
+
+input:disabled+label {
+  color: #aaa;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 </style>
 </head>
 <body>
@@ -188,7 +241,7 @@
 <img src="images/cs-title-bar.jpg" style="max-width:100%;height:auto;">
 <br/>
 
-<p style="font-size:1.5vw">
+<p style="font-size:14pt">
   These code samples are from the O'Reilly book <b><i><a href="http://shop.oreilly.com/product/0636920167433.do">Programming Quantum Computers</a></i></b>, available for pre-order at <b><a href="https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683">Amazon</a></b> and other retailers.
 </p>
 <p style="font-size:1.5vw"><b>(page formatting and layout is under construction)</b></p>
@@ -229,8 +282,7 @@
       </div>
     </div>
 
-    <div class="right">
-      <p>Quantum Gates</p>
+    <div id="staff_popin_div" class="right">
     </div>
 </div>
 <br/>
@@ -336,6 +388,7 @@ var example_choice_span = document.getElementById('example_choice_span');
 var example_github_span = document.getElementById('example_github_span');
 // var language_choice_span = document.getElementById('language_choice_span');
 var script_output_textarea = document.getElementById('script_output_textarea');
+var staff_popin_div = document.getElementById('staff_popin_div');
 // var current_language = 'javascript';
 // var button_js = document.getElementById('lang_js');
 // var button_py = document.getElementById('lang_py');
@@ -358,6 +411,8 @@ function handle_run_button()
     // {
     setup_script_panels(null)
     run_script();
+    panel_staff.staff.fullSnapshot();
+    //panel_staff.style.width = '100%';
     show_state_vector();
     // }
 }
@@ -531,7 +586,7 @@ function fetch_sample_contents()
 function make_sample_menu()
 {
     str = '';
-    str += '<select id="example_choice_sel" onchange="example_menu_changed();">';
+    str += '<select class="samplechoice" id="example_choice_sel" onchange="example_menu_changed();">';
     for (i = 0; i < sample_menu.length; ++i)
     {
         sample = sample_menu[i];
@@ -787,6 +842,23 @@ function setup_script_panels(sample)
         panel_staff.draw();
         panel_chart.draw();
     }
+    pop_in(panel_staff.div, staff_popin_div);
+    pop_in(panel_chart.div, staff_popin_div);
+}
+
+function pop_in(child_div, parent_div)
+{
+    parent_div.appendChild(child_div);
+    child_div.style.position = 'relative';
+    child_div.style.top = 0;
+    child_div.style.left = 0;
+    child_div.style.width = '100%';
+    child_div.style.height = '200px';
+    child_div.style.marginLeft = 0;
+    child_div.style.marginTop = 0;
+    child_div.style.boxShadow = 'none';
+    child_div.style.overflow = 'scroll';
+    child_div.style.display = 'block';
 }
 
 function run_script()
