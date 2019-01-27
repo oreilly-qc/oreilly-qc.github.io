@@ -30,6 +30,7 @@ var sample_menu = [
     {shortcut:'5-3', menu_title:'Ex 5-3: Add-squared',                    sample_file: 'ch05_add_squared',           num_qubits: 8, num_instructions: 26, num_circle_cols: 8, num_circle_rows: 8, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'5-4', menu_title:'Ex 5-4: Quantum conditional execution',  sample_file: 'ch05_conditional_execution', num_qubits: 8, num_instructions: 26, num_circle_cols: 8, num_circle_rows: 8, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'5-5', menu_title:'Ex 5-5: Quantum conditional phase flip', sample_file: 'ch05_conditional_phase',     num_qubits: 8, num_instructions: 26, num_circle_cols: 8, num_circle_rows: 4, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'5-6', menu_title:'Ex 5-6: CNOT logic',                     sample_file: 'ch05_cnot_logic',            num_qubits: 3, num_instructions: 12, num_circle_cols: 8, num_circle_rows: 4, circle_scale: 1.0, gate_scale: 1.0},
 
     {shortcut:'6-1', menu_title:'Ex 6-1: Grover iterations',  sample_file: 'ch06_grover_iterations', num_qubits: 4, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'6-2', menu_title:'Ex 6-2: Grover frequencies', sample_file: 'ch06_grover_freq',       num_qubits: 4, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
