@@ -286,6 +286,54 @@ body {
     </div>
 </div>
 <br/>
+
+
+
+<table>
+  <tr>
+    <td align="center" valign="top">
+      <canvas id="display_full_res" width="128" height="128" style="border:1px solid #008;"></canvas><br/>
+      <span id="display_full_res_span">output images<br/>go here.</span>
+    </td>
+    <td align="center" valign="top">
+      <canvas id="display_ground_truth" width="128" height="128" style="border:1px solid #008;"></canvas><br/>
+      <span id="display_ground_truth_span"></span>
+    </td>
+    <td align="center" valign="top">
+      <canvas id="display_1xaa" width="128" height="128" style="border:1px solid #fff;"></canvas><br/>
+      <span id="display_1xaa_span"></span>
+    </td>
+  </tr><tr>
+    <td align="center" valign="top">
+      <canvas id="display_qfull_res" width="128" height="128" style="border:1px solid #008;"></canvas><br/>
+      <span id="display_qfull_res_span"></span>
+    </td>
+    <td align="center" valign="top">
+      <canvas id="display_qpeek" width="128" height="128" style="border:1px solid #fff;"></canvas><br/>
+      <span id="display_qpeek_span"></span>
+    </td>
+    <td align="center" valign="top">
+      <canvas id="display_qrand" width="128" height="128" style="border:1px solid #fff;"></canvas><br/>
+      <span id="display_qrand_span"></span>
+    </td>
+    <td align="center" valign="top">
+      <canvas id="display_qss" width="128" height="128" style="border:1px solid #fff;"></canvas><br/>
+      <span id="display_qss_span"></span>
+    </td>
+    <td align="center" valign="top">
+      <canvas id="display_qss_hw" width="128" height="128" style="border:1px solid #fff;"></canvas><br/>
+      <span id="display_qss_hw_span"></span>
+    </td>
+    <td align="center" valign="top">
+      <canvas id="display_cwtable" width="128" height="128" style="border:1px solid #008;"></canvas><br/>
+      <span id="display_cwtable_span"></span>
+    </td>
+  </tr>
+</table>
+
+
+
+
 <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script> -->
 
 <!-- https://www.w3schools.com/html/html_responsive.asp
@@ -920,6 +968,12 @@ function show_state_vector()
                 // list[index].graphState = false;
                 // list[index].stateVector = false;
                 // list[index].collapsed = true;
+
+
+
+
+
+
 
 </script>
 
