@@ -11,13 +11,16 @@
 //   ...so when experimenting here it's best to start with small changes.
 
 var res_full_bits    = 6;  // Number of bits in x,y in the complete image. 8 means the image is 256x256
-var res_aa_bits      = 2;  // Number of bits in x,y per sub-pixel tile. 2 means tiles are 4x4
-var num_counter_bits = 1;  // The effective bit depth of the result.
+var res_aa_bits      = 4;  // Number of bits in x,y per sub-pixel tile. 2 means tiles are 4x4
+var num_counter_bits = 4;  // The effective bit depth of the result.
 var accum_bits       = 10; // Scratch qubits for the shader. More scratch bits means we can do more complicated math
 
 var res_full        = 1 << res_full_bits; // The x and y size of the full image, before sampling.
 var res_aa          = 1 << res_aa_bits;   // The x and y size of each subpixel tile.
 var res_tiles       = res_full / res_aa;  // The number of tiles which make up one image row or column.
+
+var qss_full_lookup_table = null;
+var qss_count_to_hits = [];
 
 // The main function draws the full-size image for reference, then constructs the QSS lookup table,
 // and then finally uses QSS to draw the sampled image.
@@ -29,10 +32,13 @@ function main()
     qc.disableAnimation();
 
     // Draw the whole image, so we can see what we're sampling.
-    draw_full_res_image();
+//    draw_full_res_image();
 
-    var shader_params = {};
-    test_quantum_supersample_counter3(shader_params);
+    // Create the QSS lookup table
+    // This can be done beforehand and saved for use with multiple QSS images
+    create_qss_lookup_table();
+
+//    do_qss_image();
 }
 
 // The quantum pixel shader is the function which is called for each iteration.
@@ -179,250 +185,101 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
     }
 }
 
-var auto_counter_tables = [];
-
-function get_counter_table(qres_bits, sp)
-{
-  test_create_all_tables(qres_bits, qres_bits, num_counter_bits, num_counter_bits, sp);
-  return auto_counter_tables[qres_bits][num_counter_bits];
-}
-
-var count_full_translation_table = null;
-
 function trace_merge(x, count, condition)
 {
   for (var i = 0; i < count; ++i)
   {
     x.not(i);
     x.phaseShift(180, ~0, condition);
-//    xor_color(x, condition, null);
-    x.not(i);
-  }
-}
-function trace_merge_nophase(x, count, condition, out_bit)
-{
-  var mask = qintMask([x, ~0]);
-  mask.orEquals(condition);
-  for (var i = 0; i < count; ++i)
-  {
-    x.not(i);
-    xor_color(null, mask, out_bit);
     x.not(i);
   }
 }
 
-function test_create_all_tables(min_qres_bits, max_qres_bits, min_counter_bits, max_counter_bits, sp)
+function create_qss_lookup_table()
+{
+    var num_subpixels = 1 << (res_aa_bits + res_aa_bits);
+    qss_full_lookup_table = null;
+    for (var hits = 0; hits <= num_subpixels; ++hits)
+        create_table_column(hits);
+    var cw = qss_full_lookup_table;
+
+    qss_count_to_hits = [];
+    for (var count = 0; count < cw.length; ++count)
     {
-        var counter_tables = auto_counter_tables;
-        for (var qres_bits = 0; qres_bits <= max_qres_bits; ++qres_bits)
+        var best_hits = 0;
+        var best_prob = 0;
+        for (var hits = 0; hits < cw[0].length; ++hits)
         {
-            while (counter_tables.length <= qres_bits)
-                counter_tables.push([]);
-
-
-            for (var counter_bits = 0; counter_bits <= max_counter_bits; ++counter_bits)
+            if (best_prob < cw[count][hits])
             {
-                count_full_translation_table = null;
-                if (qres_bits >= min_qres_bits && counter_bits >= min_counter_bits)
-                {
-                    var max_hits = (1 << (qres_bits - 0));
-                    for (var hits = 0; hits <= max_hits; ++hits)
-                        test_create_table(qres_bits, counter_bits, hits, sp);
-                }
-                var table_obj = {probabilities: null,
-                count_wave_table_full: count_full_translation_table
+                best_prob = cw[count][hits];
+                best_hits = hits;
             }
-
-            var cw = table_obj.count_wave_table_full;
-            if (cw)
-            {
-                // Build the count-to-hits lookup
-                table_obj.count_to_hits = [];
-                for (var count = 0; count < cw.length; ++count)
-                {
-                    var best_hits = 0;
-                    var best_prob = 0;
-                    for (var hits = 0; hits < cw[0].length; ++hits)
-                    {
-                        if (best_prob < cw[count][hits])
-                        {
-                            best_prob = cw[count][hits];
-                            best_hits = hits;
-                        }
-                    }
-                    table_obj.count_to_hits.push(best_hits);
-                }
-                // Build the count-to-hits (second-most-likely) lookup
-                table_obj.count_to_hits2 = [];
-                for (var count = 0; count < cw.length; ++count)
-                {
-                    var skip_hits = table_obj.count_to_hits[count];
-                    var best_hits = 0;
-                    var best_prob = 0;
-                    for (var hits = 0; hits < cw[0].length; ++hits)
-                    {
-                        if (hits != skip_hits && best_prob < cw[count][hits])
-                        {
-                            best_prob = cw[count][hits];
-                            best_hits = hits;
-                        }
-                    }
-                    // Now find the best count for that number of hits
-                    best_prob = 0;
-                    best_cc = 0;
-                    for (var cc = 0; cc < cw.length; ++cc)
-                    {
-                        if (table_obj.count_to_hits[cc] != skip_hits && best_prob < cw[cc][best_hits])
-                        {
-                            best_prob = cw[cc][best_hits];
-                            best_cc = cc;
-                        }
-                    }
-                    table_obj.count_to_hits2.push(table_obj.count_to_hits[best_cc]);
-                }
-
-                // Build the count-to-hits (third-most-likely) lookup
-                table_obj.count_to_hits3 = [];
-                for (var count = 0; count < cw.length; ++count)
-                {
-                    var skip_hits1 = table_obj.count_to_hits[count];
-                    var skip_hits2 = table_obj.count_to_hits2[count];
-                    var best_hits = 0;
-                    var best_prob = 0;
-                    for (var hits = 0; hits < cw[0].length; ++hits)
-                    {
-                        if (hits != skip_hits1 && hits != skip_hits2 &&
-                                best_prob < cw[count][hits])
-                        {
-                            best_prob = cw[count][hits];
-                            best_hits = hits;
-                        }
-                    }
-                    // Now find the best count for that number of hits
-                    best_prob = 0;
-                    best_cc = 0;
-                    for (var cc = 0; cc < cw.length; ++cc)
-                    {
-                        if (table_obj.count_to_hits[cc] != skip_hits1 &&
-                                table_obj.count_to_hits[cc] != skip_hits2 &&
-                                best_prob < cw[cc][best_hits])
-                        {
-                            best_prob = cw[cc][best_hits];
-                            best_cc = cc;
-                        }
-                    }
-                    table_obj.count_to_hits3.push(table_obj.count_to_hits[best_cc]);
-                }
-                // Draw the cw table
-                if (cw && display_cwtable)
-                {
-                    var disp = display_cwtable;
-                    var ysize = cw.length;
-                    var xsize = cw[0].length;
-                    disp.setup(xsize, ysize, 16);//789789
-                    for (var y = 0; y < ysize; ++y)
-                        for (var x = 0; x < xsize; ++x)
-                            disp.pixel(x, y, cw[y][x]);
-                    disp.span.innerHTML = 'QSS Probability Table<br/>' +
-                                            'horiz = '+(1 << (res_aa_bits*res_aa_bits))+' hits<br/>' +
-                                            'vert = '+(1 << counter_bits)+' output gray levels';
-                }
-            }
-            while (counter_tables[qres_bits].length <= counter_bits)
-                counter_tables[qres_bits].push(null);
-            counter_tables[qres_bits][counter_bits] = table_obj;
         }
+        qss_count_to_hits.push(best_hits);
     }
-    auto_counter_tables = counter_tables;
-    var str = JSON.stringify(auto_counter_tables);
-    console.log(str);
-}
-
-function get_pregenerated_counter_tables()
-{
-  return null;
-}
-
-// THIS WILL CREATE the table!
-function test_create_table(bits, count_bits, width, sp)
-{
-
-// If we have a table for this already, skip the construction.
-    var tables = get_pregenerated_counter_tables();
-    if (tables
-        && tables.length > bits
-        && tables[bits].length > count_bits
-        && tables[bits][count_bits])
+    // Draw the cw table
+    if (qss_full_lookup_table && display_cwtable)
     {
-        console.log('Using pre-generated table for qx_bits='+bits+' count_bits='+count_bits);
-        count_full_translation_table = tables[bits][count_bits];
-        return;
+        var disp = display_cwtable;
+        var ysize = cw.length;
+        var xsize = cw[0].length;
+        disp.setup(xsize, ysize, 16);
+        for (var y = 0; y < ysize; ++y)
+            for (var x = 0; x < xsize; ++x)
+                disp.pixel(x, y, cw[y][x]);
+        disp.span.innerHTML = 'QSS Probability Table<br/>' +
+                                'horiz = '+num_subpixels+' hits<br/>' +
+                                'vert = '+(1 << num_counter_bits)+' output gray levels';
     }
+}
 
+function create_table_column(color)
+{
+    qc.reset((res_aa_bits + res_aa_bits) + num_counter_bits);
+    var num_subpixels = 1 << (res_aa_bits + res_aa_bits);
 
+    var true_count = color;
 
-    qc.reset(bits + count_bits);
-    var max_hits = 1 << bits;
-
-    var true_count = width;
-
-    var ray_x = qint.new(bits, 'ray_x');
-    var count = qint.new(count_bits, 'count');
+    var qxy = qint.new(res_aa_bits + res_aa_bits, 'qxy');
+    var count = qint.new(num_counter_bits, 'count');
     count.write(0);
     count.hadamard();
-    ray_x.write(0);
-    ray_x.hadamard(~0);
-
+    qxy.write(0);
+    qxy.hadamard(~0);
 
     var qcolor_index = 0;
-    for (var i = 0; i < count_bits; ++i)
+    for (var i = 0; i < num_counter_bits; ++i)
     {
         var reps = 1 << i;
         var condition = qintMask([count, reps]);
-        var xmask = qintMask([ray_x, ~0]);
-        var xmask_cond = qintMask([ray_x, ~0]);
+        var xmask = qintMask([qxy, ~0]);
+        var xmask_cond = qintMask([qxy, ~0]);
         xmask_cond.orEquals(condition);
         for (var j = 0; j < reps; ++j)
         {
-            trace_merge(ray_x, true_count, condition);
-            grover_iteration(ray_x, condition);
+            trace_merge(qxy, true_count, condition);
+            grover_iteration(qxy, condition);
         }
     }
     invQFT(count);
 
     // Construct the translation table
-    // TODO: We can also construct a confidence table from this.
-    if (1)
+    var table = [];
+    for (var i = 0; i < (1 << num_counter_bits); ++i)
+        table.push(count.peekProbability(i));
+    if (qss_full_lookup_table == null)
     {
-        var table = [];
-        for (var i = 0; i < (1 << count_bits); ++i)
-            table.push(count.peekProbability(i));
-        if (count_full_translation_table == null)
+        qss_full_lookup_table = [];
+        for (var i = 0; i < (1 << num_counter_bits); ++i)
         {
-            count_full_translation_table = [];
-            for (var i = 0; i < (1 << count_bits); ++i)
-            {
-                count_full_translation_table.push([]);
-                for (var j = 0; j < max_hits; ++j)
-                    count_full_translation_table[i].push(0);
-            }
-        }
-        for (var i = 0; i < (1 << count_bits); ++i)
-        {
-            count_full_translation_table[i][true_count] = table[i];
-        }
-        if (1)  // Check and print
-        {
-            var str = '';
-            for (var i = 0; i < (1 << count_bits); ++i)
-            {
-                for (var j = 0; j < max_hits; ++j)
-                    str += '' + count_full_translation_table[i][j] + ' ';
-                str += '\n'
-            }
-            console.log(str);
+            qss_full_lookup_table.push([]);
+            for (var j = 0; j < num_subpixels; ++j)
+                qss_full_lookup_table[i].push(0);
         }
     }
+    for (var col = 0; col < (1 << num_counter_bits); ++col)
+        qss_full_lookup_table[col][true_count] = table[col];
 }
 
 
@@ -501,7 +358,7 @@ function qss_tile(sp, is_qne)
     invQFT(sp.counter);
 
     sp.readVal = sp.counter.read();
-    sp.hits = sp.hit_table.count_to_hits[sp.readVal];
+    sp.hits = qss_count_to_hits[sp.readVal];
     sp.color = sp.hits / (res_aa * res_aa);
     sp.qne_readVal = sp.readVal;
     sp.qne_hits = sp.hits;
@@ -510,11 +367,11 @@ function qss_tile(sp, is_qne)
 }
 
 // This one is the best so far.
-function test_quantum_supersample_counter3(sp)
+function do_qss_image()
 {
+    var sp = {};
     qc.disableAnimation();
     qc.disableRecording();
-    sp.hit_table = get_counter_table(2 * res_aa_bits, num_counter_bits, sp);
 
     var total_qubits = 2 * res_aa_bits + num_counter_bits + accum_bits;
     if (enableGPUBlocks)
