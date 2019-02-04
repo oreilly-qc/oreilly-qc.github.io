@@ -11,7 +11,7 @@
 //   ...so when experimenting here it's best to start with small changes.
 
 var res_full_bits    = 6;  // Number of bits in x,y in the complete image. 8 means the image is 256x256
-var res_aa_bits      = 4;  // Number of bits in x,y per sub-pixel tile. 2 means tiles are 4x4
+var res_aa_bits      = 2;  // Number of bits in x,y per sub-pixel tile. 2 means tiles are 4x4
 var num_counter_bits = 4;  // The effective bit depth of the result.
 var accum_bits       = 10; // Scratch qubits for the shader. More scratch bits means we can do more complicated math
 
@@ -28,17 +28,14 @@ function main()
 {
     setup_display_boxes();
 
-    qc.clearOutput();
-    qc.disableAnimation();
-
     // Draw the whole image, so we can see what we're sampling.
-//    draw_full_res_image();
+    draw_full_res_image();
 
     // Create the QSS lookup table
     // This can be done beforehand and saved for use with multiple QSS images
     create_qss_lookup_table();
 
-//    do_qss_image();
+    do_qss_image();
 }
 
 // The quantum pixel shader is the function which is called for each iteration.
@@ -71,7 +68,6 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
         if (dy < 0) dy = -(dy + 1);
         dx *= res_aa;
         dy *= res_aa;
-//        console.log('tx'+tx+' ty'+ty+' dx'+dx+' dy'+dy);
         qacc.add(dx * dx + dy * dy - br * br);
         if (tx < bx)
             qx.not();
@@ -185,22 +181,34 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
     }
 }
 
-function trace_merge(x, count, condition)
+// Flip num_terms_to_flip terms of quantum reg x, conditional on condition
+function flip_n_terms(x, num_terms_to_flip, condition)
 {
-  for (var i = 0; i < count; ++i)
-  {
-    x.not(i);
-    x.phaseShift(180, ~0, condition);
-    x.not(i);
-  }
+    // This is a simple brute-force way to do it, but as this function
+    // is only used to build the look-up tables, that's ok.
+    var terms_flipped = 0;
+    for (var i = 0; i < num_terms_to_flip; ++i)
+    {
+        x.not(i);
+        x.phaseShift(180, ~0, condition);
+        x.not(i);
+    }
 }
 
 function create_qss_lookup_table()
 {
+    qc.clearOutput();
+    qc.disableAnimation();
+    qc.disableRecording();
+
+    qc.reset((res_aa_bits + res_aa_bits) + num_counter_bits);
+    var qxy = qint.new(res_aa_bits + res_aa_bits, 'qxy');
+    var qcount = qint.new(num_counter_bits, 'count');
+
     var num_subpixels = 1 << (res_aa_bits + res_aa_bits);
     qss_full_lookup_table = null;
     for (var hits = 0; hits <= num_subpixels; ++hits)
-        create_table_column(hits);
+        create_table_column(hits, qxy, qcount);
     var cw = qss_full_lookup_table;
 
     qss_count_to_hits = [];
@@ -230,44 +238,39 @@ function create_qss_lookup_table()
                 disp.pixel(x, y, cw[y][x]);
         disp.span.innerHTML = 'QSS Probability Table<br/>' +
                                 'horiz = '+num_subpixels+' hits<br/>' +
-                                'vert = '+(1 << num_counter_bits)+' output gray levels';
+                                'vert = '+(1 << num_counter_bits)+' sample rows';
     }
 }
 
-function create_table_column(color)
+function create_table_column(color, qxy, qcount)
 {
-    qc.reset((res_aa_bits + res_aa_bits) + num_counter_bits);
     var num_subpixels = 1 << (res_aa_bits + res_aa_bits);
 
     var true_count = color;
 
-    var qxy = qint.new(res_aa_bits + res_aa_bits, 'qxy');
-    var count = qint.new(num_counter_bits, 'count');
-    count.write(0);
-    count.hadamard();
-    qxy.write(0);
-    qxy.hadamard(~0);
+    // Put everything into superposition
+    qc.write(0);
+    qcount.hadamard();
+    qxy.hadamard();
 
     var qcolor_index = 0;
     for (var i = 0; i < num_counter_bits; ++i)
     {
         var reps = 1 << i;
-        var condition = qintMask([count, reps]);
-        var xmask = qintMask([qxy, ~0]);
-        var xmask_cond = qintMask([qxy, ~0]);
-        xmask_cond.orEquals(condition);
+        var condition = qcount.bits(reps);
+        var mask_with_condition = qxy.bits().or(condition);
         for (var j = 0; j < reps; ++j)
         {
-            trace_merge(qxy, true_count, condition);
-            grover_iteration(qxy, condition);
+            flip_n_terms(qxy, true_count, condition);
+            grover_iteration(qxy.bits(), mask_with_condition);
         }
     }
-    invQFT(count);
+    invQFT(qcount);
 
     // Construct the translation table
     var table = [];
     for (var i = 0; i < (1 << num_counter_bits); ++i)
-        table.push(count.peekProbability(i));
+        table.push(qcount.peekProbability(i));
     if (qss_full_lookup_table == null)
     {
         qss_full_lookup_table = [];
@@ -289,6 +292,7 @@ function create_table_column(color)
 
 function draw_full_res_image()
 {
+    qc.clearOutput();
     qc.disableAnimation();
     qc.disableRecording();
 
@@ -310,7 +314,7 @@ function draw_full_res_image()
 
     for (var y = 0; y < res_full; ++y)
     {
-        console.log('row ' + y);
+        console.log('full-res row ' + y + ' of ' + res_full);
         for (var x = 0; x < res_full; ++x)
         {
             var tx = x >> res_aa_bits;
@@ -328,31 +332,22 @@ function draw_full_res_image()
 
 function qss_tile(sp, is_qne)
 {
-//  console.log(' ty ' + sp.ty + ' tx ' + sp.tx);
     sp.qx.write(0);
     sp.qy.write(0);
     sp.counter.write(0);
-    if (sp.qcolor)
-        sp.qcolor.write(0);
     sp.qx.hadamard();
     sp.qy.hadamard();
     sp.counter.hadamard();
     for (var cbit = 0; cbit < num_counter_bits; ++cbit)
     {
         var iters = 1 << cbit;
-        var condition = qintMask([sp.counter, iters]);
-        var qxqy_mask = qintMask([sp.qx, ~0, sp.qy, ~0]);
-        var qxqy_cond = qintMask([sp.counter, iters, sp.qx, ~0, sp.qy, ~0]);
-        if (sp.qcolor)
-            shader_quantum(sp.qx, sp.qy, sp.tx, sp.ty, sp.qacc, condition, sp.qcolor);
+        var qxy_bits = sp.qx.bits().or(sp.qy.bits());
+        var condition = sp.counter.bits(iters);
+        var mask_with_condition = qxy_bits.or(condition);
         for (var i = 0; i < iters; ++i)
         {
-            if (sp.qcolor)
-                sp.qcolor.phaseShift(180, ~0, condition);
-            else
-                shader_quantum(sp.qx, sp.qy, sp.tx, sp.ty, sp.qacc, condition, sp.qcolor);
-
-            grover_iteration_mask(qxqy_mask, qxqy_cond);
+            shader_quantum(sp.qx, sp.qy, sp.tx, sp.ty, sp.qacc, condition, sp.qcolor);
+            grover_iteration(qxy_bits, mask_with_condition);
         }
     }
     invQFT(sp.counter);
@@ -370,6 +365,7 @@ function qss_tile(sp, is_qne)
 function do_qss_image()
 {
     var sp = {};
+    qc.clearOutput();
     qc.disableAnimation();
     qc.disableRecording();
 
@@ -389,7 +385,7 @@ function do_qss_image()
     sp.qacc.write(0);
     for (sp.ty = 0; sp.ty < res_tiles; ++sp.ty)
     {
-        console.log('ty ' + sp.ty);
+        console.log('QSS row ' + sp.ty + ' of ' + res_tiles);
         for (sp.tx = 0; sp.tx < res_tiles; ++sp.tx)
         {
             qss_tile(sp);
@@ -400,22 +396,12 @@ function do_qss_image()
 }
 
 
-function grover_iteration(x, condition)
-{
-    qc.codeLabel('Grover iteration');
-    x.hadamard();
-    x.not();
-    x.phaseShift(180, ~0, condition);
-    x.not();
-    x.hadamard();
-}
-
-function grover_iteration_mask(mask, condition)
+function grover_iteration(mask, mask_with_condition)
 {
     qc.codeLabel('Grover iteration');
     qc.hadamard(mask);
     qc.not(mask);
-    qc.phase(180, condition);
+    qc.phase(180, mask_with_condition);
     qc.not(mask);
     qc.hadamard(mask);
 }
@@ -490,7 +476,6 @@ function xor_color(qq, condition, out_color)
 
 function DisplayBox(canvas_name)
 {
-    console.log('canvas ' + canvas_name);
     this.canvas = document.getElementById(canvas_name);
     this.span = document.getElementById(canvas_name + '_span');
     this.ctx = this.canvas.getContext('2d');
@@ -507,8 +492,7 @@ function DisplayBox(canvas_name)
     {
         this.resolution_x = resolution_x;
         this.resolution_y = resolution_y;
-        if (this.canvas.width < this.resolution_x * ss_scale)
-            this.canvas.width = this.resolution_x * ss_scale;
+        this.canvas.width = this.resolution_x * ss_scale;
         this.canvas.height = this.canvas.width * this.resolution_y / this.resolution_x;
     }
 
