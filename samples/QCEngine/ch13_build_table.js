@@ -105,7 +105,6 @@ function create_table_column(color, qxy, qcount)
     qcount.hadamard();
     qxy.hadamard();
 
-    var qcolor_index = 0;
     for (var i = 0; i < num_counter_bits; ++i)
     {
         var reps = 1 << i;

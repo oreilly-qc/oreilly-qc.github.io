@@ -33,9 +33,9 @@ function main()
 
     // Create the QSS lookup table
     // This can be done beforehand and saved for use with multiple QSS images
-    create_qss_lookup_table();
+//    create_qss_lookup_table();
 
-    do_qss_image();
+//    do_qss_image();
 }
 
 // The quantum pixel shader is the function which is called for each iteration.
@@ -253,7 +253,6 @@ function create_table_column(color, qxy, qcount)
     qcount.hadamard();
     qxy.hadamard();
 
-    var qcolor_index = 0;
     for (var i = 0; i < num_counter_bits; ++i)
     {
         var reps = 1 << i;
@@ -296,12 +295,9 @@ function draw_full_res_image()
     qc.disableAnimation();
     qc.disableRecording();
 
-    var disp = display_qfull_res;
     var bits = res_aa_bits;
-    var total_qubits = 2 * bits + accum_bits + 1 + 30; // +30 is to disable sim
-    if (enableGPUBlocks)
-    qc.reset(total_qubits, total_qubits);
-    else
+    var disable_simulation = 30; // overload the qubits to disable the quantum sim and fall back to digital
+    var total_qubits = 2 * bits + accum_bits + 1 + disable_simulation; // +30 is to disable sim
     qc.reset(total_qubits);
 
     var qx = qint.new(bits, 'qx');
@@ -312,21 +308,33 @@ function draw_full_res_image()
     if (qacc)
         qacc.write(0);
 
-    for (var y = 0; y < res_full; ++y)
+    var num_subpixels = res_aa * res_aa;
+    for (var ty = 0; ty < res_tiles; ++ty)
     {
-        console.log('full-res row ' + y + ' of ' + res_full);
-        for (var x = 0; x < res_full; ++x)
+        console.log('full-res row ' + ty + ' of ' + res_tiles);
+        for (var tx = 0; tx < res_tiles; ++tx)
         {
-            var tx = x >> res_aa_bits;
-            var ty = y >> res_aa_bits;
-            qx.write(x % res_aa);
-            qy.write(y % res_aa);
-            color.write(0);
-            shader_quantum(qx, qy, tx, ty, qacc, null, color);
-            disp.pixel(x, y, color.read());
+            var tile_ideal_sum = 0;
+            for (var y = 0; y < res_aa; ++y)
+            {
+                for (var x = 0; x < res_aa; ++x)
+                {
+                    qx.write(x);
+                    qy.write(y);
+                    color.write(0);
+                    shader_quantum(qx, qy, tx, ty, qacc, null, color);
+                    var subpixel_value = color.read();
+                    var full_x = (tx << res_aa_bits) + x;
+                    var full_y = (ty << res_aa_bits) + y;
+                    display_qfull_res.pixel(full_x, full_y, subpixel_value);
+                    tile_ideal_sum += subpixel_value;
+                }
+            }
+            display_ground_truth.pixel(tx, ty, tile_ideal_sum / num_subpixels);
         }
     }
-    disp.label('quantum shader<br/>full res');
+    display_qfull_res.label('quantum shader<br/>full res');
+    display_ground_truth.label('quantum shader<br/>ideal sampling');
     qc.qReg.disableSimulation = false;
 }
 
