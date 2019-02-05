@@ -393,7 +393,8 @@ function draw_reference_res_images()
                     tile_monte_carlo_sum += color.read();
                 }
                 display_monte_carlo.pixel(tx, ty, tile_monte_carlo_sum / num_monte_carlo_samples);
-                var pixel_error = Math.abs(tile_monte_carlo_sum - tile_ideal_sum);
+                var normalized_mc_sum = Math.round(num_subpixels * tile_monte_carlo_sum / num_monte_carlo_samples);
+                var pixel_error = Math.abs(normalized_mc_sum - tile_ideal_sum);
                 if (pixel_error)
                     total_pixel_error += pixel_error;
                 else
