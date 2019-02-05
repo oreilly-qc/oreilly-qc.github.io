@@ -10,9 +10,9 @@
 //   then increasing them to 12,8,6,16 will cause the program to take approximately 2,700 years.
 //   ...so when experimenting here it's best to start with small changes.
 
-var res_full_bits    = 6;  // Number of bits in x,y in the complete image. 8 means the image is 256x256
+var res_full_bits    = 5;  // Number of bits in x,y in the complete image. 8 means the image is 256x256
 var res_aa_bits      = 2;  // Number of bits in x,y per sub-pixel tile. 2 means tiles are 4x4
-var num_counter_bits = 4;  // The effective bit depth of the result.
+var num_counter_bits = 3;  // The effective bit depth of the result.
 var accum_bits       = 10; // Scratch qubits for the shader. More scratch bits means we can do more complicated math
 
 var res_full        = 1 << res_full_bits; // The x and y size of the full image, before sampling.
@@ -21,6 +21,8 @@ var res_tiles       = res_full / res_aa;  // The number of tiles which make up o
 
 var qss_full_lookup_table = null;
 var qss_count_to_hits = [];
+
+var do_shortcut_qss = false; // Use classical sampling based on the ideal result to approximate the QSS result
 
 // The main function draws the full-size image for reference, then constructs the QSS lookup table,
 // and then finally uses QSS to draw the sampled image.
@@ -33,9 +35,11 @@ function main()
 
     // Create the QSS lookup table
     // This can be done beforehand and saved for use with multiple QSS images
-//    create_qss_lookup_table();
+    create_qss_lookup_table();
 
-//    do_qss_image();
+    do_qss_image();
+
+    draw_confidence_map();
 }
 
 // The quantum pixel shader is the function which is called for each iteration.
@@ -242,6 +246,37 @@ function create_qss_lookup_table()
     }
 }
 
+function draw_confidence_map()
+{
+    // Draw the confidence map
+    if (ideal_result && qss_raw_result)
+    {
+        var cw = qss_full_lookup_table;
+        display_confidence.label('Confidence Map');
+        for (var ty = 0; ty < res_tiles; ++ty)
+        {
+            for (var tx = 0; tx < res_tiles; ++tx)
+            {
+                var ysize = cw.length;
+                var xsize = cw[0].length;
+                var qss_out = qss_raw_result[ty][tx];
+                // Given the QSS result, find the confidence
+                var row_total = 0;
+                var row_max = 0;
+                for (var x = 0; x < xsize; ++x)
+                {
+                    var val = cw[qss_out][x];
+                    row_total += val;
+                    if (val > row_max)
+                        row_max = val;
+                }
+                var confidence = row_max / row_total;
+                display_confidence.pixel(tx, ty, confidence);
+            }
+        }
+    }
+}
+
 function create_table_column(color, qxy, qcount)
 {
     var num_subpixels = 1 << (res_aa_bits + res_aa_bits);
@@ -289,6 +324,7 @@ function create_table_column(color, qxy, qcount)
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 var ideal_result = null;
+var qss_raw_result = null;
 
 function draw_reference_res_images()
 {
@@ -380,6 +416,34 @@ function random_int(range)
 
 function qss_tile(sp)
 {
+    if (do_shortcut_qss && ideal_result)
+    {
+        var cw = qss_full_lookup_table;
+        var ysize = cw.length;
+        var xsize = cw[0].length;
+        var true_val = ideal_result[sp.ty][sp.tx];
+
+        // Given the true val, simulate a QSS reult
+        var total_prob = 0;
+        for (var y = 0; y < ysize; ++y)
+            total_prob += cw[y][true_val];
+        var dice = Math.random() * total_prob;
+        var qss_out = 0;
+        var prob = 0;
+        for (var y = 0; y < ysize; ++y)
+        {
+            prob += cw[y][true_val];
+            if (prob >= dice)
+            {
+                qss_out = y;
+                break;
+            }
+        }
+        sp.readVal = qss_out;
+        sp.hits = qss_count_to_hits[sp.readVal];
+        sp.color = sp.hits / (res_aa * res_aa);
+        return sp.color;
+    }
     sp.qx.write(0);
     sp.qy.write(0);
     sp.counter.write(0);
@@ -425,13 +489,17 @@ function do_qss_image()
     var total_pixel_error = 0;
     var num_zero_error_pixels = 0;
 
+    qss_raw_result = [];
+
     sp.qacc.write(0);
     for (sp.ty = 0; sp.ty < res_tiles; ++sp.ty)
     {
+        qss_raw_result.push([]);
         console.log('QSS row ' + sp.ty + ' of ' + res_tiles);
         for (sp.tx = 0; sp.tx < res_tiles; ++sp.tx)
         {
             qss_tile(sp);
+            qss_raw_result[sp.ty].push(sp.readVal);
             display_qss.pixel(sp.tx, sp.ty, sp.color);
             if (ideal_result)
             {
@@ -506,6 +574,7 @@ var display_ground_truth = null;
 var display_monte_carlo = null;
 var display_qfull_res = null;
 var display_qss = null;
+var display_confidence = null;
 var display_cwtable = null;
 
 
@@ -516,11 +585,13 @@ function setup_display_boxes()
     display_monte_carlo = new DisplayBox('display_monte_carlo');
     display_qfull_res = new DisplayBox('display_qfull_res');
     display_qss = new DisplayBox('display_qss');
+    display_confidence = new DisplayBox('display_confidence');
+    display_cwtable = new DisplayBox('display_cwtable');
     display_ground_truth.setup(res_tiles, res_tiles, res_aa);
     display_monte_carlo.setup(res_tiles, res_tiles, res_aa);
     display_qfull_res.setup(res_full, res_full, 1);
     display_qss.setup(res_tiles, res_tiles, res_aa);
-    display_cwtable = new DisplayBox('display_cwtable');
+    display_confidence.setup(res_tiles, res_tiles, res_aa);
     display_cwtable.setup(res_tiles, res_tiles, res_aa);
 }
 
