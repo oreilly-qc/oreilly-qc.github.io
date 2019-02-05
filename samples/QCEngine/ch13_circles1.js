@@ -2,7 +2,7 @@
 //   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
 //   O'Reilly Media
 
-// To run this online, go to http://oreilly-qc.github.io?p=13-4
+// To run this online, go to http://oreilly-qc.github.io?p=13-X
 
 // PERFORMANCE NOTE: Increasing any of the following parameters by 1 will
 //   cause the program to take either 2x longer or 4x longer.
@@ -10,9 +10,9 @@
 //   then increasing them to 12,8,6,16 will cause the program to take approximately 2,700 years.
 //   ...so when experimenting here it's best to start with small changes.
 
-var res_full_bits    = 5;  // Number of bits in x,y in the complete image. 8 means the image is 256x256
+var res_full_bits    = 6;  // Number of bits in x,y in the complete image. 8 means the image is 256x256
 var res_aa_bits      = 2;  // Number of bits in x,y per sub-pixel tile. 2 means tiles are 4x4
-var num_counter_bits = 3;  // The effective bit depth of the result.
+var num_counter_bits = 1;  // The effective bit depth of the result.
 var accum_bits       = 10; // Scratch qubits for the shader. More scratch bits means we can do more complicated math
 
 var res_full        = 1 << res_full_bits; // The x and y size of the full image, before sampling.
@@ -23,6 +23,7 @@ var qss_full_lookup_table = null;
 var qss_count_to_hits = [];
 
 var do_shortcut_qss = false; // Use classical sampling based on the ideal result to approximate the QSS result
+var do_monte_carlo  = true; // Generate the MonteCarlo image
 
 // The main function draws the full-size image for reference, then constructs the QSS lookup table,
 // and then finally uses QSS to draw the sampled image.
@@ -377,34 +378,40 @@ function draw_reference_res_images()
             ideal_result[ty].push(tile_ideal_sum);
             display_ground_truth.pixel(tx, ty, tile_ideal_sum / num_subpixels);
 
-            // Do Monte Carlo sampling
-            var tile_monte_carlo_sum = 0;
-            for (var sample = 0; sample < num_monte_carlo_samples; ++sample)
+            if (do_monte_carlo)
             {
-                var x = random_int(res_aa);
-                var y = random_int(res_aa);
-                qx.write(x);
-                qy.write(y);
-                color.write(0);
-                shader_quantum(qx, qy, tx, ty, qacc, null, color);
-                tile_monte_carlo_sum += color.read();
+                // Do Monte Carlo sampling
+                var tile_monte_carlo_sum = 0;
+                for (var sample = 0; sample < num_monte_carlo_samples; ++sample)
+                {
+                    var x = random_int(res_aa);
+                    var y = random_int(res_aa);
+                    qx.write(x);
+                    qy.write(y);
+                    color.write(0);
+                    shader_quantum(qx, qy, tx, ty, qacc, null, color);
+                    tile_monte_carlo_sum += color.read();
+                }
+                display_monte_carlo.pixel(tx, ty, tile_monte_carlo_sum / num_monte_carlo_samples);
+                var pixel_error = Math.abs(tile_monte_carlo_sum - tile_ideal_sum);
+                if (pixel_error)
+                    total_pixel_error += pixel_error;
+                else
+                    num_zero_error_pixels++;
             }
-            display_monte_carlo.pixel(tx, ty, tile_monte_carlo_sum / num_monte_carlo_samples);
-            var pixel_error = Math.abs(tile_monte_carlo_sum - tile_ideal_sum);
-            if (pixel_error)
-                total_pixel_error += pixel_error;
-            else
-                num_zero_error_pixels++;
         }
     }
-    var average_pixel_error_percent = Math.round(100 * total_pixel_error / (res_tiles * res_tiles * num_subpixels));
-    var zero_error_pixels_percent = Math.round(100 * num_zero_error_pixels / (res_tiles * res_tiles));
+    if (do_monte_carlo)
+    {
+        var average_pixel_error_percent = Math.round(100 * total_pixel_error / (res_tiles * res_tiles * num_subpixels));
+        var zero_error_pixels_percent = Math.round(100 * num_zero_error_pixels / (res_tiles * res_tiles));
+        display_monte_carlo.label('Monte Carlo result<br/>'+num_monte_carlo_samples+' samples/tile<br/>'
+                                  +res_tiles+'x'+res_tiles+' pixels<br/>'
+                                  +'avg pixel error: '+average_pixel_error_percent+'%<br/>'
+                                  +'zero-error pixels: '+zero_error_pixels_percent+'%<br/>');
+    }
     display_qfull_res.label('Full-resolution reference<br/>'+res_full+'x'+res_full+' pixels');
     display_ground_truth.label('Ideal sampling reference<br/>'+res_tiles+'x'+res_tiles+' pixels');
-    display_monte_carlo.label('Monte Carlo result<br/>'+num_monte_carlo_samples+' samples/tile<br/>'
-                              +res_tiles+'x'+res_tiles+' pixels<br/>'
-                              +'avg pixel error: '+average_pixel_error_percent+'%<br/>'
-                              +'zero-error pixels: '+zero_error_pixels_percent+'%<br/>');
     qc.qReg.disableSimulation = false;
 }
 
