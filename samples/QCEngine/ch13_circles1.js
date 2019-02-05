@@ -29,7 +29,7 @@ function main()
     setup_display_boxes();
 
     // Draw the whole image, so we can see what we're sampling.
-    draw_full_res_image();
+    draw_reference_res_images();
 
     // Create the QSS lookup table
     // This can be done beforehand and saved for use with multiple QSS images
@@ -288,8 +288,9 @@ function create_table_column(color, qxy, qcount)
 
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
+var ideal_result = null;
 
-function draw_full_res_image()
+function draw_reference_res_images()
 {
     qc.clearOutput();
     qc.disableAnimation();
@@ -308,12 +309,19 @@ function draw_full_res_image()
     if (qacc)
         qacc.write(0);
 
+    var num_monte_carlo_samples = (1 << num_counter_bits) - 1;
     var num_subpixels = res_aa * res_aa;
+    var total_pixel_error = 0;
+    var num_zero_error_pixels = 0;
+
+    ideal_result = [];
     for (var ty = 0; ty < res_tiles; ++ty)
     {
+        ideal_result.push([]);
         console.log('full-res row ' + ty + ' of ' + res_tiles);
         for (var tx = 0; tx < res_tiles; ++tx)
         {
+            // Do full-res reference, and also ideal sampling
             var tile_ideal_sum = 0;
             for (var y = 0; y < res_aa; ++y)
             {
@@ -330,15 +338,47 @@ function draw_full_res_image()
                     tile_ideal_sum += subpixel_value;
                 }
             }
+            ideal_result[ty].push(tile_ideal_sum);
             display_ground_truth.pixel(tx, ty, tile_ideal_sum / num_subpixels);
+
+            // Do Monte Carlo sampling
+            var tile_monte_carlo_sum = 0;
+            for (var sample = 0; sample < num_monte_carlo_samples; ++sample)
+            {
+                var x = random_int(res_aa);
+                var y = random_int(res_aa);
+                qx.write(x);
+                qy.write(y);
+                color.write(0);
+                shader_quantum(qx, qy, tx, ty, qacc, null, color);
+                tile_monte_carlo_sum += color.read();
+            }
+            display_monte_carlo.pixel(tx, ty, tile_monte_carlo_sum / num_monte_carlo_samples);
+            var pixel_error = Math.abs(tile_monte_carlo_sum - tile_ideal_sum);
+            if (pixel_error)
+                total_pixel_error += pixel_error;
+            else
+                num_zero_error_pixels++;
         }
     }
-    display_qfull_res.label('quantum shader<br/>full res');
-    display_ground_truth.label('quantum shader<br/>ideal sampling');
+    var average_pixel_error_percent = Math.round(100 * total_pixel_error / (res_tiles * res_tiles * num_subpixels));
+    var zero_error_pixels_percent = Math.round(100 * num_zero_error_pixels / (res_tiles * res_tiles));
+    display_qfull_res.label('Full-resolution reference<br/>'+res_full+'x'+res_full+' pixels');
+    display_ground_truth.label('Ideal sampling reference<br/>'+res_tiles+'x'+res_tiles+' pixels');
+    display_monte_carlo.label('Monte Carlo result<br/>'+num_monte_carlo_samples+' samples/tile<br/>'
+                              +res_tiles+'x'+res_tiles+' pixels<br/>'
+                              +'avg pixel error: '+average_pixel_error_percent+'%<br/>'
+                              +'zero-error pixels: '+zero_error_pixels_percent+'%<br/>');
     qc.qReg.disableSimulation = false;
 }
 
-function qss_tile(sp, is_qne)
+// Return a random int [0,range)
+function random_int(range)
+{
+    return Math.floor(Math.random() * range) % range;
+}
+
+function qss_tile(sp)
 {
     sp.qx.write(0);
     sp.qy.write(0);
@@ -363,9 +403,6 @@ function qss_tile(sp, is_qne)
     sp.readVal = sp.counter.read();
     sp.hits = qss_count_to_hits[sp.readVal];
     sp.color = sp.hits / (res_aa * res_aa);
-    sp.qne_readVal = sp.readVal;
-    sp.qne_hits = sp.hits;
-    sp.qne_color = sp.color;
     return sp.color;
 }
 
@@ -378,17 +415,15 @@ function do_qss_image()
     qc.disableRecording();
 
     var total_qubits = 2 * res_aa_bits + num_counter_bits + accum_bits;
-    if (enableGPUBlocks)
-        qc.reset(total_qubits, total_qubits);
-    else
-        qc.reset(total_qubits);
+    qc.reset(total_qubits);
 
     sp.qx = qint.new(res_aa_bits, 'qx');
     sp.qy = qint.new(res_aa_bits, 'qy');
     sp.counter = qint.new(num_counter_bits, 'counter');
     sp.qacc = qint.new(accum_bits, 'scratch');
 
-    qc.codeLabel('init');
+    var total_pixel_error = 0;
+    var num_zero_error_pixels = 0;
 
     sp.qacc.write(0);
     for (sp.ty = 0; sp.ty < res_tiles; ++sp.ty)
@@ -398,9 +433,33 @@ function do_qss_image()
         {
             qss_tile(sp);
             display_qss.pixel(sp.tx, sp.ty, sp.color);
+            if (ideal_result)
+            {
+                var pixel_error = Math.abs(sp.hits - ideal_result[sp.ty][sp.tx]);
+                if (pixel_error)
+                    total_pixel_error += pixel_error;
+                else
+                    num_zero_error_pixels++;
+            }
         }
     }
-    display_qss.label('QC q-count '+num_counter_bits);
+
+    var num_qss_iterations = (1 << num_counter_bits) - 1;
+    if (ideal_result)
+    {
+        var num_subpixels = res_aa * res_aa;
+        var average_pixel_error_percent = Math.round(100 * total_pixel_error / (res_tiles * res_tiles * num_subpixels));
+        var zero_error_pixels_percent = Math.round(100 * num_zero_error_pixels / (res_tiles * res_tiles));
+        display_qss.label('QSS result<br/>'+num_qss_iterations+' iterations/tile<br/>'
+                          +res_tiles+'x'+res_tiles+' pixels<br/>'
+                          +'avg pixel error: '+average_pixel_error_percent+'%<br/>'
+                          +'zero-error pixels: '+zero_error_pixels_percent+'%<br/>');
+    }
+    else
+    {
+        display_qss.label('QSS result<br/>'+num_qss_iterations+' iterations/tile<br/>'
+                          +res_tiles+'x'+res_tiles+' pixels<br/>');
+    }
 }
 
 
@@ -444,6 +503,7 @@ function invQFT(x)
 
 
 var display_ground_truth = null;
+var display_monte_carlo = null;
 var display_qfull_res = null;
 var display_qss = null;
 var display_cwtable = null;
@@ -453,9 +513,11 @@ var display_cwtable = null;
 function setup_display_boxes()
 {
     display_ground_truth = new DisplayBox('display_ground_truth');
+    display_monte_carlo = new DisplayBox('display_monte_carlo');
     display_qfull_res = new DisplayBox('display_qfull_res');
     display_qss = new DisplayBox('display_qss');
     display_ground_truth.setup(res_tiles, res_tiles, res_aa);
+    display_monte_carlo.setup(res_tiles, res_tiles, res_aa);
     display_qfull_res.setup(res_full, res_full, 1);
     display_qss.setup(res_tiles, res_tiles, res_aa);
     display_cwtable = new DisplayBox('display_cwtable');
