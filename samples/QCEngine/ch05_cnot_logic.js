@@ -9,13 +9,13 @@
 qc.reset(3);
 
 // c = ~c
-c.write(0);
-c.not();
-c.read();
+qc.write(0);
+qc.not();
+qc.read();
 
 // if (b) then c = ~c
 qc.write(2, 2|4);
-c.cnot(b);
+qc.cnot(b);
 qc.read(2|4);
 
 // if (a and b) then c = ~c
