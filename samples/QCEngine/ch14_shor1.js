@@ -2,7 +2,7 @@
 //   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
 //   O'Reilly Media
 
-// To run this online, go to http://oreilly-qc.github.io?p=15-1
+// To run this online, go to http://oreilly-qc.github.io?p=14-1
 
 function shor_sample() {
     N = 35;             // The number we're factoring

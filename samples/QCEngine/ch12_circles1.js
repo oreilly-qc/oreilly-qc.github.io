@@ -2,7 +2,7 @@
 //   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
 //   O'Reilly Media
 
-// To run this online, go to http://oreilly-qc.github.io?p=13-X
+// To run this online, go to http://oreilly-qc.github.io?p=12-X
 
 // PERFORMANCE NOTE: Increasing any of the following parameters by 1 will
 //   cause the program to take either 2x longer or 4x longer.

@@ -2,7 +2,7 @@
 //   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
 //   O'Reilly Media
 
-// To run this online, go to http://oreilly-qc.github.io?p=13-1
+// To run this online, go to http://oreilly-qc.github.io?p=12-1
 
 qc.reset(8);
 qx = qint.new(4, 'qx');
