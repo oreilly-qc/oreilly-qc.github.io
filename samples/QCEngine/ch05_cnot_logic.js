@@ -7,18 +7,24 @@
 // This sample demonstrates logic using CNOT and Toffoli gates.
 
 qc.reset(3);
+var a = qint.new(1, 'a');
+var b = qint.new(1, 'b');
+var c = qint.new(1, 'c');
 
-// c = ~c
-qc.write(0);
-qc.not();
-qc.read();
+c.write(0);
+c.not();
+c.read();
 
 // if (b) then c = ~c
-qc.write(2, 2|4);
-qc.cnot(b);
-qc.read(2|4);
+b.write(1);
+c.write(0);
+c.cnot(b);
+b.read();
+c.read();
 
 // if (a and b) then c = ~c
-qc.write(1|2);
-qc.cnot(4, 1|2);
-qc.read(1|2|4);
+qc.write(0x1|0x2);
+qc.cnot(0x4, 0x1|0x2);
+qc.read();
+
+qc.nop();
