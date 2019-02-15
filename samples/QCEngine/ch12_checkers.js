@@ -10,9 +10,9 @@
 //   then increasing them to 12,8,6,16 will cause the program to take approximately 2,700 years.
 //   ...so when experimenting here it's best to start with small changes.
 
-var res_full_bits    = 8;  // Number of bits in x,y in the complete image. 8 means the image is 256x256
+var res_full_bits    = 9;  // Number of bits in x,y in the complete image. 8 means the image is 256x256
 var res_aa_bits      = 3;  // Number of bits in x,y per sub-pixel tile. 2 means tiles are 4x4
-var num_counter_bits = 4;  // The effective bit depth of the result.
+var num_counter_bits = 5;  // The effective bit depth of the result.
 var accum_bits       = 13; // Scratch qubits for the shader. More scratch bits means we can do more complicated math
 
 var res_full        = 1 << res_full_bits; // The x and y size of the full image, before sampling.
@@ -67,7 +67,13 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
     var is_ground = vbin >= 4 && vbin < 8;
 //    var is_ground = !is_ball && !is_sky;
 
-    if (is_ball && color_plane != 'blue')
+    if (color_plane == 'blue')
+    {
+      ball_radius = 9;
+      is_ball = vbin < 4;
+    }
+
+    if (is_ball)// && color_plane != 'blue')
     {
         // drawing a circle is tricky, because we want x^2+y^2<r^2, but we don't have
         // a great way to accumulate the squared sum of tx*res+qx. Instead,
@@ -96,6 +102,8 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
 //        qacc.add(dx + dy - br);
         var acc_sign_bit = 1 << (accum_bits - 1);
         var mask = qacc.bits(acc_sign_bit);
+        if (color_plane == 'blue')
+          mask.orEquals(qy.bits(0x1));
         mask.orEquals(condition);
         xor_color(null, mask, out_color);
 //        qacc.subtract(dx + dy - br);
@@ -145,14 +153,23 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
     }
     if (1 && is_ground)
     {
-        // 50% gray
-        if (color_plane != 'green')
+        if (color_plane == 'red')
         {
+            // 50% gray
             qx.cnot(qy, 0x1);
             var mask = qx.bits(0x1);
             mask.orEquals(condition);
             xor_color(null, mask, out_color);
             qx.cnot(qy, 0x1);
+        }
+        else if (color_plane == 'blue')
+        {
+            // 75% gray
+            qx.cnot(qy);
+            var mask = qx.bits(0x3);
+            mask.orEquals(condition);
+            xor_color(null, mask, out_color);
+            qx.cnot(qy);
         }
 
         // perspective checkerboard
@@ -204,7 +221,7 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
         }
 
         // Draw checkerboard parallel
-        for (var band = 0; band < 6; ++band)
+        for (var band = 0; band < 7; ++band)
         {
                 var band_bit = 1 << (band + 1);
                 qacc.subtract((ty << (tile_shift)) - (y_offset));
@@ -730,29 +747,6 @@ function DisplayBox(canvas_name)
     {
         this.span.innerHTML = text;
     }
-
-    this.get_bw_pixels = function(width, height)
-    {
-        var imgd = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-        var pix = imgd.data;
-        var out_bytes = new Array();
-        var src_row_index = 0;
-        var src_col_pitch = 4 * this.canvas.width / width;
-        var src_row_pitch = src_col_pitch * width * this.canvas.height / height;
-
-        for (var row = 0; row < height; ++row)
-        {
-            var src_index = src_row_index;
-            for (var col = 0; col < width; ++col)
-            {
-                out_bytes.push(pix[src_index]);
-                src_index += src_col_pitch;
-            }
-            src_row_index += src_row_pitch;
-        }
-    }
-
-
 }
 
 
