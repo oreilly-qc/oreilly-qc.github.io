@@ -47,6 +47,10 @@ var sample_menu = [
     {shortcut:'8-1', menu_title:'Ex 8-1: Phase estimation 1', sample_file: 'ch08_phase_est1', num_qubits: 4, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'8-2', menu_title:'Ex 8-2: Phase estimation 2', sample_file: 'ch08_phase_est2', num_qubits: 4, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 
+    {shortcut:'10-1', menu_title:'Ex 10-1: Phase Logic 1', sample_file: 'ch10_oracle_logic1', num_qubits: 4, num_instructions: 18, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'10-2', menu_title:'Ex 10-2: Phase Logic 2', sample_file: 'ch10_oracle_logic2', num_qubits: 8, num_instructions: 18, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'10-3', menu_title:'Ex 10-3: Kitten and Tiger', sample_file: 'ch10_kitten_and_tiger2', num_qubits: 4, num_instructions: 34, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+
     {shortcut:'11-1', menu_title:'Ex 11-1: QRAM', sample_file: 'ex_qram1', num_qubits: 3, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 
     {shortcut:'12-1', menu_title:'Ex 12-1: Basic phase graphics 1', sample_file: 'ch12_basic_gfx1',     num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
