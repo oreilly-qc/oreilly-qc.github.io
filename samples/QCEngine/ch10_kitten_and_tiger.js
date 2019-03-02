@@ -37,10 +37,9 @@ anc.hadamard();
 
 // Satisfy the final condition using phase-logic
 qc.codeLabel('(A OR B) XNOR (NOT A)');
-qc.not(0x1);
 qc.cnot(0x8,0x4);
 qc.cnot(0x8,0x1);
-qc.not(0x1|0x8);
+qc.not(0x8);
 qc.codeLabel('');
 
 // Return the ancilla to |0>
