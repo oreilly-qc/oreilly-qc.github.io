@@ -20,7 +20,8 @@ var sample_menu = [
     {shortcut:'3-2', menu_title:'Ex 3-2: Entangled qubits', sample_file: 'ch03_entangled_qubits',          num_qubits: 2, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'3-3', menu_title:'Ex 3-3: Phase kickback',           sample_file: 'ch03_phase_kickback',    num_qubits: 3, num_instructions: 8, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'3-4', menu_title:'Ex 3-4: Custom conditional-phase', sample_file: 'ch03_custom_cphase',     num_qubits: 3, num_instructions: 8, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'3-5', menu_title:'Ex 3-5: Remote-controlled randomness', sample_file: 'ch03_remote_random', num_qubits: 2, num_instructions: 8, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'3-5', menu_title:'Ex 3-5: Swap test',                sample_file: 'ch03_swaptest', num_qubits: 3, num_instructions: 10, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'3-6', menu_title:'Ex 3-6: Remote-controlled randomness', sample_file: 'ch03_remote_random', num_qubits: 2, num_instructions: 8, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 
     {shortcut:'4-1', menu_title:'Ex 4-1: Basic teleportation',            sample_file: 'ch04_basic_teleportation',   num_qubits: 3, num_instructions: 24, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'4-2', menu_title:'Ex 4-2: A fly in the teleporter',        sample_file: 'ch04_teleport_fly',          num_qubits: 24, num_instructions: 60, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
