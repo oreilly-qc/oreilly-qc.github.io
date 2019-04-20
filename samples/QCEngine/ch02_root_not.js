@@ -14,13 +14,13 @@ qc.reset(1);
 qc.write(0);
 qc.codeLabel("RNOT")
 qc.had();
-qc.phase(90);
+qc.phase(-90);
 qc.had();
 qc.codeLabel();
 qc.nop()
 qc.codeLabel("RNOT")
 qc.had();
-qc.phase(90);
+qc.phase(-90);
 qc.had();
 qc.codeLabel("")
 
