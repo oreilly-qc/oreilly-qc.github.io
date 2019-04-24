@@ -62,7 +62,8 @@ var sample_menu = [
     {shortcut:'11-2', menu_title:'Ex 11-2: Basic phase graphics 2', sample_file: 'ch12_basic_gfx2',     num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'11-3', menu_title:'Ex 11-3: Basic phase graphics 3', sample_file: 'ch12_basic_gfx3',     num_qubits: 16, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'11-4', menu_title:'Ex 11-4: Supersampling 4',        sample_file: 'ch12_supersampling1', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'11-X', menu_title:'Ex 11-X: Supersampling (All Options)',        sample_file: 'ch12_circles1', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'11-5', menu_title:'Ex 11-5: Supersampling (All Options)',        sample_file: 'ch12_circles1', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'11-A', menu_title:'Ex 11-A: Supersampling Circles',        sample_file: 'ch12_circles2', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 
     {shortcut:'14-1', menu_title:'Ex 12-1: Shor\'s Factroring Algorithm', sample_file: 'ch14_shor1',          num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'14-2', menu_title:'Ex 12-2: Shor without a QPU',           sample_file: 'ch14_shor_no_qpu',    num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},

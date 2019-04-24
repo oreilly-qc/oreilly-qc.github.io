@@ -18,7 +18,7 @@ signal.write(0);
 signal.hadamard();
 if (which_signal == 'A') {
     signal.phase(180, 1);
-} else if (which_signal == 'A') {
+} else if (which_signal == 'B') {
     signal.phase(90, 1);
     signal.phase(180, 2);
 } else if (which_signal == 'C') {
