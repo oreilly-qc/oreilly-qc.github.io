@@ -44,7 +44,8 @@ fiber.exchange(a);
 
 // Activate the spy
 var spy_is_present = true;
-if (spy_is_present) {
+if (spy_is_present)
+{
     var spy_basis = 1;
     qc.nop();
     qc.codeLabel('spy');

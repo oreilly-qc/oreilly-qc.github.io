@@ -21,6 +21,7 @@ qc.nop()
 qc.codeLabel('Swap test')
 output.write(0);
 output.had();
+// Now exchange the two inputs conditional on the output qubits.
 input1.exchange(input2, 0x1, output.bits());
 output.had();
 output.not();
