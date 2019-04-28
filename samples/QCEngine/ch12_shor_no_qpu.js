@@ -2,7 +2,7 @@
 //   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
 //   O'Reilly Media
 
-// To run this online, go to http://oreilly-qc.github.io?p=14-2
+// To run this online, go to http://oreilly-qc.github.io?p=12-2
 
 function ShorNoQPU(N, precision_bits, coprime) {
     // Classical replacement for the quantum part of Shor
