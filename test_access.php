@@ -1,0 +1,75 @@
+<html>
+<head>
+    
+</head>
+<body>
+
+<h3>Access test</h3>
+<?php
+echo '(php version)<br/>';
+?>
+<pre>
+<span id="output_span"></span>
+</pre>
+<br/>
+
+<pre>
+<span id="output_span2"></span>
+</pre>
+<br/>
+
+<script>
+function do_access_test()
+{
+    var str = '';
+
+    str += 'window.location.hash: ' + window.location.hash + '\n';
+    str += 'window.location.host: ' + window.location.host + '\n';
+    str += 'window.location.hostname: ' + window.location.hostname + '\n';
+    str += 'window.location.href: ' + window.location.href + '\n';
+    str += 'window.location.origin: ' + window.location.origin + '\n';
+    str += 'window.location.parthname: ' + window.location.parthname + '\n';
+    str += 'window.location.port: ' + window.location.port + '\n';
+    str += 'window.location.protocol: ' + window.location.protocol + '\n';
+    str += 'window.location.search: ' + window.location.search + '\n';
+
+    document.getElementById('output_span').innerHTML = str;
+
+
+
+
+    ///////////////////////////////////////
+    var url = 'http://oreilly-qc.github.io/test_access.html';
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4)
+        {
+            str = '';
+            str += 'status: ' + xhr.status + '\n';
+            if (xhr.status == 200)
+            {
+                str += 'access granted.\nGreetings Professor Falken.\n\n';
+                str += xhr.response;
+            }
+            else
+            {
+                str += 'access denied.\n';                
+            }
+
+            document.getElementById('output_span2').innerHTML = str;
+        }
+    }
+    xhr.open("GET", url, true);
+    xhr.setRequestHeader('Content-Type', 'text/html');
+    xhr.send(JSON.stringify({
+        language: 'js',
+        draw: '1',
+    }));
+}
+
+do_access_test();
+
+</script>
+
+</body>
+</html>
