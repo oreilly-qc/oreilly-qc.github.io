@@ -293,10 +293,10 @@ body {
       </div>
     </div>
 
-    <div id="staff_popin_div" class="right">
+    <div id="staff_popin_div" class="right" style="resize: both; overflow: auto;">
       <canvas id="draw_gate_canvas"></canvas>
     </div>
-    <div id="circle_div" class="right">
+    <div id="circle_div" style="resize: both; overflow: auto;">
       <canvas id="circle_canvas", width="500", height="500"></canvas>
     </div>
 </div>
@@ -601,8 +601,8 @@ function load_code_from_url(file_url)
 
 qc_options.staff_canvas = document.getElementById('draw_gate_canvas');
 qc_options.staff_div = document.getElementById('staff_popin_div');
-qc_options.staff_canvas = document.getElementById('circle_canvas');
-qc_options.staff_div = document.getElementById('circle_div');
+qc_options.circle_canvas = document.getElementById('circle_canvas');
+qc_options.circle_div = document.getElementById('circle_div');
 var qc = QPU();
 // qc.set_canvas(document.getElementById('draw_gate_canvas'));
 // panel_staff = qc.panel_staff;
@@ -902,8 +902,8 @@ function setup_script_panels(sample)
         qc.panel_staff.draw();
         qc.panel_chart.draw();
     }
-    pop_in(qc.panel_staff.div, staff_popin_div);
-    pop_in(qc.panel_chart.div, staff_popin_div);
+    // pop_in(qc.panel_staff.div, staff_popin_div);
+    // pop_in(qc.panel_chart.div, staff_popin_div);
 }
 
 function pop_in(child_div, parent_div)
