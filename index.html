@@ -238,6 +238,17 @@ body {
 </head>
 <body>
 
+
+<script type="text/javascript" src="./sample_shortcuts.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_bitfield.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_reg.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_int.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_basicops.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_widgets.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_staff.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_scriptpanel.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_panel.js"></script>
+
 <img src="images/cs-title-bar.jpg" style="max-width:100%;height:auto;">
 <br/>
 
@@ -283,6 +294,7 @@ body {
     </div>
 
     <div id="staff_popin_div" class="right">
+      <canvas id="draw_gate_canvas"></canvas>
     </div>
 </div>
 <br/>
@@ -447,7 +459,7 @@ function handle_run_button()
     // {
     setup_script_panels(null)
     run_script();
-    panel_staff.staff.fullSnapshot();
+    qc.panel_staff.staff.fullSnapshot();
     //panel_staff.style.width = '100%';
     show_state_vector();
     // }
@@ -583,6 +595,13 @@ function load_code_from_url(file_url)
     }
     make_github_source_links();
 }
+
+qc_options.staff_canvas = document.getElementById('draw_gate_canvas');
+qc_options.staff_div = document.getElementById('staff_popin_div');
+var qc = QPU();
+// qc.set_canvas(document.getElementById('draw_gate_canvas'));
+// panel_staff = qc.panel_staff;
+// panel_chart = qc.panel_chart;
 
 var current_sample = null;
 var all_sample_contents = {};
@@ -836,7 +855,7 @@ function LoadUserName() {}
 
 function setup_script_panels(sample)
 {
-    if (panel_staff)
+    if (qc.panel_staff)
     {
         // if (current_language != 'javascript')
         // {
@@ -865,36 +884,36 @@ function setup_script_panels(sample)
         var circle_grid = 64;
         var gate_width = 100 + 20 + gate_grid * sample.num_instructions;
         var gate_height = 80 + gate_grid * sample.num_qubits;
-        panel_staff.setPos(left, top);
-        panel_staff.setSize(gate_width, gate_height);
+        qc.panel_staff.setPos(left, top);
+        qc.panel_staff.setSize(gate_width, gate_height);
         top += gate_height + 32;
         var circle_width = 20 + circle_grid * sample.num_circle_cols;
         var circle_height = 150 + circle_grid * sample.num_circle_rows;
-        panel_chart.setPos(left, top);
-        panel_chart.setSize(circle_width, circle_height);
-        panel_staff.setVisible(true);
-        panel_chart.setVisible(true);
+        qc.panel_chart.setPos(left, top);
+        qc.panel_chart.setSize(circle_width, circle_height);
+        qc.panel_staff.setVisible(true);
+        qc.panel_chart.setVisible(true);
 
-        panel_staff.draw();
-        panel_chart.draw();
+        qc.panel_staff.draw();
+        qc.panel_chart.draw();
     }
-    pop_in(panel_staff.div, staff_popin_div);
-    pop_in(panel_chart.div, staff_popin_div);
+    pop_in(qc.panel_staff.div, staff_popin_div);
+    pop_in(qc.panel_chart.div, staff_popin_div);
 }
 
 function pop_in(child_div, parent_div)
 {
-    parent_div.appendChild(child_div);
-    child_div.style.position = 'relative';
-    child_div.style.top = 0;
-    child_div.style.left = 0;
-    child_div.style.width = '100%';
-    child_div.style.height = '200px';
-    child_div.style.marginLeft = 0;
-    child_div.style.marginTop = 0;
-    child_div.style.boxShadow = 'none';
-    child_div.style.overflow = 'scroll';
-    child_div.style.display = 'block';
+    // parent_div.appendChild(child_div);
+    // child_div.style.position = 'relative';
+    // child_div.style.top = 0;
+    // child_div.style.left = 0;
+    // child_div.style.width = '100%';
+    // child_div.style.height = '200px';
+    // child_div.style.marginLeft = 0;
+    // child_div.style.marginTop = 0;
+    // child_div.style.boxShadow = 'none';
+    // child_div.style.overflow = 'scroll';
+    // child_div.style.display = 'block';
 }
 
 function run_script()
@@ -913,8 +932,8 @@ function run_script()
     runQCScriptInTextArea('editor', 'script_output_textarea');
 
     qc.qReg.changed();
-    panel_staff.draw();
-    panel_chart.draw();
+    qc.panel_staff.draw();
+    qc.panel_chart.draw();
 
     qc.enableAnimation();
 }
@@ -934,7 +953,7 @@ function rewind_to_beginning()
 
 function show_state_vector()
 {
-  list = panel_chart.widgets;
+  list = qc.panel_chart.widgets;
   for (var i = 0; i < list.length; ++i)
   {
     if (list[i].stateVector)
@@ -974,27 +993,6 @@ function show_state_vector()
 
 
 
-
-<script type="text/javascript" src="./sample_shortcuts.js"></script>
-
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_bitfield.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_reg.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_int.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_basicops.js"></script>
-
-
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_widgets.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_blockjob.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_staff.js"></script>
-
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_setup.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_scriptpanel.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_panel.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_photonic.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_test.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_webgl_block.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_mbc.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_aaronson_chp.js"></script>
 
 
 </body>
