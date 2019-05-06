@@ -2,7 +2,7 @@
 //   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
 //   O'Reilly Media
 
-// To run this online, go to http://oreilly-qc.github.io?p=7-5
+// To run this online, go to http://oreilly-qc.github.io?p=7-3
 
 var num_qubits = 4;
 qc.reset(num_qubits);

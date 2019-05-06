@@ -30,6 +30,6 @@ qc.codeLabel();
 qc.nop();
 
 qc.codeLabel('QFT');
-signal.invQFT();
+signal.QFT();
 qc.codeLabel();
 qc.nop();
