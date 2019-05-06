@@ -17,17 +17,14 @@ function phase_est(theta, out_res)
     var q_in = qint.new(1, 'q_in');
     // Prepare the input register in eigenstate
     q_in.write(0);
-    // HAD the output register
+    // Prepare the output register
+    q_out.write(0);
     q_out.had();
     // Apply conditional powers of u
     for (j = 0; j < out_res; j++) 
         cont_u(theta, 2**j, 2**(out_res), 2**j);
 
-    // Inverse QFT on output register
-    // (Note qft backwards and doesn't include 
-    // exchanges in QCEngine at the moment)
-    qft_flip(out_res);
-    q_out.QFT();
+    q_out.invQFT();
 }
 
 function main()
