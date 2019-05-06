@@ -48,8 +48,8 @@ var sample_menu = [
     {shortcut:'7-7', menu_title:'Ex 7-7: QFT frequency manipulation',  sample_file: 'ch07_07_qft_freq_manip', num_qubits: 4, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'7-8', menu_title:'Ex 7-8: QFT rotating phases',         sample_file: 'ch07_08_qft_rotating_phases', num_qubits: 4, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 
-    {shortcut:'8-1', menu_title:'Ex 8-1: Phase estimation 1', sample_file: 'ch08_phase_est1', num_qubits: 4, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'8-2', menu_title:'Ex 8-2: Phase estimation 2', sample_file: 'ch08_phase_est2', num_qubits: 4, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'8-1', menu_title:'Ex 8-1: Phase estimation 1', sample_file: 'ch08_01_phase_est1', num_qubits: 4, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'8-2', menu_title:'Ex 8-2: Phase estimation 2', sample_file: 'ch08_02_phase_est2', num_qubits: 4, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 
     {shortcut:'9-1', menu_title:'Ex 9-1: QRAM 1',             sample_file: 'ex_qram1', num_qubits: 3, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'9-2', menu_title:'Ex 9-2: QRAM',               sample_file: 'ex_qram2', num_qubits: 3, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
