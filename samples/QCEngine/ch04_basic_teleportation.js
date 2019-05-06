@@ -66,8 +66,8 @@ function bob_receive()
     // Option 1: Bob is asleep (can't respond to Alice's data), so he just does whatever.
     if (bob_is_asleep)
     {
-        bob.not();
         bob.phase(180);
+        bob.not();
     }
     // Option 2: Bob is responsive, and we use conditional-ops for visual clarity
     else if (use_conditonals)
@@ -75,16 +75,16 @@ function bob_receive()
         // Here, we use conditional gates, just for visual clarity.
         // The "conditions" are on qubits which have already been read and
         // turned into classical bits.
-        bob.cnot(alice);
-        bob.cz(ep);
+        bob.cz(alice);
+        bob.cnot(ep);
     }
     // Option 3: Bob is responsive, and we use straightforward "if" in the code.
     else
     {
         if (a1)
-            bob.not();
-        if (a2)
             bob.phase(180);
+        if (a2)
+            bob.not();
     }
     qc.codeLabel('');
     qc.nop();
