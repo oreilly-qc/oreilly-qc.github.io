@@ -10,15 +10,15 @@ qy = qint.new(4, 'qy');
 
 // Horizontal Line at qy=3
 qy.not(~3);
-qc.phase(180, qy.bits());
+qc.cphase(180, qy.bits());
 qy.not(~3);
 
 // Vertical Line at qx=10
 qx.not(~10);
-qc.phase(180, qx.bits());
+qc.cphase(180, qx.bits());
 qx.not(~10);
 
 // Diagonal Line at qy=-(qx+1)
 qx.add(qy);
-qc.phase(180, qx.bits());
+qc.cphase(180, qx.bits());
 qx.subtract(qy);

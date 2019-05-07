@@ -17,7 +17,7 @@ for (var i = 0; i < number_of_iterations; ++i)
 {
     // Flip the marked value
     reg.not(~number_to_flip);
-    reg.phase(180);
+    reg.cphase(180);
     reg.not(~number_to_flip);
 
     reg.Grover();

@@ -69,7 +69,7 @@ function amplitude_encode(vec, qreg)
                 qc.not(not_mask);
             qc.rotx(theta, top_bit, cond_bits);
             if (phase != 0 && phase != 180)
-                qreg.phase(phase);
+                qreg.cphase(phase);
             if (not_mask)
                 qc.not(not_mask);
             if (cnot_mask)

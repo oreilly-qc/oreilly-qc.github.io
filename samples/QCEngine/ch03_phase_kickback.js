@@ -14,5 +14,5 @@ reg2.write(1);
 reg1.had();
 // Perform phase rotations on second register,
 //conditioned on qubits from the first
-qc.phase(45, 0x1|0x4);
-qc.phase(90, 0x2|0x4);
+qc.phase(45, 0x4, 0x1);
+qc.phase(90, 0x4, 0x2);

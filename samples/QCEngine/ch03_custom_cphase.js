@@ -17,4 +17,4 @@ qc.cnot(0x2, 0x1);
 qc.phase( theta / 2, 0x1);
 
 // Builds the same operation as a 2-qubit CPHASE
-qc.phase(theta, 0x1 | 0x2);
+qc.phase(theta, 0x1, 0x2);

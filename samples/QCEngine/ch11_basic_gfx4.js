@@ -25,7 +25,7 @@ qc.codeLabel('fill if x^2 + y^2 < r^2');
 qacc.addSquared(qx);
 qacc.addSquared(qy);
 qacc.subtract(radius * radius);
-qacc.phase(180, 1 << (acc_bits - 1));
+qacc.cphase(180, 1 << (acc_bits - 1));
 qacc.add(radius * radius);
 qacc.subtractSquared(qy);
 qacc.subtractSquared(qx);
