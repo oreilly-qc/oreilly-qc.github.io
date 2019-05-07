@@ -29,7 +29,7 @@ qc.codeLabel('');
 qc.nop();
 qc.codeLabel('flip if (a < 0 && b==1)');
 b.not(~1);
-qc.phase(180, a.bits(0x4, b.bits(~0)));
+qc.phase(180, a.bits(0x4), b.bits());
 b.not(~1);
 qc.codeLabel('');
 qc.nop();

@@ -20,7 +20,7 @@ for (var i = 0; i < number_of_iterations; ++i)
     {
         var marked_term = n2f[j];
         reg.not(~marked_term);
-        reg.phase(180);
+        reg.cphase(180);
         reg.not(~marked_term);
     }
 

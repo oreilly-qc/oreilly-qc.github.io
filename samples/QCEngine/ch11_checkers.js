@@ -245,7 +245,7 @@ function flip_n_terms(x, num_terms_to_flip, condition)
     for (var i = 0; i < num_terms_to_flip; ++i)
     {
         x.not(i);
-        x.phaseShift(180, ~0, condition);
+        x.cphase(180, ~0, condition);
         x.not(i);
     }
 }
@@ -594,7 +594,7 @@ function grover_iteration(mask, mask_with_condition)
     qc.codeLabel('Grover iteration');
     qc.hadamard(mask);
     qc.not(mask);
-    qc.phase(180, mask_with_condition);
+    qc.cphase(180, mask_with_condition);
     qc.not(mask);
     qc.hadamard(mask);
 }
@@ -613,7 +613,7 @@ function invQFT(x)
         {
             var bit2 = bits - (j + 1);
             var mask2 = 1 << bit2;
-            x.phaseShift(theta, mask1 + mask2);
+            x.cphase(theta, mask1 + mask2);
             theta *= 0.5;
         }
     }
@@ -662,14 +662,14 @@ function xor_color(qq, condition, out_color)
     if (out_color)
       out_color.cnot(qq, ~0, condition);
     else
-      qq.phaseShift(180, ~0, condition);
+      qq.cphase(180, ~0, condition);
   }
   else
   {
     if (out_color)
       out_color.cnot(null, ~0, condition);
     else
-      qc.phase(180, condition);
+      qc.cphase(180, condition);
   }
 }
 

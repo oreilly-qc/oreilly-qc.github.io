@@ -109,7 +109,7 @@ function pixel(obj, x, y)
     var val = ~((y << 4) | x);
     obj.not(val ^ last_not);
     last_not = val;
-    obj.phase(180, ~0x8);
+    obj.cphase(180, ~0x8);
 }
 
 function send_payload(payload, ep)

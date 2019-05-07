@@ -16,7 +16,7 @@ var ty = 3;
 qacc.cnot(qy)
 qacc.add(ty * 4);
 qacc.not(~3);
-qc.phase(180, qacc.bits());
+qc.cphase(180, qacc.bits());
 qacc.not(~3);
 qacc.subtract(ty * 4);
 qacc.cnot(qy);
@@ -25,7 +25,7 @@ qacc.cnot(qy);
 qacc.cnot(qx)
 qacc.add(tx * 4);
 qacc.not(~10);
-qc.phase(180, qacc.bits());
+qc.cphase(180, qacc.bits());
 qacc.not(~10);
 qacc.subtract(tx * 4);
 qacc.cnot(qx);
