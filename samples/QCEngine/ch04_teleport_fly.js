@@ -10,6 +10,9 @@
 // This is a fun and horrifying example from the
 // teleportation chapter.
 
+//// CAUTION: This sample is big, and may take several seconds to execute.
+////          It may even fail on some smaller devices (e-readers, etc.)
+
 qc_options.color_by_phase = true;
 
 // This is the left half of the pixels of the fly,
