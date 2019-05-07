@@ -169,7 +169,7 @@ function cleanup_view(fly, epair1, epair2)
 
 function show_state_vector()
 {
-  list = panel_chart.widgets;
+  list = qc.panel_chart.widgets;
   for (var i = 0; i < list.length; ++i)
   {
     if (list[i].stateVector)
