@@ -13,48 +13,48 @@ var bob   = qint.new(1, 'bob');
 
 ep.write(0);
 bob.write(0);
-qc.codeLabel('entangle');
+qc.label('entangle');
 ep.had();
 bob.cnot(ep);
-qc.codeLabel('');
+qc.label('');
 
 alice.write(0);
-qc.codeLabel('prep payload');
+qc.label('prep payload');
 alice.had();
 alice.phase(45);
 alice.had();
-qc.codeLabel('');
+qc.label('');
 qc.nop();
 qc.print('alice prob:' + alice.peekProbability(1));
 
-qc.codeLabel('send');
+qc.label('send');
 ep.cnot(alice);
 alice.had();
 alice.read();
 ep.read();
-qc.codeLabel('');
+qc.label('');
 qc.nop();
 
 // ej TODO: Check code order issue
-qc.codeLabel('apply gate');
+qc.label('apply gate');
 bob.had();
 //bob.phase(30);
 bob.had();
-qc.codeLabel('');
+qc.label('');
 
-qc.codeLabel('receive');
+qc.label('receive');
 bob.cnot(ep);
 bob.cz(alice);
 
-qc.codeLabel('');
+qc.label('');
 qc.nop();
 
 
-qc.codeLabel('verify');
+qc.label('verify');
 bob.had();
 //bob.phase(-45-30);
 bob.phase(-45);
 bob.had();
 bob.read();
-qc.codeLabel('');
+qc.label('');
 qc.nop();

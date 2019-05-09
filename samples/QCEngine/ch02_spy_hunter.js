@@ -18,26 +18,26 @@ function random_bit(q) {
 }
 
 // Generate two random bits
-qc.codeLabel('get two random bits');
+qc.label('get two random bits');
 send_basis = random_bit(a);
 send_value = random_bit(a);
-qc.codeLabel('');
+qc.label('');
 
 // Prepare Alice's qubit
 a.write(0);
-qc.codeLabel('set value');
+qc.label('set value');
 qc.nop();
 if (send_value)
     a.not();
 qc.nop();
-qc.codeLabel('');
+qc.label('');
 qc.nop();
-qc.codeLabel('set basis');
+qc.label('set basis');
 qc.nop();
 if (send_basis)
     a.had();
 qc.nop();
-qc.codeLabel('');
+qc.label('');
 
 // Send the qubit!
 fiber.exchange(a);
@@ -48,7 +48,7 @@ if (spy_is_present)
 {
     var spy_basis = 1;
     qc.nop();
-    qc.codeLabel('spy');
+    qc.label('spy');
     if (spy_basis)
         fiber.had();
     stolen_data = fiber.read();
@@ -57,25 +57,25 @@ if (spy_is_present)
         fiber.not();
     if (spy_basis)
         fiber.had();
-    qc.codeLabel('');
+    qc.label('');
     qc.nop();
 }
 
 // Receive the qubit!
 recv_basis = random_bit(b);
 fiber.exchange(b);
-qc.codeLabel('set basis');
+qc.label('set basis');
 qc.nop();
 if (recv_basis)
     b.had();
 qc.nop();
-qc.codeLabel('');
+qc.label('');
 qc.nop();
-qc.codeLabel('read value');
+qc.label('read value');
 qc.nop();
 recv_val = b.read();
 qc.nop();
-qc.codeLabel('');
+qc.label('');
 qc.nop();
 
 // Now Alice emails Bob to tell

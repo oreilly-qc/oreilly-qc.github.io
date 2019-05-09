@@ -12,23 +12,23 @@ qc.reset(num_qubits);
 a = qint.new(num_qubits, 'a');
 
 // prepare
-qc.codeLabel('prepare')
+qc.label('prepare')
 a.write(1);
 a.hadamard(0x4);
 a.phase(45, 0x4);
 qc.nop();
 
-qc.codeLabel('')
+qc.label('')
 qc.nop();
-qc.codeLabel('increment')
+qc.label('increment')
 // increment
 a.add(1);
 
-qc.codeLabel('')
+qc.label('')
 qc.nop();
-qc.codeLabel('decrement')
+qc.label('decrement')
 // decrement
 a.subtract(1);
 
-qc.codeLabel('')
+qc.label('')
 qc.nop();

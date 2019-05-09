@@ -62,7 +62,7 @@ function main()
 
 function entangle_pair(ep1, ep2)
 {
-    qc.codeLabel('entangle pair');
+    qc.label('entangle pair');
 
     // Create all the entangled qubits we need to teleport this object.    
     ep1.write(0);
@@ -70,7 +70,7 @@ function entangle_pair(ep1, ep2)
     ep1.hadamard();
     ep2.cnot(ep1);
 
-    qc.codeLabel('');
+    qc.label('');
     qc.nop();
 }
 
@@ -78,7 +78,7 @@ var last_not = 0;
 
 function prepare_fly(fly)
 {
-    qc.codeLabel('encode fly');
+    qc.label('encode fly');
 
     // Encode the fly pixels into relative phases in a
     // quantum superposition
@@ -98,7 +98,7 @@ function prepare_fly(fly)
 
     // At this point, reading the "fly" register would be very likely
     // to return the coordinates of one of the pixels in the fly.
-    qc.codeLabel('');
+    qc.label('');
     qc.nop();
 }
 
@@ -114,32 +114,32 @@ function pixel(obj, x, y)
 
 function send_payload(payload, ep)
 {
-    qc.codeLabel('send payload');
+    qc.label('send payload');
 
     // Entangle the payload with half of the e-pair, and then vaporize it!
     ep.cnot(payload);
     payload.hadamard();
     var digital_bits = [payload.read(), ep.read()];
 
-    qc.codeLabel('');
+    qc.label('');
     qc.nop();
     return digital_bits;
 }
 
 function apply_error(qubits, error_severity)
 {
-    qc.codeLabel('apply error');
+    qc.label('apply error');
 
     // Apply some unpredictable noise to the system
     qc.noise(error_severity, qubits.bits());
 
-    qc.codeLabel('');
+    qc.label('');
     qc.nop();
 }
 
 function receive_payload(ep, digital_bits)
 {
-    qc.codeLabel('receive payload');
+    qc.label('receive payload');
 
     // Teleport receiver applies the correct operations based on
     // the digital data. Note that in this example we *could*
@@ -151,7 +151,7 @@ function receive_payload(ep, digital_bits)
         if (bit & digital_bits[0])
             ep.phase(180, bit);
     }
-    qc.codeLabel('');
+    qc.label('');
     qc.nop();
 }
 

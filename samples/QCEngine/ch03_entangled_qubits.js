@@ -10,10 +10,10 @@ b = qint.new(1, 'b');
 qc.write(0);
 qc.nop();
 
-qc.codeLabel('entangle');
+qc.label('entangle');
 a.had();           // Place into superposition
 b.cnot(a);         // Entangle
-qc.codeLabel();
+qc.label();
 
 qc.nop();
 a_result = a.read();  // The two bits will be random,

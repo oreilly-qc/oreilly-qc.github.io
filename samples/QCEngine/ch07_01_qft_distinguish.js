@@ -13,7 +13,7 @@ var signal = qint.new(num_qubits, 'signal')
 var which_signal = 'A';
 
 // prepare the signal
-qc.codeLabel('prepare');
+qc.label('prepare');
 signal.write(0);
 signal.hadamard();
 if (which_signal == 'A') {
@@ -26,10 +26,10 @@ if (which_signal == 'A') {
     signal.phase(90, 2);
     signal.phase(180, 4);
 }
-qc.codeLabel();
+qc.label();
 qc.nop();
 
-qc.codeLabel('QFT');
+qc.label('QFT');
 signal.QFT();
-qc.codeLabel();
+qc.label();
 qc.nop();

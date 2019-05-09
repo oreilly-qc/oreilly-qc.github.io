@@ -18,11 +18,11 @@ a.had(0x1|0x2|0x4);
 b.write(2);
 ancilla.write(0);
 
-qc.codeLabel('b = b-a')
+qc.label('b = b-a')
 b.subtract(a);
-qc.codeLabel('');
+qc.label('');
 
-qc.codeLabel('flip if b negative')
+qc.label('flip if b negative')
 
 ancilla.not();
 ancilla.had();
@@ -31,9 +31,9 @@ ancilla.cnot(b.bits(0x8));
 ancilla.had();
 ancilla.not();
 
-qc.codeLabel('');
+qc.label('');
 
-qc.codeLabel('uncompute');
+qc.label('uncompute');
 b.add(a);
 
 

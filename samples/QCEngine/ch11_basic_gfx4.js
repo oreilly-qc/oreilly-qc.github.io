@@ -12,15 +12,15 @@ qc.reset(2 * xy_bits + acc_bits);
 var qx = qint.new(xy_bits, 'qx');
 var qy = qint.new(xy_bits, 'qy');
 var qacc = qint.new(acc_bits, 'qacc');
-qc.codeLabel('init');
+qc.label('init');
 qc.write(0);
 qx.hadamard();
 qy.hadamard();
-qc.codeLabel('');
+qc.label('');
 qc.nop();
 
 var radius = 13;
-qc.codeLabel('fill if x^2 + y^2 < r^2');
+qc.label('fill if x^2 + y^2 < r^2');
 
 qacc.addSquared(qx);
 qacc.addSquared(qy);
@@ -30,5 +30,5 @@ qacc.add(radius * radius);
 qacc.subtractSquared(qy);
 qacc.subtractSquared(qx);
 
-qc.codeLabel('');
+qc.label('');
 qc.nop();

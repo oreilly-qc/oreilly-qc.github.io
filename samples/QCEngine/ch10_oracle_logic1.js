@@ -20,22 +20,22 @@ function main()
     qc.write(0);
     qc.hadamard(0x1|0x2|0x4);
 
-    qc.codeLabel('(a OR NOT b)');
+    qc.label('(a OR NOT b)');
     b.not();
     bit_or(1,2,8);
-    qc.codeLabel('');
+    qc.label('');
     qc.nop();
     
     
-    qc.codeLabel('pAND')
+    qc.label('pAND')
     phase_and(4|8);
-    qc.codeLabel('');
+    qc.label('');
     
     qc.nop();
-    qc.codeLabel('uncompute');
+    qc.label('uncompute');
     inv_bit_or(1,2,8);
     b.not();
-    qc.codeLabel('');
+    qc.label('');
 }
 
 //////////// Definitions

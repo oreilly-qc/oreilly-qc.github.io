@@ -541,7 +541,7 @@ function do_qss_image()
 
 function grover_iteration(mask, mask_with_condition)
 {
-    qc.codeLabel('Grover iteration');
+    qc.label('Grover iteration');
     qc.hadamard(mask);
     qc.not(mask);
     qc.cphase(180, mask_with_condition);
@@ -552,7 +552,7 @@ function grover_iteration(mask, mask_with_condition)
 function invQFT(x)
 {
     var bits = x.numBits;
-    qc.codeLabel('inverse QFT');
+    qc.label('inverse QFT');
     for (var i = 0; i < bits; ++i)
     {
         var bit1 = bits - (i + 1);

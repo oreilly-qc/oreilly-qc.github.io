@@ -14,26 +14,26 @@ a = qint.new(3, 'a');
 b = qint.new(3, 'b');
 
 // prepare
-qc.codeLabel('a = (1, 5)');
+qc.label('a = (1, 5)');
 a.write(1);
 a.hadamard(0x4);
-qc.codeLabel('');
+qc.label('');
 qc.nop();
-qc.codeLabel('b = (1, 3)');
+qc.label('b = (1, 3)');
 b.write(1);
 b.hadamard(0x2);
 b.phase(45, 0x2);
-qc.codeLabel('');
+qc.label('');
 qc.nop();
 
 // if a < 3 then b += 1
-qc.codeLabel('a -= 3');
+qc.label('a -= 3');
 a.subtract(3);
-qc.codeLabel('');
+qc.label('');
 qc.nop();
-qc.codeLabel('if (a < 0) then b++');
+qc.label('if (a < 0) then b++');
 b.add(1, a.bits(0x4));
-qc.codeLabel('');
+qc.label('');
 qc.nop();
-qc.codeLabel('a += 3');
+qc.label('a += 3');
 a.add(3);

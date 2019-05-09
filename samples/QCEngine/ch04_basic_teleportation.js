@@ -26,40 +26,40 @@ function entangle()
 {
     // First, create an entangled pair
     qc.write(0, 2|4);
-    qc.codeLabel('entangle');
+    qc.label('entangle');
     ep.had();
     bob.cnot(ep);
-    qc.codeLabel('');
+    qc.label('');
 }
 
 function alice_prep()
 {
     // Alice prepares her payload to teleport
     alice.write(0);
-    qc.codeLabel('prep payload');
+    qc.label('prep payload');
     alice.had();
     alice.phase(45);
     alice.had();
-    qc.codeLabel('');
+    qc.label('');
     qc.nop();
 }
 
 function alice_send()
 {
     // Alice sends the payload (and destroys it in the process)
-    qc.codeLabel('send');
+    qc.label('send');
     ep.cnot(alice);
     alice.had();
     a1 = alice.read();
     a2 = ep.read();
-    qc.codeLabel('');
+    qc.label('');
     qc.nop();
 }
 
 function bob_receive()
 {
     // Bob receives the payload, using the two bits Alice sent
-    qc.codeLabel('receive');
+    qc.label('receive');
     var bob_is_asleep = false;
     var use_conditonals = true;
 
@@ -86,19 +86,19 @@ function bob_receive()
         if (a2)
             bob.not();
     }
-    qc.codeLabel('');
+    qc.label('');
     qc.nop();
 }
 
 function bob_verify()
 {
     // Verify that the teleportation worked
-    qc.codeLabel('verify');
+    qc.label('verify');
     bob.had();
     bob.phase(-45);
     bob.had();
     bob.read();
-    qc.codeLabel('');
+    qc.label('');
     qc.nop();
 }
 

@@ -10,7 +10,7 @@ qc.reset(num_qubits);
 a = qint.new(4, 'a');
 b = qint.new(2, 'b');
 // prepare
-qc.codeLabel('prepare');
+qc.label('prepare');
 a.write(1);
 a.hadamard(0x4);
 a.phase(45, 0x4);
@@ -18,13 +18,13 @@ b.write(1);
 b.hadamard(0x2);
 b.phase(90, 0x2);
 qc.nop();
-qc.codeLabel('');
+qc.label('');
 qc.nop();
 
-qc.codeLabel('a += b');
+qc.label('a += b');
 
 // a += b * b
 a.addSquared(b);
 
-qc.codeLabel('');
+qc.label('');
 qc.nop();

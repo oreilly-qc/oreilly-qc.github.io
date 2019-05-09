@@ -12,20 +12,7 @@ var precision_bits = 4;       // This can be anything you want.
 function main()
 {
   qc_options.speed_is_priority = false;
-  if (qc_options.speed_is_priority)
-  {
-    panel_chart.setVisible(false);
-    panel_staff.setVisible(true);
-    qc.disableAnimation();
-    qc.disableRecording();
-  }
-  panel_chart.setVisible(true);
-  
-  if (do_override)  // just for the buttons on the left
-  {
-     number_to_factor = override_N;
-     precision_bits = override_PB;
-  }
+
 
   var ok = do_simple_shor(number_to_factor, precision_bits);
   if (ok)
@@ -55,11 +42,11 @@ function do_simple_shor(N, precision_bits)
   var total_bits = N_bits + precision_bits + scratch_bits;
 
   qc.reset(total_bits);
-  num = qint.new(N_bits, 'num');
+  num = qint.new(N_bits, 'work');
   precision = qint.new(precision_bits, 'precision');
   if (do_modulo)
     scratch = qint.new(1, 'scratch');
-  qc.codeLabel('init');
+  qc.label('init');
   num.write(1);
   precision.write(0);
   precision.hadamard();
@@ -77,22 +64,23 @@ function do_simple_shor(N, precision_bits)
     var shifts = 1 << iter;
     if (!do_modulo)
     {
-      qc.codeLabel('iter ' + iter);
+      qc.label('iter ' + iter);
       shifts %= num.numBits;
 //      num.rollLeft(shifts, condition);
         if (shifts == 1)
             num.rollLeft(shifts, condition);
-        else
+        else if (shifts == 2)
 {
-for (var i = 0; i < shifts; ++i)
-            num.rollLeft(1, condition);
+    qc.exchange(0x2|0x8, 32);
+    qc.exchange(0x1|0x4, 32);
+//            num.rollLeft(shifts, condition);
 }
     }
     else
     {
       for (var sh = 0; sh < shifts; ++sh)
       {
-        qc.codeLabel('num *= coprime');
+        qc.label('num *= coprime');
         num.rollLeft(1, condition);   // Multiply by the coprime
         if (do_modulo)
         {
@@ -101,7 +89,7 @@ for (var i = 0; i < shifts; ++i)
             mod_engaged = true;
           if (mod_engaged)
           {
-            qc.codeLabel('modulo N');
+            qc.label('modulo N');
             var wrap_mask = scratch.bits();
             var wrap_mask_with_condition = scratch.bits();
             wrap_mask_with_condition.orEquals(condition);
@@ -118,9 +106,12 @@ for (var i = 0; i < shifts; ++i)
       }
     }
   }
-  qc.codeLabel('invQFT');
-  precision.invQFT();
-  precision.reverseBits();  // TODO: This is a temporary fix
+  qc.label('QFT');
+  precision.QFT();
+//  precision.reverseBits();  // TODO: This is a temporary fix
+  qc.label('');
+precision.read();
+
   return true;
 }
 

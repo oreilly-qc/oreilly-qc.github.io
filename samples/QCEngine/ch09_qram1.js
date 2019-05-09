@@ -11,21 +11,21 @@ var qreg = qint.new(3, 'qreg');
 
 function increment(index)
 {
-    qc.codeLabel('a[2]→qreg');
+    qc.label('a[2]→qreg');
     //qreg.write(a[index]);
     qreg.write(0);
     qreg.not(a[index]);
-    qc.codeLabel('');
+    qc.label('');
     qc.nop();
 
-    qc.codeLabel('add 1');
+    qc.label('add 1');
     qreg.add(1);
-    qc.codeLabel('');
+    qc.label('');
     qc.nop();
 
-    qc.codeLabel('qreg→a[2]');
+    qc.label('qreg→a[2]');
     a[index] = qreg.read();
-    qc.codeLabel('');
+    qc.label('');
     qc.nop();
 }
 

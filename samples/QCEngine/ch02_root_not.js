@@ -12,21 +12,21 @@
 
 qc.reset(1);
 qc.write(0);
-qc.codeLabel("RNOT")
+qc.label("RNOT")
 qc.had();
 qc.phase(-90);
 qc.had();
-qc.codeLabel();
+qc.label();
 qc.nop()
-qc.codeLabel("RNOT")
+qc.label("RNOT")
 qc.had();
 qc.phase(-90);
 qc.had();
-qc.codeLabel("")
+qc.label("")
 
 qc.nop()
-qc.codeLabel("Built-in RNOT")
+qc.label("Built-in RNOT")
 qc.rootnot();
 qc.nop()
 qc.rootnot();
-qc.codeLabel()
+qc.label()

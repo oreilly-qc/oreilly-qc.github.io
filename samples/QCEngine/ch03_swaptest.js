@@ -12,13 +12,13 @@ var output = qint.new(1, 'output');
 // Initialize the output register
 // Initialize input registers that we want to compare
 // In this example the swap test should reveal their equality
-qc.codeLabel('Initialize');
+qc.label('Initialize');
 input1.write(0);
 input2.write(0);
-qc.codeLabel('');
+qc.label('');
 qc.nop()
 // The swap test itself
-qc.codeLabel('Swap test')
+qc.label('Swap test')
 output.write(0);
 output.had();
 // Now exchange the two inputs conditional on the output qubits.
@@ -27,5 +27,5 @@ output.had();
 output.not();
 // The output register is 1 only if inputs are equal
 output.read();
-qc.codeLabel('');
+qc.label('');
 qc.nop();

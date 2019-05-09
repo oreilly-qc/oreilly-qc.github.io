@@ -16,35 +16,35 @@ var r2;
 
 ep1.write(0);
 ep2.write(0);
-qc.codeLabel('entangle');
+qc.label('entangle');
 ep1.had();
 ep2.cnot(ep1);
-qc.codeLabel('');
+qc.label('');
 
 alice.write(0);
-qc.codeLabel('prep alice');
+qc.label('prep alice');
 alice.had();
 alice.phase(45);
 alice.had();
-qc.codeLabel('');
+qc.label('');
 
 bob.write(0);
-qc.codeLabel('prep bob');
+qc.label('prep bob');
 bob.had();
 bob.phase(30);
 bob.had();
-qc.codeLabel('');
+qc.label('');
 
 
-qc.codeLabel('teleport');
+qc.label('teleport');
 ep1.cnot(alice);
 bob.cnot(ep2);
 ep2.had();
 r1 = ep1.read();
 r2 = ep2.read();
-qc.codeLabel('');
+qc.label('');
 
-qc.codeLabel('conditional');
+qc.label('conditional');
 bob.cnot(ep1);
 alice.cz(ep2);
-qc.codeLabel('');
+qc.label('');
