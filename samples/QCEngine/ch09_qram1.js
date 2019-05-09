@@ -4,31 +4,23 @@
 
 // To run this online, go to http://oreilly-qc.github.io?p=9-1
 
-var a = [4, 3, 5, 1];
-
-qc.reset(3);
-var qreg = qint.new(3, 'qreg');
-
-function increment(index)
+function main()
 {
-    qc.label('a[2]→qreg');
-    //qreg.write(a[index]);
-    qreg.write(0);
-    qreg.not(a[index]);
-    qc.label('');
-    qc.nop();
+    var a = [4, 3, 5, 1];
 
-    qc.label('add 1');
-    qreg.add(1);
-    qc.label('');
-    qc.nop();
+    qc.reset(3);
+    var qreg = qint.new(3, 'qreg');
 
-    qc.label('qreg→a[2]');
-    a[index] = qreg.read();
-    qc.label('');
-    qc.nop();
+    qc.print(a);
+    increment(a, 2, qreg);
+    qc.print(a);
 }
 
-qc.print(a);
-increment(2);
-qc.print(a);
+function increment(a, index, qreg)
+{
+    qreg.write(a[index]);
+    qreg.add(1);
+    a[index] = qreg.read();
+}
+main();
+
