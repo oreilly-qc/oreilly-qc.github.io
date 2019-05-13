@@ -19,7 +19,7 @@ function random_bit(q) {
 
 // Generate two random bits
 qc.label('get two random bits');
-send_basis = random_bit(a);
+send_had = random_bit(a);
 send_value = random_bit(a);
 qc.label('');
 
@@ -32,9 +32,9 @@ if (send_value)
 qc.nop();
 qc.label('');
 qc.nop();
-qc.label('set basis');
+qc.label('apply had');
 qc.nop();
-if (send_basis)
+if (send_had)
     a.had();
 qc.nop();
 qc.label('');
@@ -46,27 +46,27 @@ fiber.exchange(a);
 var spy_is_present = true;
 if (spy_is_present)
 {
-    var spy_basis = 1;
+    var spy_had = 1;
     qc.nop();
     qc.label('spy');
-    if (spy_basis)
+    if (spy_had)
         fiber.had();
     stolen_data = fiber.read();
     fiber.write(0);
     if (stolen_data)
         fiber.not();
-    if (spy_basis)
+    if (spy_had)
         fiber.had();
     qc.label('');
     qc.nop();
 }
 
 // Receive the qubit!
-recv_basis = random_bit(b);
+recv_had = random_bit(b);
 fiber.exchange(b);
-qc.label('set basis');
+qc.label('apply had');
 qc.nop();
-if (recv_basis)
+if (recv_had)
     b.had();
 qc.nop();
 qc.label('');
@@ -79,9 +79,9 @@ qc.label('');
 qc.nop();
 
 // Now Alice emails Bob to tell
-// him her basis and value.
-// If the basis matches and the
+// him her had setting and value.
+// If the had setting matches and the
 // value does not, there's a spy!
-if (send_basis == recv_basis)
+if (send_had == recv_had)
     if (send_value != recv_val)
         qc.print('Caught a spy!\n');
