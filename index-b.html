@@ -8,17 +8,82 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="./external/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+
+    <style>
+        .panel-resizable {
+            resize: vertical;
+          overflow: auto;
+        }
+
+        .ej-no-margin {
+          margin: 0px !important;
+/*          margin-bottom:50px !important;
+*/           padding: 0px !important;
+          padding-bottom:10px !important;
+        }
+
+        .xxxpad-left-only {
+          margin: 0px !important;
+/*           padding: 8px !important;
+           padding-left: 10px !important;
+           padding-right: 0px !important;
+           margin: 0px !important;
+           margin-left: 10px;
+*/        }
+        .xxxpad-right-only {
+           padding: 8px !important;
+/*           padding-left: 0px !important;
+           padding-right: 10px !important;
+           margin: 0px !important;
+           margin-right: 10px;
+*/        }
+        .less-padding {
+           padding: 0px !important;
+           margin: 0px !important;
+        }
+
+        .editor {
+/*          background-color:#e5e5e5;
+          padding:0px;
+          margin-top:1%;
+          margin-left:1%;
+          margin-right:1%;
+          margin-bottom:1%;
+          float:bottom;
+          width:98%;
+*/          
+/*          resize:vertical;
+          overflow:auto;
+*/
+          overflow: hidden;
+          width:100%;
+          height:100px;
+        }
+    </style>
 
 </head>
 <body>
 
+<img src="images/cs-title-bar.jpg" width="100%" />
+<br/>
+<!-- <div class="jumbotron text-center">
+  <table>
+    <tr>
+      <td>
+        <img src="images/book_cover.jpg" height="300" />
+      </td>
+      <td>
+        <h1>Programming Quantum Computers</h1>
+        <p>Hands on: Run Code Samples</p> 
+      </td>
+    </tr>
+  </table>
+</div>
+ -->
 <div class="row">
-<<<<<<< HEAD
-  <div class="col-sm-4">
-=======
   <div class="col-sm-6">
->>>>>>> ui-testing
-    <div class="container">
+    <div class="container-fluid pad-left-only">
 
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -49,29 +114,22 @@
             </button>
           </div>
         </div>
-        <div class="panel-body">(editor)</div>
+        <div id="editor_boot_panel" class="panel-body panel-resizable ej-no-margin">
+          <div id="editor_div" class="editor"></div>
+        </div>
       </div>
+
+
     </div>
   </div>
-<<<<<<< HEAD
-  <div class="col-sm-4">
-    <div class="container">
+  <div class="col-sm-6">
+    <div class="container-fluid pad-right-only">
       <div class="row">
         <div class="col-*-*">
-          <div class="container">
+          <div class="container-fluid pad-right-only">
             <div class="panel panel-default">
               <div class="panel-heading">
                 <b>Program gates</b>
-=======
-  <div class="col-sm-6">
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <div class="container">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                Program gates
->>>>>>> ui-testing
                 <div class="btn-group">
                   <button type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-zoom-in"></span>
@@ -84,13 +142,12 @@
                     <span class="glyphicon glyphicon-new-window"></span>
                 </button>
               </div>
-              <div class="panel-body">(gates)</div>
+              <div class="panel-body panel-resizable">(gates)</div>
             </div>
           </div>
         </div>
-<<<<<<< HEAD
         <div class="col-*-*">
-          <div class="container">
+          <div class="container-fluid pad-right-only">
             <div class="panel panel-default">
               <div class="panel-heading">
                 <b>State vector</b>
@@ -108,13 +165,6 @@
                     <img src="images/circ_style_11a.png" width="64"></span>
                   </button>
                 </div>
-=======
-        <div class="col">
-          <div class="container">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                State vector
->>>>>>> ui-testing
                 <div class="btn-group">
                   <button type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-zoom-in"></span>
@@ -127,8 +177,30 @@
                     <span class="glyphicon glyphicon-new-window"></span>
                 </button>
               </div>
-              <div class="panel-body">(state vector)</div>
+              <div class="panel-body panel-resizable">(state vector)</div>
             </div>
+
+
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+                <b>Program output</b>
+
+          <div class="btn-group">
+            <button type="button" class="btn btn-default">
+              <span class="glyphicon glyphicon-zoom-in"></span>
+            </button>
+            <button type="button" class="btn btn-default">
+              <span class="glyphicon glyphicon-zoom-out"></span>
+            </button>
+          </div>
+        </div>
+        <div class="panel-body panel-resizable">(output)</div>
+      </div>
+
+
+
+
           </div>
         </div>
       </div>
@@ -136,5 +208,55 @@
   </div>
 </div>
 
+<script>
+    var editor = ace.edit("editor_div");
+    editor.session.setMode("ace/mode/javascript");
+    editor.commands.addCommand({
+        name: "run",
+        bindKey: {win: "Shift-Enter", mac: "Shift-Enter"},
+        exec: function(editor) {
+            handle_run_button();
+        }
+    });
+
+var editor_div = document.getElementById('editor_div');
+var editor_boot_panel = document.getElementById('editor_boot_panel');
+var editor_frame_div = document.getElementById('editor_frame_div');
+var example_choice_span = document.getElementById('example_choice_span');
+var example_github_span = document.getElementById('example_github_span');
+// var language_choice_span = document.getElementById('language_choice_span');
+var script_output_textarea = document.getElementById('script_output_textarea');
+var staff_popin_div = document.getElementById('staff_popin_div');
+
+
+///////////////////////////////////////////////////////////////
+// This is a small workaround for the issue where the editor
+// doesn't get informed about size changes
+var last_editor_div_width = 0;
+var last_editor_div_height = 0;
+var check_serial = 0;
+function check_for_editor_resize()
+{
+    console.log('check ' + check_serial);
+    check_serial += 1;
+    var seconds_per_check_for_editor_resize = 0.5;
+    var w = editor_boot_panel.offsetWidth;
+    var h = editor_boot_panel.offsetHeight;
+    editor_div.style.height = "" + (h - 10) + "px";
+    if (w != last_editor_div_width || h != last_editor_div_height)
+    {
+        console.log('  ...changed');
+        editor.resize();
+        last_editor_div_width = w;
+        last_editor_div_height = h;
+    }
+    window.setTimeout(check_for_editor_resize,
+                      1000 * seconds_per_check_for_editor_resize);
+}
+window.onload = function() {
+    check_for_editor_resize();
+};
+
+</script>
 </body>
 </html>
