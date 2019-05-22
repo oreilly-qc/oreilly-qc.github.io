@@ -156,9 +156,17 @@
                 </button>
               </div>
               <div class="panel-body panel-resizable">
+
+
+
                 <div id="staff_popin_div" class="right" style="resize: both; overflow: auto;">
                   <canvas id="draw_gate_canvas"></canvas>
                 </div>
+
+
+
+
+
               </div>
             </div>
           </div>
@@ -195,9 +203,12 @@
                 </button>
               </div>
               <div class="panel-body panel-resizable">
-                <div id="circle_div" style="resize: both; overflow: auto;">
-                  <canvas id="circle_canvas", width="500", height="500"></canvas>
+
+                <div id="circle_div" class="right" style="resize: both; overflow: auto;">
+                  <canvas id="circle_canvas"></canvas>
                 </div>
+
+
               </div>
             </div>
 
@@ -566,6 +577,21 @@ function load_code_sample(sample_str)
     return ok;
 }
 
+// function test_cc(canvas, color)
+// {
+//     canvas.width = 200;
+//     canvas.height = 200;
+
+//     console.log(canvas);
+//     var ctx = canvas.getContext('2d');
+//     ctx.save();
+//     {
+//         ctx.fillStyle = color;
+//         ctx.fillRect(0, 0, canvas.width, canvas.height);
+//     }
+//     ctx.restore();
+// }
+
 function run_script()
 {
     qc_options.color_by_phase = false;
@@ -582,6 +608,7 @@ function run_script()
     runQCScriptInTextArea('editor', 'script_output_textarea');
 
     qc.qReg.changed();
+    show_state_vector();
     qc.panel_staff.draw();
     qc.panel_chart.draw();
 
@@ -619,6 +646,8 @@ function show_state_vector()
 function handle_run_button()
 {
     run_script();
+    qc.panel_staff.setVisible(true);
+    qc.panel_chart.setVisible(true);
     qc.panel_staff.staff.fullSnapshot();
 }
 
