@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Testing</title>
+  <title>Programming Quantum Computers</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -75,23 +75,14 @@
 </head>
 <body>
 
-<img src="images/cs-title-bar.jpg" width="100%" />
+<!--
+<a href="https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683">
+ -->
+<a href="http://shop.oreilly.com/product/0636920167433.do">
+  <img src="images/cs-title-bar.jpg" width="100%" />
+</a>
 <br/>
 
-<!-- <div class="jumbotron text-center">
-  <table>
-    <tr>
-      <td>
-        <img src="images/book_cover.jpg" height="300" />
-      </td>
-      <td>
-        <h1>Programming Quantum Computers</h1>
-        <p>Hands on: Run Code Samples</p> 
-      </td>
-    </tr>
-  </table>
-</div>
- -->
 <div class="row">
   <div class="col-sm-6">
     <div class="container-fluid pad-left-only">
@@ -100,7 +91,7 @@
         <div class="panel-heading">
 
           <div class="btn-group">
-            <button type="button" class="btn btn-success">
+            <button type="button" class="btn btn-success" onclick="handle_run_button();">
                         <span class="glyphicon glyphicon-play"></span>
                         Run Program
             </button>
@@ -163,7 +154,11 @@
                     <span class="glyphicon glyphicon-new-window"></span>
                 </button>
               </div>
-              <div class="panel-body panel-resizable">(gates)</div>
+              <div class="panel-body panel-resizable">
+                <div id="staff_popin_div" class="right" style="resize: both; overflow: auto;">
+                  <canvas id="draw_gate_canvas"></canvas>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -198,7 +193,11 @@
                     <span class="glyphicon glyphicon-new-window"></span>
                 </button>
               </div>
-              <div class="panel-body panel-resizable">(state vector)</div>
+              <div class="panel-body panel-resizable">
+                <div id="circle_div" style="resize: both; overflow: auto;">
+                  <canvas id="circle_canvas", width="500", height="500"></canvas>
+                </div>
+              </div>
             </div>
 
 
@@ -359,21 +358,38 @@ function load_code_from_url(file_url)
                     editor.focus();
                     editor.setValue(http_request.responseText);
                     editor.gotoLine(0);
+                    make_github_source_links();
                 }
                 else
                 {
-                    var code_str = '// sample ' + file_url + ' could not be loaded.\n';
-                    editor.focus();
-                    editor.setValue(code_str);
-                    editor.gotoLine(0);
+                  do_failed_load_sample(file_url);
                 }
-                make_github_source_links();
             }
         };
-        http_request.send(null);
+        http_request.onerror = function ()
+        {
+          do_failed_load_sample(file_url);
+        };
+        try {
+          http_request.send(null);
+        }
+        catch (error) {
+          do_failed_load_sample(file_url);
+        }
         return true;
     }
     make_github_source_links();
+}
+
+function do_failed_load_sample(file_url)
+{
+  var code_str = '// The sample ' + file_url + '\n// could not be loaded.\n//\n';
+  code_str += '// (basic teleportation sample follows)\n\n';
+  code_str += default_program;
+  editor.focus();
+  editor.setValue(code_str);
+  editor.gotoLine(0);
+  make_github_source_links();
 }
 
 qc_options.staff_canvas = document.getElementById('draw_gate_canvas');
@@ -423,36 +439,18 @@ function fetch_sample_contents()
 function make_sample_menu()
 {
     str = '';
-
-
-    if (0)
+    str += '<button id="sample_menu_button" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
+    str += 'Choose a sample <span class="caret"></span></button>';
+    str += '<ul class="dropdown-menu" role="menu">';
+    for (i = 0; i < sample_menu.length; ++i)
     {
-      str += '<select class="samplechoice" id="example_choice_sel" onchange="example_menu_changed();">';
-      for (i = 0; i < sample_menu.length; ++i)
-      {
-          sample = sample_menu[i];
-          str += '<option value="' + sample.sample_file + '">';
-          str += sample.menu_title;
-          str += '</option>';
-      }
-      str += '</select>';
+        sample = sample_menu[i];
+        str += '<li><a href="#" onclick="choose_sample_menu(sample_menu['+i+'], null);">';
+        str += sample.menu_title;
+        str += '</a></li>';
     }
-    else
-    {
-      str += '<button id="sample_menu_button" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
-      str += 'Choose a sample <span class="caret"></span></button>';
-      str += '<ul class="dropdown-menu" role="menu">';
-      for (i = 0; i < sample_menu.length; ++i)
-      {
-          sample = sample_menu[i];
-          str += '<li><a href="#" onclick="choose_sample_menu(sample_menu['+i+'], null);">';
-          str += sample.menu_title;
-          str += '</a></li>';
-      }
-      str += '</ul>'
-    }
+    str += '</ul>'
     example_choice_span.innerHTML = str;
-
     try_to_get_program_from_passed_in_url();
 }
 
@@ -504,7 +502,12 @@ function get_url_param(param)
     }
   );
   if (param) {
-    return vars[param] ? vars[param] : null;  
+    result = vars[param]
+    if (!result)
+      return null;
+    // Strip stray # symbols
+    result = result.replace('#','');
+    return result;
   }
   return vars;
 }
@@ -539,9 +542,6 @@ function try_to_get_program_from_passed_in_url()
     var sample = get_sample_from_string(sample_str);
     var engine = get_engine_from_string(engine_str);
     choose_sample_menu(sample, engine);
-    // menu = document.getElementById('example_choice_sel');
-    // menu.value = sample.sample_file;
-    // example_menu_changed();
 }
 
 function load_code_sample(sample_str)
@@ -563,168 +563,6 @@ function load_code_sample(sample_str)
         editor.gotoLine(0);
     }
     return ok;
-}
-
-  //   for (i = 0; i < sample_list.length; ++i)
-  //   {
-  //     sample = sample_list[i];
-  //     if (program_id == sample.id)
-  //     {
-  //       menu = document.getElementById('example_choice_sel');
-  //       menu.value = program_id;
-  //       return true;
-  //     }
-  //   }
-  // }
-  // return false;
-//}
-
-// function example_menu_changed()
-// {
-    // if (button_js.checked)
-    //     current_language = 'javascript';
-    // if (button_py.checked)
-    //     current_language = 'python';
-    // if (button_asm.checked)
-    //     current_language = 'asm';
-    // menu = document.getElementById('example_choice_sel');
-    // load_example(menu.value);
-
-    // var editor_mode = "ace/mode/" + current_language;
-    // if (current_language == 'asm')
-    //     editor_mode = '';
-    // editor.session.setMode(editor_mode);
-
-    // if (current_language == 'javascript')
-    // {
-    //     handle_run_button();
-    //     rewind_to_beginning();
-    // }
-    // else
-    // {
-    //     panel_staff.setVisible(false);
-    //     panel_chart.setVisible(false);
-    // }
-
-//     menu = document.getElementById('example_choice_sel');
-//     load_code_sample(menu.value);
-//     clear_output();
-// }
-
-// function load_example(id)
-// {
-//     for (i = 0; i < sample_list.length; ++i)
-//     {
-//         sample = sample_list[i];
-//         if (sample.id == id)
-//         {
-//             var id_lang = setup_program_in_language(id);
-//             source_area = document.getElementById(id_lang);
-//             if (source_area != null)
-//             {
-//                 editor.focus();
-//                 editor.setValue(source_area.value);
-//                 editor.gotoLine(0);
-//                 setup_script_panels(sample);
-//             }
-//             return;
-//         }
-//     }
-// }
-
-// function setup_program_in_language(id)
-// {
-//     var src_js = document.getElementById(id + '_javascript');
-//     var src_py = document.getElementById(id + '_python');
-//     var src_asm = document.getElementById(id + '_asm');
-//     button_js.disabled = (src_js == null);
-//     button_py.disabled = (src_py == null);
-//     button_asm.disabled = (src_asm == null);
-//     var id_lang = id + '_' + current_language;
-//     source_area = document.getElementById(id_lang);
-//     if (source_area == null)
-//     {
-//         // If the language isn't supported, switch to JavaScript
-//         current_language = 'javascript'
-//         id_lang = id + '_' + current_language;
-//     }
-//     set_current_language_checkbox();
-//     return id_lang;
-// }
-
-// function set_current_language_checkbox()
-// {
-//     if (current_language == 'javascript')
-//         button_js.checked = true;
-//     if (current_language == 'python')
-//         button_py.checked = true;
-//     if (current_language == 'asm')
-//         button_asm.checked = true;
-// }
-
-function LoadUserName() {}
-
-function setup_script_panels(sample)
-{
-    if (qc.panel_staff)
-    {
-        // if (current_language != 'javascript')
-        // {
-        //     panel_staff.setVisible(false);
-        //     panel_chart.setVisible(false);
-        //     return;
-        // }
-        // panel_staff.div.parentNode.removeChild(panel_staff.div);
-        // console.log('div');
-        // console.log(panel_staff);
-        // console.log(panel_staff.div);
-        // panel_staff.div.style.scroll = 'both';
-        qc_options.color_by_phase = false;
-        qc_options.circle_scale = 0.5;
-        qc.start();
-        qc.enableAnimation();
-        // qc.reset(sample.num_qubits);
-        // qc.write(0);
-        // qint.new(sample.num_qubits, 'reg');
-
-        sample = {num_instructions:20,num_qubits:18,num_circle_cols:8,num_circle_rows:2};
-
-        var left = 510;
-        var top = 260;
-        var gate_grid = 20;
-        var circle_grid = 64;
-        var gate_width = 100 + 20 + gate_grid * sample.num_instructions;
-        var gate_height = 80 + gate_grid * sample.num_qubits;
-        qc.panel_staff.setPos(left, top);
-        qc.panel_staff.setSize(gate_width, gate_height);
-        top += gate_height + 32;
-        var circle_width = 20 + circle_grid * sample.num_circle_cols;
-        var circle_height = 150 + circle_grid * sample.num_circle_rows;
-        qc.panel_chart.setPos(left, top);
-        qc.panel_chart.setSize(circle_width, circle_height);
-        qc.panel_staff.setVisible(true);
-        qc.panel_chart.setVisible(true);
-
-        qc.panel_staff.draw();
-        qc.panel_chart.draw();
-    }
-    // pop_in(qc.panel_staff.div, staff_popin_div);
-    // pop_in(qc.panel_chart.div, staff_popin_div);
-}
-
-function pop_in(child_div, parent_div)
-{
-    // parent_div.appendChild(child_div);
-    // child_div.style.position = 'relative';
-    // child_div.style.top = 0;
-    // child_div.style.left = 0;
-    // child_div.style.width = '100%';
-    // child_div.style.height = '200px';
-    // child_div.style.marginLeft = 0;
-    // child_div.style.marginTop = 0;
-    // child_div.style.boxShadow = 'none';
-    // child_div.style.overflow = 'scroll';
-    // child_div.style.display = 'block';
 }
 
 function run_script()
@@ -775,6 +613,12 @@ function show_state_vector()
     else if (list[i].blochSphere || list[i].densityMatrix || list[i].graphState || list[i].stabilizerState)
         list[i].in_use = false;
   }
+}
+
+function handle_run_button()
+{
+    run_script();
+    qc.panel_staff.staff.fullSnapshot();
 }
 
 var default_program = `
