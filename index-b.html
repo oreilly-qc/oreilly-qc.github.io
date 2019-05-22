@@ -10,6 +10,16 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script src="./external/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 
+<script type="text/javascript" src="../QCEngine/src/qcengine_bitfield.js"></script>
+<script type="text/javascript" src="../QCEngine/src/qcengine_reg.js"></script>
+<script type="text/javascript" src="../QCEngine/src/qcengine_int.js"></script>
+<script type="text/javascript" src="../QCEngine/src/qcengine_basicops.js"></script>
+<script type="text/javascript" src="../QCEngine/src/qcengine_widgets.js"></script>
+<script type="text/javascript" src="../QCEngine/src/qcengine_staff.js"></script>
+<script type="text/javascript" src="../QCEngine/src/qcengine_scriptpanel.js"></script>
+<script type="text/javascript" src="../QCEngine/src/qcengine_panel.js"></script>
+<script type="text/javascript" src="./sample_shortcuts.js"></script>
+
     <style>
         .panel-resizable {
             resize: vertical;
@@ -58,7 +68,7 @@
 */
           overflow: hidden;
           width:100%;
-          height:100px;
+          height:400px;
         }
     </style>
 
@@ -67,6 +77,7 @@
 
 <img src="images/cs-title-bar.jpg" width="100%" />
 <br/>
+
 <!-- <div class="jumbotron text-center">
   <table>
     <tr>
@@ -94,6 +105,9 @@
                         Run Program
             </button>
             <div class="btn-group">
+
+
+                    <span id="example_choice_span">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
               Choose a sample <span class="caret"></span></button>
               <ul class="dropdown-menu" role="menu">
@@ -101,6 +115,8 @@
                 <li><a href="#">Sample 2-14: Another sample</a></li>
                 <li><a href="#">Sample 6-1: And yet another one</a></li>
               </ul>
+                    </span>
+
             </div>
           </div>
 
@@ -113,7 +129,12 @@
               <span class="glyphicon glyphicon-zoom-out"></span>
             </button>
           </div>
+
+          <span id="example_github_span">
+          </span>
         </div>
+
+
         <div id="editor_boot_panel" class="panel-body panel-resizable ej-no-margin">
           <div id="editor_div" class="editor"></div>
         </div>
@@ -195,7 +216,11 @@
             </button>
           </div>
         </div>
-        <div class="panel-body panel-resizable">(output)</div>
+        <div class="panel-body panel-resizable">
+          <textarea id="script_output_textarea" style="width:100%; height:100px;" style="resize:both;">
+(program output goes here)
+          </textarea>
+        </div>
       </div>
 
 
@@ -237,15 +262,12 @@ var last_editor_div_height = 0;
 var check_serial = 0;
 function check_for_editor_resize()
 {
-    console.log('check ' + check_serial);
-    check_serial += 1;
     var seconds_per_check_for_editor_resize = 0.5;
     var w = editor_boot_panel.offsetWidth;
     var h = editor_boot_panel.offsetHeight;
     editor_div.style.height = "" + (h - 10) + "px";
     if (w != last_editor_div_width || h != last_editor_div_height)
     {
-        console.log('  ...changed');
         editor.resize();
         last_editor_div_width = w;
         last_editor_div_height = h;
@@ -255,7 +277,626 @@ function check_for_editor_resize()
 }
 window.onload = function() {
     check_for_editor_resize();
+    fetch_sample_contents();
+    make_sample_menu();
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+function load_json_from_url(file_url)
+{
+    fetch(file_url, {cache: 'reload'})
+      .then(
+        function(response) {
+          if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' + response.status);
+            return false;
+          }
+
+          response.json().then(function(data) {
+            console.log(data);
+          });
+          return true;
+        }
+      )
+      .catch(function(err) {
+        console.log('Fetch Error :-S', err);
+        return false;
+      });
+}
+
+function load_code_from_url(file_url)
+{
+    var use_fetch = false; // fetch is not supported on Kindles
+    if (use_fetch)
+    {
+        fetch(file_url, {cache: 'reload'})
+          .then(
+            function(response) {
+              if (response.status !== 200) {
+                console.log('Error loading ' + file_url + '. Status Code: ' + response.status);
+                return false;
+              }
+              response.text().then(function(data) {
+                editor.focus();
+                editor.setValue(data);
+                editor.gotoLine(0);
+              });
+              return true;
+            }
+          )
+          .catch(function(err) {
+            console.log('Fetch Error :-S', err);
+            return false;
+          });
+    }
+    else
+    {
+        var http_request = new XMLHttpRequest();
+        http_request.open('GET', file_url, true);
+
+        // If specified, responseType must be empty string or "text"
+        http_request.responseType = 'text';
+
+        http_request.onload = function ()
+        {
+            if (http_request.readyState === http_request.DONE)
+            {
+                if (http_request.status === 200)
+                {
+                    // console.log(http_request.response);
+                    // console.log(http_request.responseText);
+                    editor.focus();
+                    editor.setValue(http_request.responseText);
+                    editor.gotoLine(0);
+                }
+                else
+                {
+                    var code_str = '// sample ' + file_url + ' could not be loaded.\n';
+                    editor.focus();
+                    editor.setValue(code_str);
+                    editor.gotoLine(0);
+                }
+                make_github_source_links();
+            }
+        };
+        http_request.send(null);
+        return true;
+    }
+    make_github_source_links();
+}
+
+qc_options.staff_canvas = document.getElementById('draw_gate_canvas');
+qc_options.staff_div = document.getElementById('staff_popin_div');
+qc_options.circle_canvas = document.getElementById('circle_canvas');
+qc_options.circle_div = document.getElementById('circle_div');
+var qc = QPU();
+// qc.set_canvas(document.getElementById('draw_gate_canvas'));
+// panel_staff = qc.panel_staff;
+// panel_chart = qc.panel_chart;
+
+var current_sample = null;
+var all_sample_contents = {};
+function fetch_one_sample_dir(engine)
+{
+    var base_url = 'https://api.github.com/repos/oreilly-qc/oreilly-qc.github.io/contents/samples/';
+    var http_request = new XMLHttpRequest();
+    http_request.open('GET', base_url + engine.name, true);
+
+    // If specified, responseType must be empty string or "text"
+    http_request.responseType = 'text';
+
+    http_request.onload = function ()
+    {
+        if (http_request.readyState === http_request.DONE)
+        {
+            if (http_request.status === 200)
+            {
+                engine.dir_list = http_request.responseText;
+                make_github_source_links();
+            }
+            else
+            {
+                engine.dir_list = '';
+            }
+        }
+    };
+    http_request.send(null);
+}
+
+function fetch_sample_contents()
+{
+    for (var i = 0; i < engine_list.length; ++i)
+        fetch_one_sample_dir(engine_list[i]);
+}
+
+function make_sample_menu()
+{
+    str = '';
+
+
+    if (0)
+    {
+      str += '<select class="samplechoice" id="example_choice_sel" onchange="example_menu_changed();">';
+      for (i = 0; i < sample_menu.length; ++i)
+      {
+          sample = sample_menu[i];
+          str += '<option value="' + sample.sample_file + '">';
+          str += sample.menu_title;
+          str += '</option>';
+      }
+      str += '</select>';
+    }
+    else
+    {
+      str += '<button id="sample_menu_button" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
+      str += 'Choose a sample <span class="caret"></span></button>';
+      str += '<ul class="dropdown-menu" role="menu">';
+      for (i = 0; i < sample_menu.length; ++i)
+      {
+          sample = sample_menu[i];
+          str += '<li><a href="#" onclick="choose_sample_menu(sample_menu['+i+'], null);">';
+          str += sample.menu_title;
+          str += '</a></li>';
+      }
+      str += '</ul>'
+    }
+    example_choice_span.innerHTML = str;
+
+    try_to_get_program_from_passed_in_url();
+}
+
+function choose_sample_menu(sample, engine)
+{
+  console.log('Sample menu chosen: ' + sample.sample_file);
+  var sample_menu_button = document.getElementById('sample_menu_button');
+  sample_menu_button.innerHTML = sample.menu_title;
+  load_code_sample(sample.sample_file);
+  clear_output();
+}
+
+function make_github_source_links()
+{
+    var sample = current_sample;
+    str = '<br/>';
+//    if (sample != null)
+    {
+        str += 'View source in Github: ';
+        for (i = 0; i < engine_list.length; ++i)
+        {
+            engine = engine_list[i];
+            if (i > 0)
+                str += ' / ';
+            var sample_ok = engine.dir_list.includes(sample.sample_file);
+            if (sample_ok)
+            {
+                var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/blob/master/samples/';
+                link += engine.name + '/' + sample.sample_file + engine.suffix;
+                str += '<b><a href="'+link+'">'+engine.name+'</a></b>';
+            }
+            else
+            {
+                str += '<span style="color:#aaa">' + engine.name + '</span>';
+            }
+        }
+    }
+    example_github_span.innerHTML = str;
+}
+
+// get_url_param() is adapted from JeffreyCrofte's work here: https://www.creativejuiz.fr/blog/en/javascript-en/read-url-get-parameters-with-javascript
+function get_url_param(param)
+{
+  var vars = {};
+  window.location.href.replace( location.hash, '' ).replace( 
+    /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+    function( m, key, value ) { // callback
+      vars[key] = value !== undefined ? value : '';
+    }
+  );
+  if (param) {
+    return vars[param] ? vars[param] : null;  
+  }
+  return vars;
+}
+
+function get_sample_from_string(sample_str)
+{
+    for (var i = 0; i < sample_menu.length; ++i)
+    {
+        var sample = sample_menu[i];
+        if (sample_str == sample.sample_file || sample_str == sample.shortcut)
+            return sample;
+    }
+    return sample_menu[0];
+}
+
+function get_engine_from_string(engine_str)
+{
+    for (var i = 0; i < engine_list.length; ++i)
+    {
+        var engine = engine_list[i];
+        if (engine_str == engine.sample_file || sample_str == engine.shortcut)
+            return engine;
+    }
+    return engine_list[0];
+}
+
+function try_to_get_program_from_passed_in_url()
+{
+    var sample_str = get_url_param('p');
+    var engine_str = get_url_param('e');
+
+    var sample = get_sample_from_string(sample_str);
+    var engine = get_engine_from_string(engine_str);
+    choose_sample_menu(sample, engine);
+    // menu = document.getElementById('example_choice_sel');
+    // menu.value = sample.sample_file;
+    // example_menu_changed();
+}
+
+function load_code_sample(sample_str)
+{
+    var sample = get_sample_from_string(sample_str);
+    current_sample = sample;
+
+    var qce = engine_list[0];
+    var raw_qce_code_url = qce.subdir + sample.sample_file + qce.suffix;
+
+    var github_links_str = '';
+
+    ok = load_code_from_url(raw_qce_code_url);
+    if (!ok)
+    {
+        var code_str = '// sample ' + raw_qce_code_url + ' could not be loaded.\n';
+        editor.focus();
+        editor.setValue(code_str);
+        editor.gotoLine(0);
+    }
+    return ok;
+}
+
+  //   for (i = 0; i < sample_list.length; ++i)
+  //   {
+  //     sample = sample_list[i];
+  //     if (program_id == sample.id)
+  //     {
+  //       menu = document.getElementById('example_choice_sel');
+  //       menu.value = program_id;
+  //       return true;
+  //     }
+  //   }
+  // }
+  // return false;
+//}
+
+// function example_menu_changed()
+// {
+    // if (button_js.checked)
+    //     current_language = 'javascript';
+    // if (button_py.checked)
+    //     current_language = 'python';
+    // if (button_asm.checked)
+    //     current_language = 'asm';
+    // menu = document.getElementById('example_choice_sel');
+    // load_example(menu.value);
+
+    // var editor_mode = "ace/mode/" + current_language;
+    // if (current_language == 'asm')
+    //     editor_mode = '';
+    // editor.session.setMode(editor_mode);
+
+    // if (current_language == 'javascript')
+    // {
+    //     handle_run_button();
+    //     rewind_to_beginning();
+    // }
+    // else
+    // {
+    //     panel_staff.setVisible(false);
+    //     panel_chart.setVisible(false);
+    // }
+
+//     menu = document.getElementById('example_choice_sel');
+//     load_code_sample(menu.value);
+//     clear_output();
+// }
+
+// function load_example(id)
+// {
+//     for (i = 0; i < sample_list.length; ++i)
+//     {
+//         sample = sample_list[i];
+//         if (sample.id == id)
+//         {
+//             var id_lang = setup_program_in_language(id);
+//             source_area = document.getElementById(id_lang);
+//             if (source_area != null)
+//             {
+//                 editor.focus();
+//                 editor.setValue(source_area.value);
+//                 editor.gotoLine(0);
+//                 setup_script_panels(sample);
+//             }
+//             return;
+//         }
+//     }
+// }
+
+// function setup_program_in_language(id)
+// {
+//     var src_js = document.getElementById(id + '_javascript');
+//     var src_py = document.getElementById(id + '_python');
+//     var src_asm = document.getElementById(id + '_asm');
+//     button_js.disabled = (src_js == null);
+//     button_py.disabled = (src_py == null);
+//     button_asm.disabled = (src_asm == null);
+//     var id_lang = id + '_' + current_language;
+//     source_area = document.getElementById(id_lang);
+//     if (source_area == null)
+//     {
+//         // If the language isn't supported, switch to JavaScript
+//         current_language = 'javascript'
+//         id_lang = id + '_' + current_language;
+//     }
+//     set_current_language_checkbox();
+//     return id_lang;
+// }
+
+// function set_current_language_checkbox()
+// {
+//     if (current_language == 'javascript')
+//         button_js.checked = true;
+//     if (current_language == 'python')
+//         button_py.checked = true;
+//     if (current_language == 'asm')
+//         button_asm.checked = true;
+// }
+
+function LoadUserName() {}
+
+function setup_script_panels(sample)
+{
+    if (qc.panel_staff)
+    {
+        // if (current_language != 'javascript')
+        // {
+        //     panel_staff.setVisible(false);
+        //     panel_chart.setVisible(false);
+        //     return;
+        // }
+        // panel_staff.div.parentNode.removeChild(panel_staff.div);
+        // console.log('div');
+        // console.log(panel_staff);
+        // console.log(panel_staff.div);
+        // panel_staff.div.style.scroll = 'both';
+        qc_options.color_by_phase = false;
+        qc_options.circle_scale = 0.5;
+        qc.start();
+        qc.enableAnimation();
+        // qc.reset(sample.num_qubits);
+        // qc.write(0);
+        // qint.new(sample.num_qubits, 'reg');
+
+        sample = {num_instructions:20,num_qubits:18,num_circle_cols:8,num_circle_rows:2};
+
+        var left = 510;
+        var top = 260;
+        var gate_grid = 20;
+        var circle_grid = 64;
+        var gate_width = 100 + 20 + gate_grid * sample.num_instructions;
+        var gate_height = 80 + gate_grid * sample.num_qubits;
+        qc.panel_staff.setPos(left, top);
+        qc.panel_staff.setSize(gate_width, gate_height);
+        top += gate_height + 32;
+        var circle_width = 20 + circle_grid * sample.num_circle_cols;
+        var circle_height = 150 + circle_grid * sample.num_circle_rows;
+        qc.panel_chart.setPos(left, top);
+        qc.panel_chart.setSize(circle_width, circle_height);
+        qc.panel_staff.setVisible(true);
+        qc.panel_chart.setVisible(true);
+
+        qc.panel_staff.draw();
+        qc.panel_chart.draw();
+    }
+    // pop_in(qc.panel_staff.div, staff_popin_div);
+    // pop_in(qc.panel_chart.div, staff_popin_div);
+}
+
+function pop_in(child_div, parent_div)
+{
+    // parent_div.appendChild(child_div);
+    // child_div.style.position = 'relative';
+    // child_div.style.top = 0;
+    // child_div.style.left = 0;
+    // child_div.style.width = '100%';
+    // child_div.style.height = '200px';
+    // child_div.style.marginLeft = 0;
+    // child_div.style.marginTop = 0;
+    // child_div.style.boxShadow = 'none';
+    // child_div.style.overflow = 'scroll';
+    // child_div.style.display = 'block';
+}
+
+function run_script()
+{
+    qc_options.color_by_phase = false;
+    qc_options.circle_scale = 0.5;
+    qc.start();
+    if (qc) {
+//      qc.disableAnimation();
+//      qc.enableRecording();
+      qc.codeLabel('');
+    }
+
+    qc.enableAnimation();
+
+    runQCScriptInTextArea('editor', 'script_output_textarea');
+
+    qc.qReg.changed();
+    qc.panel_staff.draw();
+    qc.panel_chart.draw();
+
+    qc.enableAnimation();
+}
+
+function clear_output()
+{
+  script_output_textarea.value = '(output prints here)\n';
+}
+
+function rewind_to_beginning()
+{
+  // if (current_language != 'javascript')
+  //   return;
+  console.log('instructions: ' + qc.qReg.staff.insertionStart);
+  qc.qReg.staff.rewind_insertion_to_start();
+}
+
+function show_state_vector()
+{
+  list = qc.panel_chart.widgets;
+  for (var i = 0; i < list.length; ++i)
+  {
+    if (list[i].stateVector)
+    {
+      // console.log(list[i]);
+      list[i].collapsed = false;
+    }
+    else if (list[i].blochSphere || list[i].densityMatrix || list[i].graphState || list[i].stabilizerState)
+        list[i].in_use = false;
+  }
+}
+
+var default_program = `
+// Programming Quantum Computers
+//   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
+//   O'Reilly Media
+
+// To run this online, go to http://oreilly-qc.github.io?p=4-1
+
+// This sample demonstrates basic teleportation.
+
+qc.reset(3);
+var alice = qint.new(1, 'alice');
+var ep    = qint.new(1, 'ep');
+var bob   = qint.new(1, 'bob');
+
+function main()
+{
+    // This will work with entangle() and alice_prep() in either order.
+    // Try swapping them to verify this.
+    entangle();
+    alice_prep();
+    alice_send();
+    bob_receive();
+    bob_verify();
+}
+
+function entangle()
+{
+    // First, create an entangled pair
+    qc.write(0, 2|4);
+    qc.label('entangle');
+    ep.had();
+    bob.cnot(ep);
+    qc.label('');
+}
+
+function alice_prep()
+{
+    // Alice prepares her payload to teleport
+    alice.write(0);
+    qc.label('prep payload');
+    alice.had();
+    alice.phase(45);
+    alice.had();
+    qc.label('');
+    qc.nop();
+}
+
+function alice_send()
+{
+    // Alice sends the payload (and destroys it in the process)
+    qc.label('send');
+    ep.cnot(alice);
+    alice.had();
+    a1 = alice.read();
+    a2 = ep.read();
+    qc.label('');
+    qc.nop();
+}
+
+function bob_receive()
+{
+    // Bob receives the payload, using the two bits Alice sent
+    qc.label('receive');
+    var bob_is_asleep = false;
+    var use_conditonals = true;
+
+    // Option 1: Bob is asleep (can't respond to Alice's data), so he just does whatever.
+    if (bob_is_asleep)
+    {
+        bob.phase(180);
+        bob.not();
+    }
+    // Option 2: Bob is responsive, and we use conditional-ops for visual clarity
+    else if (use_conditonals)
+    {
+        // Here, we use conditional gates, just for visual clarity.
+        // The "conditions" are on qubits which have already been read and
+        // turned into classical bits.
+        bob.cz(alice);
+        bob.cnot(ep);
+    }
+    // Option 3: Bob is responsive, and we use straightforward "if" in the code.
+    else
+    {
+        if (a1)
+            bob.phase(180);
+        if (a2)
+            bob.not();
+    }
+    qc.label('');
+    qc.nop();
+}
+
+function bob_verify()
+{
+    // Verify that the teleportation worked
+    qc.label('verify');
+    bob.had();
+    bob.phase(-45);
+    bob.had();
+    bob.read();
+    qc.label('');
+    qc.nop();
+}
+
+// Kick it
+main();
+
+`;
+
+
+
+
+
+
+
+
+
+
+
 
 </script>
 </body>
