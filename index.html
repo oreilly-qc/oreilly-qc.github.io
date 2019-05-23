@@ -111,11 +111,11 @@
 
 
           <div class="btn-group">
-            <button type="button" class="btn btn-default">
-              <span class="glyphicon glyphicon-zoom-in"></span>
-            </button>
-            <button type="button" class="btn btn-default">
+            <button type="button" class="btn btn-default" onclick="click_editor_zoom(-2);">
               <span class="glyphicon glyphicon-zoom-out"></span>
+            </button>
+            <button type="button" class="btn btn-default" onclick="click_editor_zoom(2);">
+              <span class="glyphicon glyphicon-zoom-in"></span>
             </button>
           </div>
 
@@ -141,16 +141,18 @@
               <div class="panel-heading">
                 <b>Program gates</b>
                 <div class="btn-group">
-                  <button type="button" class="btn btn-default">
-                    <span class="glyphicon glyphicon-zoom-in"></span>
-                  </button>
-                  <button type="button" class="btn btn-default">
+                  <button type="button" class="btn btn-default" onclick="click_gate_zoom(-1);">
                     <span class="glyphicon glyphicon-zoom-out"></span>
                   </button>
+                  <button type="button" class="btn btn-default" onclick="click_gate_zoom(1);">
+                    <span class="glyphicon glyphicon-zoom-in"></span>
+                  </button>
                 </div>
-                <button type="button" class="btn btn-default">
+
+<!--                 <button type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-new-window"></span>
                 </button>
+ -->
               </div>
               <div  id="staff_boot_panel" class="panel-body panel-resizable">
 
@@ -189,15 +191,17 @@
                 </div>
                 <div class="btn-group">
                   <button type="button" class="btn btn-default">
-                    <span class="glyphicon glyphicon-zoom-in"></span>
-                  </button>
-                  <button type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-zoom-out"></span>
                   </button>
+                  <button type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-zoom-in"></span>
+                  </button>
                 </div>
-                <button type="button" class="btn btn-default">
+
+<!--                 <button type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-new-window"></span>
                 </button>
+ -->
               </div>
               <div  id="circle_boot_panel" class="panel-body panel-resizable">
 
@@ -216,16 +220,16 @@
                 <b>Program output</b>
 
           <div class="btn-group">
-            <button type="button" class="btn btn-default">
-              <span class="glyphicon glyphicon-zoom-in"></span>
-            </button>
-            <button type="button" class="btn btn-default">
+            <button type="button" class="btn btn-default" onclick="click_output_zoom(-1);">
               <span class="glyphicon glyphicon-zoom-out"></span>
+            </button>
+            <button type="button" class="btn btn-default" onclick="click_output_zoom(1);">
+              <span class="glyphicon glyphicon-zoom-in"></span>
             </button>
           </div>
         </div>
         <div class="panel-body panel-resizable">
-          <textarea id="script_output_textarea" style="width:100%; height:100px;" style="resize:both;">
+          <textarea id="script_output_textarea" style="font-family:monospace; font-size:12pt; width:100%; height:100px; resize:both;">
 (program output goes here)
           </textarea>
         </div>
@@ -333,7 +337,41 @@ function click_circle_style(style)
   qc.panel_chart.draw();
 }
 
+function click_editor_zoom(up_down)
+{
+  var editor_fontsize = parseInt(editor.getOption('fontSize'));
+  if (up_down == 0)
+    editor_fontsize = 12;
+  else
+    editor_fontsize += up_down;
+  if (editor_fontsize < 4)
+    editor_fontsize = 4;
+  editor.setOptions({fontSize: '' + editor_fontsize + 'pt'});
+}
 
+function click_gate_zoom(up_down)
+{
+  var old_scale = qc.get_param('draw_scale', 1.0);
+  var new_scale = 1.0;
+  if (up_down == 1)
+    new_scale = old_scale * 1.1;
+  if (up_down == -1)
+    new_scale = old_scale / 1.1;
+  qc.set_param('draw_scale', new_scale);
+  qc.draw();
+}
+
+function click_output_zoom(up_down)
+{
+  var fontsize = parseInt(script_output_textarea.style.fontSize);
+  if (up_down == 0)
+    fontsize = 12;
+  else
+    fontsize += up_down;
+  if (fontsize < 4)
+    fontsize = 4;
+  script_output_textarea.style.fontSize = '' + fontsize + 'pt';
+}
 
 
 
@@ -447,7 +485,9 @@ qc_options.staff_canvas = document.getElementById('draw_gate_canvas');
 qc_options.staff_div = document.getElementById('staff_popin_div');
 qc_options.circle_canvas = document.getElementById('circle_canvas');
 qc_options.circle_div = document.getElementById('circle_div');
+//qc_options.draw_scale = 3.0;
 var qc = QPU();
+qc.set_param('draw_scale', 1.0);
 // qc.set_canvas(document.getElementById('draw_gate_canvas'));
 // panel_staff = qc.panel_staff;
 // panel_chart = qc.panel_chart;
