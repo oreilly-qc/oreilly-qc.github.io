@@ -190,10 +190,10 @@
                   </button>
                 </div>
                 <div class="btn-group">
-                  <button type="button" class="btn btn-default">
+                  <button type="button" class="btn btn-default" onclick="click_circle_zoom(-1);">
                     <span class="glyphicon glyphicon-zoom-out"></span>
                   </button>
-                  <button type="button" class="btn btn-default">
+                  <button type="button" class="btn btn-default" onclick="click_circle_zoom(1);">
                     <span class="glyphicon glyphicon-zoom-in"></span>
                   </button>
                 </div>
@@ -359,6 +359,18 @@ function click_gate_zoom(up_down)
     new_scale = old_scale / 1.1;
   qc.set_param('draw_scale', new_scale);
   qc.draw();
+}
+
+function click_circle_zoom(up_down)
+{
+  var e = {ctrlKey:true, shiftKey:false, deltaY:-up_down};
+
+  list = qc.panel_chart.widgets;
+  for (var i = 0; i < list.length; ++i)
+  {
+    var widget = list[i];
+    list[i].mouseWheel(e);
+  }
 }
 
 function click_output_zoom(up_down)
@@ -717,8 +729,14 @@ function show_state_vector()
       // console.log(list[i]);
       list[i].collapsed = false;
     }
-    else if (list[i].blochSphere || list[i].densityMatrix || list[i].graphState || list[i].stabilizerState)
+    else if (list[i].blochSphere ||
+             list[i].densityMatrix || 
+             list[i].graphState || 
+             list[i].stabilizerState ||
+             list[i].drawQInt)
+    {
         list[i].in_use = false;
+    }
   }
 }
 
