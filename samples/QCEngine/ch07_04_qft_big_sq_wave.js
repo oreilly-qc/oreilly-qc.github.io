@@ -8,6 +8,7 @@
 qc.reset(8);
 
 // create equal superposition
+qc.label('prep');
 qc.write(0);
 qc.had();
 
@@ -17,4 +18,5 @@ qc.had();
 qc.phase(180, 16);
 
 // Apply the QFT
+qc.label('QFT');
 qc.QFT();

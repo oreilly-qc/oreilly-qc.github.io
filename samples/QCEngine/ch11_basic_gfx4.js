@@ -2,7 +2,7 @@
 //   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
 //   O'Reilly Media
 
-// To run this online, go to http://oreilly-qc.github.io?p=12-4
+// To run this online, go to http://oreilly-qc.github.io?p=11-2
 
 qc_options.color_by_phase = true;
 

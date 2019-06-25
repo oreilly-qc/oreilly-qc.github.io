@@ -9,6 +9,7 @@ qc.reset(num_qubits);
 var signal = qint.new(num_qubits, 'signal')
 
 // prepare the signal
+qc.label('prep');
 signal.write(0);
 signal.hadamard();
 signal.phase(45, 1);
@@ -16,4 +17,5 @@ signal.phase(90, 2);
 signal.phase(180, 4);
 
 // Run the QFT
+qc.label('QFT');
 signal.QFT()
