@@ -8,6 +8,8 @@
 var num_qubits = 4;
 qc.reset(num_qubits);
 var qin = qint.new(num_qubits, 'qin');
+
+qc.label('write freq');
 qin.write(0);
 
 // Write the frequencies we want to register
@@ -18,4 +20,5 @@ qc.cnot(1,2);
 qin.not(2);
 
 //Inverse QFT to turn into a signal
+qc.label('invQFT');
 qin.invQFT()

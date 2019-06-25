@@ -54,22 +54,28 @@ var sample_menu = [
     {shortcut:'9-1', menu_title:'Ex 9-1: QRAM 1',             sample_file: 'ch09_qram1', num_qubits: 3, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'9-2', menu_title:'Ex 9-2: QRAM',               sample_file: 'ch09_qram2', num_qubits: 3, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'9-3', menu_title:'Ex 9-3: QRAM',               sample_file: 'ch09_qram3', num_qubits: 3, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'9-4', menu_title:'Ex 9-4: QRAM',               sample_file: 'ch09_butter', num_qubits: 3, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'9-5', menu_title:'Ex 9-5: Amplitude Encoding', sample_file: 'ch09_ae_complete', num_qubits: 3, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 
     {shortcut:'10-1', menu_title:'Ex 10-1: Phase Logic 1', sample_file: 'ch10_oracle_logic1', num_qubits: 4, num_instructions: 18, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'10-2', menu_title:'Ex 10-2: Phase Logic 2', sample_file: 'ch10_oracle_logic2', num_qubits: 8, num_instructions: 18, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'10-3', menu_title:'Ex 10-3: Kitten and Tiger', sample_file: 'ch10_kitten_and_tiger', num_qubits: 4, num_instructions: 34, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 
-    {shortcut:'11-1', menu_title:'Ex 11-1: Basic phase graphics 1', sample_file: 'ch11_basic_gfx1',     num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'11-2', menu_title:'Ex 11-2: Basic phase graphics 2', sample_file: 'ch11_basic_gfx2',     num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'11-3', menu_title:'Ex 11-3: Basic phase graphics 3', sample_file: 'ch11_basic_gfx3',     num_qubits: 16, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'11-4', menu_title:'Ex 11-4: Supersampling 4',        sample_file: 'ch11_supersampling1', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'11-5', menu_title:'Ex 11-5: Supersampling (All Options)',        sample_file: 'ch11_circles1', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'11-A', menu_title:'Ex 11-A: Supersampling Circles',        sample_file: 'ch11_circles2', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'11-1', menu_title:'Ex 11-1: Simple Rectangles',      sample_file: 'ch11_basic_gfx1',     num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'11-2', menu_title:'Ex 11-2: Drawing Curves',         sample_file: 'ch11_basic_gfx4',     num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'11-3', menu_title:'Ex 11-3: Drawing into small tiles', sample_file: 'ch11_basic_gfx3',     num_qubits: 16, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'11-4', menu_title:'Ex 11-4: Quantum Supersampling',        sample_file: 'ch11_supersampling1', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'11-5', menu_title:'Ex 11-5: Build QSS Lookup Table',        sample_file: 'ch11_circles1', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'11-6', menu_title:'Ex 11-6: Adding Color',           sample_file: 'ch11_circles2', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 
     {shortcut:'12-1', menu_title:'Ex 12-1: Shor\'s Factroring Algorithm', sample_file: 'ch12_shor1',          num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'12-2', menu_title:'Ex 12-2: Shor without a QPU',           sample_file: 'ch12_shor_no_qpu',    num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'12-3', menu_title:'Ex 12-3: Shor step-by-step',           sample_file: 'ch12_shor_complete',    num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'12-4', menu_title:'Ex 12-4: Shor classical followup',      sample_file: 'ch12_shor_spike_est', num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'12-A', menu_title:'Ex 12-A: Shor time/space trade',        sample_file: 'ch12_shor_time_space', num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+
+    {shortcut:'14-GD', menu_title:'Ex 14-GD: General Gate Decomposition', sample_file: 'ch14_gate_decomposition', num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'14-GT', menu_title:'Ex 14-GT: Gate Teleportation',         sample_file: 'ch14_gate_teleportation', num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'14-DJ', menu_title:'Ex 14-DJ: Deutsch-Jozsa',              sample_file: 'ch14_deutsch_jozsa',      num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'14-BV', menu_title:'Ex 14-BV: Bernstein-Vazirani',         sample_file: 'ch14_bernstein-vazirani', num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'14-S',  menu_title:'Ex 14-S: Simon',                       sample_file: 'ch14_simon',              num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 ];
+

@@ -16,14 +16,17 @@ function phase_est(theta, out_res)
     // The register that we will apply conditional u on
     var q_in = qint.new(1, 'q_in');
     // Prepare the input register in eigenstate
+    qc.label('prep');
     q_in.write(0);
     // Prepare the output register
     q_out.write(0);
     q_out.had();
     // Apply conditional powers of u
+    qc.label('apply conditional powers of u');
     for (j = 0; j < out_res; j++) 
         cont_u(theta, 2**j, 2**(out_res), 2**j);
 
+    qc.label('invQFT');
     q_out.invQFT();
 }
 

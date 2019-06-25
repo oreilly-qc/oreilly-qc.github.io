@@ -10,9 +10,11 @@ qc.reset(num_qubits);
 var qin = qint.new(num_qubits, 'qin');
 
 // Write the frequency we want to register
+qc.label('write freq');
 qin.write(3);
 
 // Inverse QFT to turn into a signal
+qc.label('invQFT');
 qin.invQFT()
 
 

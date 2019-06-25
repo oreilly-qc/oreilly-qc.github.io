@@ -11,9 +11,7 @@ var qin = qint.new(n, 'input');
 // Initialize output register all zeros
 qout.write(0);
 // Initialize input register as eigenstate of HAD
-qin.write(0);
-
-// Initialize input register as eigenstate of HAD
+qc.label('init');
 qin.write(0);
 qin.roty(-135);
 // This state will have an eigenphase of 180.
@@ -28,6 +26,7 @@ function cont_u(qcontrol, qtarget, control_count) {
         qtarget.chadamard(null, ~0, qcontrol.bits(control_count));
 }
 // Operate phase estimation primitive on registers
+qc.label('phase estimation');
 phase_est(qin, qout, cont_u);
 // Read output register
 qout.read();
