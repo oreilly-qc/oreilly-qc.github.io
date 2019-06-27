@@ -3,6 +3,8 @@
 //   O'Reilly Media
 
 // To run this online, go to http://oreilly-qc.github.io?p=9-1
+// Note: This sample may vary slightly from the text in the book,
+// due to revisions or aesthetic tweaks.
 
 function main()
 {
