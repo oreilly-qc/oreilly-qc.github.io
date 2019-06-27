@@ -58,6 +58,8 @@ var sample_menu = [
     {shortcut:'10-1', menu_title:'Ex 10-1: Phase Logic 1', sample_file: 'ch10_oracle_logic1', num_qubits: 4, num_instructions: 18, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'10-2', menu_title:'Ex 10-2: Phase Logic 2', sample_file: 'ch10_oracle_logic2', num_qubits: 8, num_instructions: 18, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'10-3', menu_title:'Ex 10-3: Kitten and Tiger', sample_file: 'ch10_kitten_and_tiger', num_qubits: 4, num_instructions: 34, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'10-4', menu_title:'Ex 10-4: Satisfiable 3-Sat', sample_file: 'ch10_04_satisfiable_3sat', num_qubits: 4, num_instructions: 34, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'10-5', menu_title:'Ex 10-5: Unsatisfiable 3-Sat', sample_file: 'ch10_05_unsatisfiable_3sat', num_qubits: 4, num_instructions: 34, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 
     {shortcut:'11-1', menu_title:'Ex 11-1: Simple Rectangles',      sample_file: 'ch11_basic_gfx1',     num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'11-2', menu_title:'Ex 11-2: Drawing Curves',         sample_file: 'ch11_basic_gfx4',     num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
