@@ -3,34 +3,34 @@
 //   O'Reilly Media
 
 // To run this online, go to http://oreilly-qc.github.io?p=6-2
+// Note: This sample may vary slightly from the text in the book,
+// due to revisions or aesthetic tweaks.
 
-var n2f = [0,1,2];             // Which terms to flip
-var number_of_iterations = 50; // The number of Grover iterations
-
+var number_to_flip = 3;
+var number_of_iterations = 4;
 var num_qubits = 4;
 qc.reset(num_qubits);
 var reg = qint.new(num_qubits, 'reg')
-reg.write(0);
-reg.hadamard();
 
+reg.write(0);
+qc.label('prep');
+reg.hadamard();
 for (var i = 0; i < number_of_iterations; ++i)
 {
-    // Flip the marked value
-    for (var j = 0; j < n2f.length; ++j)
-    {
-        var marked_term = n2f[j];
-        reg.not(~marked_term);
-        reg.cphase(180);
-        reg.not(~marked_term);
-    }
+    qc.label('Amplitude Amplification');
 
+    // Flip the marked value
+    reg.not(~number_to_flip);
+    reg.cphase(180);
+    reg.not(~number_to_flip);
     reg.Grover();
 
-    prob = 0;
-    for (var j = 0; j < n2f.length; ++j)
-    {
-        var marked_term = n2f[j];
-        prob += reg.peekProbability(marked_term);
-    }
-    qc.print('iters: '+i+' prob: '+prob);
+    // Peek at the probability
+    prob = reg.peekProbability(number_to_flip);
+    qc.print('Iter '+i+': probability = '+prob+'\n');
+
+    // just space it out visually
+    qc.label('');
+    qc.nop();
 }
+
