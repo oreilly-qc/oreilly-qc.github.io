@@ -3,6 +3,8 @@
 //   O'Reilly Media
 
 // To run this online, go to http://oreilly-qc.github.io?p=9-3
+// Note: This sample may vary slightly from the text in the book,
+// due to revisions or aesthetic tweaks.
 
 function main()
 {
@@ -13,7 +15,7 @@ function main()
     // Create register of right size to amplitude encode vector
     num_qubits = Math.log2(vector.length);
     qc.reset(num_qubits);
-    amp_enc_reg = qint.new(num_b_qubits, 'amp_enc_reg');
+    amp_enc_reg = qint.new(num_qubits, 'amp_enc_reg');
 
     // Generate amplitude encoding in amp_enc_reg
     amplitude_encode(vector, amp_enc_reg);
@@ -21,8 +23,9 @@ function main()
 
 function amplitude_encode(vec, qreg)
 {
+    var num_qubits = qreg.numBits;
     qreg.write(0);
-    var reg_mask = (1 << num_b_qubits) - 1;
+    var reg_mask = (1 << num_qubits) - 1;
     var vec_mag_sqr = 0.0;
 
     for (var i = 0; i < vec.length; ++i)
@@ -57,7 +60,7 @@ function amplitude_encode(vec, qreg)
 
             var cond_bits = reg_mask ^ top_bit;
             var split = power / remaining_power;
-            var theta = Math.asin(Math.sqrt(split)) * 180 / Math.PI;
+            var theta = 2 * Math.asin(Math.sqrt(split)) * 180 / Math.PI;
             var not_mask = reg_mask ^ top_bit;
             var cnot_mask = i ^ top_bit;
 
@@ -67,7 +70,7 @@ function amplitude_encode(vec, qreg)
                 qc.cnot(cnot_mask, top_bit);
             if (not_mask)
                 qc.not(not_mask);
-            qc.rotx(theta, top_bit, cond_bits);
+            qc.roty(theta, top_bit, cond_bits);
             if (phase != 0 && phase != 180)
                 qreg.cphase(phase);
             if (not_mask)

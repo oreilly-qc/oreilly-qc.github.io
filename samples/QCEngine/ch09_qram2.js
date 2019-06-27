@@ -17,7 +17,7 @@ function main()
     var qram = qram_initialize(a, reg_qubits);
     qreg.write(0);
     
-    qc.label('set addr in superposition');
+    qc.label('set addr');
     addr.write(2);
     addr.hadamard(0x1);
     qc.label('');
@@ -51,17 +51,19 @@ function qram_qubits_required(num_addresses, qubits_per_entry)
 }
 
 function qram_initialize(init_data, qubits_per_entry) {
+    qc.label('init QRAM');
     qram_qints = [];
     for (var i = 0; i < init_data.length; ++i)
     {
         qram_qints.push(qint.new(qubits_per_entry, 'qram['+i+']'));
         qram_qints[i].write(init_data[i]);
     }
+    qc.label('');
 }
 
 function qram_load(address, register)
 {
-    qc.label('QRAM Load');
+    qc.label('QRAM load');
     // Swap into address zero
     qram_swap_to_zero(address);
     // Swap into our register
@@ -71,7 +73,7 @@ function qram_load(address, register)
 
 function qram_store(address, register)
 {
-    qc.label('QRAM Load');
+    qc.label('QRAM store');
     // Swap into our register
     qram_qints[0].swap(register);
     // Swap into address zero
