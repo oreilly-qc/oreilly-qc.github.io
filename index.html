@@ -875,6 +875,12 @@ function try_to_get_program_from_passed_in_url()
 
     var sample = get_sample_from_string(sample_str);
     var engine = get_engine_from_string(engine_str);
+
+    // Special case: sample 4-1 in the book needs to appear in
+    //               QASM by default.
+    if (sample_str == '4-1' && engine_str == null)
+      engine = get_engine_from_string('QASM');
+
     choose_sample_menu(sample, engine);
 }
 
