@@ -317,6 +317,82 @@
   </div>
 </div>
 
+
+<div class="modal fade" id="Qiskit_runModal" tabindex="-1" role="dialog" aria-labelledby="Qiskit_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Qiskit_runModalLabel">Running Qiskit Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The Qiskit versions of examples in this book are written in Python, designed to run
+        as Qiskit notebooks, at <a href="https://qiskit.org" target="_blank">https://qiskit.org</a>.
+        <br/><br/>
+        Qiskit is an open-source software development kit (SDK) for working with OpenQASM and the
+        IBM Q quantum processors. Create quantum computing programs, compile, and execute them online
+        in a real quantum processors.
+        <br/><br/>
+        To run this sample, go to the Qiskit site and create a new notebook, and then paste this
+        sample code into it.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://qiskit.org', '_blank');">Go to Qiskit.org</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="QASM_runModal" tabindex="-1" role="dialog" aria-labelledby="QASM_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="QASM_runModalLabel">Running QASM Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The QASM versions of examples in this book are designed to run
+        using the <b>IBM Q Experience Quantum Composer</b>, at <a href="https://quantum-computing.ibm.com" target="_blank">https://quantum-computing.ibm.com</a>.
+        <br/><br/>
+        The <b>Quantum Composer</b> is a graphical user interface for programming a quantum processor.
+        <br/><br/>
+        To run this sample, go to the Qiskit site and create a new notebook, and then paste this
+        sample code into it.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://quantum-computing.ibm.com', '_blank');">Go to IBM Q Experience</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="QSharp_runModal" tabindex="-1" role="dialog" aria-labelledby="QSharp_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="QSharp_runModalLabel">Running Q# Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://www.microsoft.com/en-us/quantum/development-kit', '_blank');">Go to QDK Website</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
     var editor = ace.edit("editor_div");
     editor.session.setMode("ace/mode/javascript");
@@ -636,12 +712,35 @@ function make_sample_menu()
     try_to_get_program_from_passed_in_url();
 }
 
+function set_current_engine(engine)
+{
+    if (engine == null)
+        engine = engine_list[0];
+    current_engine = engine;
+    if (current_engine.name == 'QCEngine')
+    {
+        editor.session.setMode("ace/mode/javascript");
+    }
+    else if (current_engine.name == 'Qiskit')
+    {
+        editor.session.setMode("ace/mode/python");
+    }
+    else if (current_engine.name == 'QASM')
+    {
+        editor.session.setMode("ace/mode/plain_text");
+    }
+    else if (current_engine.name == 'QSharp')
+    {
+        editor.session.setMode("ace/mode/plain_text");
+    }
+}
+
 function choose_sample_menu(sample, engine=null)
 {
   console.log('Sample menu chosen: ' + sample.sample_file);
   if (engine == null)
     engine = engine_list[0];
-  current_engine = engine;
+  set_current_engine(engine);
   var sample_menu_button = document.getElementById('sample_menu_button');
   sample_menu_button.innerHTML = sample.menu_title;
   load_code_sample(sample.sample_file, engine);
@@ -656,7 +755,7 @@ function choose_engine_menu(engine)
   console.log('Engine menu chosen: ' + engine.name);
   var engine_menu_button = document.getElementById('engine_menu_button');
   engine_menu_button.innerHTML = engine.name;
-  current_engine = engine;
+  set_current_engine(engine);
   load_code_sample(current_sample.sample_file, engine);
   clear_output();
 }
@@ -679,6 +778,12 @@ function make_engine_menu()
     engine_choice_span.innerHTML = str;
     var engine_menu_button = document.getElementById('engine_menu_button');
     engine_menu_button.innerHTML = current_engine.name;
+}
+
+function do_engine_modal()
+{
+    var options = null;
+    var val = $('#'+current_engine.name+'_runModal').modal(options);
 }
 
 function make_github_source_links()
@@ -864,6 +969,12 @@ function show_state_vector()
 
 function handle_run_button()
 {
+    if (current_engine.name != 'QCEngine')
+    {
+        do_engine_modal();
+        return;
+    }
+
     run_script();
     qc.panel_staff.setVisible(true);
     qc.panel_chart.setVisible(true);
