@@ -3,8 +3,9 @@
 //   O'Reilly Media
 
 // To run this on an actual quantum computer,
-//    1. go to https://quantumexperience.ng.bluemix.net/qx/editor
+//    1. go to https://quantum-computing.ibm.com
 //    2. Click "Switch to Qasm Editor" and paste in the code sample.
+
 // To run the JS version in a browser, go to http://oreilly-qc.github.io?p=4-1
 
 // This sample demonstrates basic teleportation (postselected).
