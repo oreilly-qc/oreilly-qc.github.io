@@ -746,6 +746,8 @@ function get_sample_from_string(sample_str)
 
 function get_engine_from_string(engine_str)
 {
+    if (engine_str == null)
+      engine_str = 'qcengine';
     for (var i = 0; i < engine_list.length; ++i)
     {
         var engine = engine_list[i];
