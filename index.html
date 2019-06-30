@@ -125,19 +125,25 @@
 
           <div class="btn-group">
             <button type="button" class="btn btn-success" onclick="handle_run_button();">
-                        <span class="glyphicon glyphicon-play"></span>
-                        Run Program
+              <span class="glyphicon glyphicon-play"></span>
+              Run Program
             </button>
             <div class="btn-group">
-
-
-                    <span id="example_choice_span">
-              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              Choose a sample <span class="caret"></span></button>
-              <ul class="dropdown-menu" role="menu">
-              </ul>
-                    </span>
-
+              <span id="example_choice_span">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                Choose a sample <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                </ul>
+              </span>
+            </div>
+            <div class="btn-group">
+              <span id="engine_choice_span">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                QCEngine <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                </ul>
+              </span>
             </div>
           </div>
 
@@ -167,6 +173,40 @@
   <div class="col-sm-6">
     <div class="container-fluid pad-right-only">
       <div class="row">
+        <div class="col-*-*">
+          <div class="container-fluid pad-right-only">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <b>How run this sample</b>
+                  <div class="btn-group">
+
+<!--                     <span id="example_language_span">
+                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                      Choose a Language <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                      </ul>
+                    </span>
+ -->
+                  </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default" onclick="click_gate_zoom(-1);">
+                    <span class="glyphicon glyphicon-zoom-out"></span>
+                  </button>
+                  <button type="button" class="btn btn-default" onclick="click_gate_zoom(1);">
+                    <span class="glyphicon glyphicon-zoom-in"></span>
+                  </button>
+                </div>
+              </div>
+              <div  id="staff_boot_panel" class="panel-body panel-resizable">
+
+                <span id="how-to-span">(text goes here)</span>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="col-*-*">
           <div class="container-fluid pad-right-only">
             <div class="panel panel-default">
@@ -277,6 +317,88 @@
   </div>
 </div>
 
+
+<div class="modal fade" id="Qiskit_runModal" tabindex="-1" role="dialog" aria-labelledby="Qiskit_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Qiskit_runModalLabel">Running Qiskit Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The Qiskit versions of examples in this book are written in Python, designed to run
+        as Qiskit notebooks, at <a href="https://qiskit.org" target="_blank">https://qiskit.org</a>.
+        <br/><br/>
+        Qiskit is an open-source software development kit (SDK) for working with OpenQASM and the
+        IBM Q quantum processors. Create quantum computing programs, compile, and execute them online
+        in a real quantum processors.
+        <br/><br/>
+        To run this sample, go to the Qiskit site and create a new notebook, and then paste this
+        sample code into it.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://qiskit.org', '_blank');">Go to Qiskit.org</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="QASM_runModal" tabindex="-1" role="dialog" aria-labelledby="QASM_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="QASM_runModalLabel">Running QASM Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The QASM versions of examples in this book are designed to run
+        using the <b>IBM Q Experience Quantum Composer</b>, at <a href="https://quantum-computing.ibm.com" target="_blank">https://quantum-computing.ibm.com</a>.
+        <br/><br/>
+        The <b>Quantum Composer</b> is a graphical user interface for programming a quantum processor.
+        <br/><br/>
+        To run this sample, go to the Q Experience site and create new circuit using the Circuit Composer,
+        then paste the code into the Circuit Editor.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://quantum-computing.ibm.com', '_blank');">Go to IBM Q Experience</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="QSharp_runModal" tabindex="-1" role="dialog" aria-labelledby="QSharp_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="QSharp_runModalLabel">Running Q# Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The Q# (pronounced "Q Sharp") versions of examples in this book are designed to run
+        using the <b>Microsoft QDK</b>, at <a href="https://www.microsoft.com/en-us/quantum/development-kit" target="_blank">https://www.microsoft.com/en-us/quantum/development-kit</a>.
+        <br/><br/>
+          Q# is a quantum-focused programming language with native type, operators, and other abstraction.
+        <br/><br/>
+        To run this sample, go to the QDK site and create a new IQ# Notebook, and then paste this
+        sample code into it.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://www.microsoft.com/en-us/quantum/development-kit', '_blank');">Go to QDK Website</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
     var editor = ace.edit("editor_div");
     editor.session.setMode("ace/mode/javascript");
@@ -294,6 +416,7 @@ var staff_boot_panel = document.getElementById('staff_boot_panel');
 var circle_boot_panel = document.getElementById('circle_boot_panel');
 var editor_frame_div = document.getElementById('editor_frame_div');
 var example_choice_span = document.getElementById('example_choice_span');
+var engine_choice_span = document.getElementById('engine_choice_span');
 var example_github_span = document.getElementById('example_github_span');
 // var language_choice_span = document.getElementById('language_choice_span');
 var script_output_textarea = document.getElementById('script_output_textarea');
@@ -492,6 +615,7 @@ function load_code_from_url(file_url)
                     editor.setValue(http_request.responseText);
                     editor.gotoLine(0);
                     make_github_source_links();
+                    make_engine_menu();
                 }
                 else
                 {
@@ -512,6 +636,7 @@ function load_code_from_url(file_url)
         return true;
     }
     make_github_source_links();
+    make_engine_menu();
 }
 
 function do_failed_load_sample(file_url)
@@ -523,12 +648,14 @@ function do_failed_load_sample(file_url)
   editor.setValue(code_str);
   editor.gotoLine(0);
   make_github_source_links();
+  make_engine_menu();
 }
 
 qc_options.staff_canvas = document.getElementById('draw_gate_canvas');
 qc_options.staff_div = document.getElementById('staff_popin_div');
 qc_options.circle_canvas = document.getElementById('circle_canvas');
 qc_options.circle_div = document.getElementById('circle_div');
+var valid_engine_list = [];
 //qc_options.draw_scale = 3.0;
 var qc = QPU();
 qc.set_param('draw_scale', 1.0);
@@ -537,6 +664,7 @@ qc.set_param('draw_scale', 1.0);
 // panel_chart = qc.panel_chart;
 
 var current_sample = null;
+var current_engine = engine_list[0];
 var all_sample_contents = {};
 function fetch_one_sample_dir(engine)
 {
@@ -555,6 +683,7 @@ function fetch_one_sample_dir(engine)
             {
                 engine.dir_list = http_request.responseText;
                 make_github_source_links();
+                make_engine_menu();
             }
             else
             {
@@ -589,18 +718,84 @@ function make_sample_menu()
     try_to_get_program_from_passed_in_url();
 }
 
-function choose_sample_menu(sample, engine)
+function set_current_engine(engine)
+{
+    if (engine == null)
+        engine = engine_list[0];
+    current_engine = engine;
+    if (current_engine.name == 'QCEngine')
+    {
+        editor.session.setMode("ace/mode/javascript");
+    }
+    else if (current_engine.name == 'Qiskit')
+    {
+        editor.session.setMode("ace/mode/python");
+    }
+    else if (current_engine.name == 'QASM')
+    {
+        editor.session.setMode("ace/mode/plain_text");
+    }
+    else if (current_engine.name == 'QSharp')
+    {
+        editor.session.setMode("ace/mode/plain_text");
+    }
+}
+
+function choose_sample_menu(sample, engine=null)
 {
   console.log('Sample menu chosen: ' + sample.sample_file);
+  if (engine == null)
+    engine = engine_list[0];
+  set_current_engine(engine);
   var sample_menu_button = document.getElementById('sample_menu_button');
   sample_menu_button.innerHTML = sample.menu_title;
-  load_code_sample(sample.sample_file);
+  load_code_sample(sample.sample_file, engine);
+  var engine_menu_button = document.getElementById('engine_menu_button');
+  if (engine_menu_button)
+      engine_menu_button.innerHTML = engine.name;
   clear_output();
+}
+
+function choose_engine_menu(engine)
+{
+  console.log('Engine menu chosen: ' + engine.name);
+  var engine_menu_button = document.getElementById('engine_menu_button');
+  engine_menu_button.innerHTML = engine.name;
+  set_current_engine(engine);
+  load_code_sample(current_sample.sample_file, engine);
+  clear_output();
+}
+
+function make_engine_menu()
+{
+    str = '';
+    str += '<button id="engine_menu_button" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
+    str += 'Choose an engine <span class="caret"></span></button>';
+    str += '<ul class="dropdown-menu" role="menu">';
+    for (i = 0; i < valid_engine_list.length; ++i)
+    {
+        var engine_index = valid_engine_list[i];
+        engine = engine_list[engine_index];
+        str += '<li><a href="#" onclick="choose_engine_menu(engine_list['+engine_index+']);">';
+        str += engine.name;
+        str += '</a></li>';
+    }
+    str += '</ul>'
+    engine_choice_span.innerHTML = str;
+    var engine_menu_button = document.getElementById('engine_menu_button');
+    engine_menu_button.innerHTML = current_engine.name;
+}
+
+function do_engine_modal()
+{
+    var options = null;
+    var val = $('#'+current_engine.name+'_runModal').modal(options);
 }
 
 function make_github_source_links()
 {
     var sample = current_sample;
+    valid_engine_list = [0];
     str = '<br/>';
 //    if (sample != null)
     {
@@ -616,6 +811,8 @@ function make_github_source_links()
                 var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/blob/master/samples/';
                 link += engine.name + '/' + sample.sample_file + engine.suffix;
                 str += '<b><a href="'+link+'">'+engine.name+'</a></b>';
+                if (i > 0)
+                  valid_engine_list.push(i);
             }
             else
             {
@@ -660,10 +857,12 @@ function get_sample_from_string(sample_str)
 
 function get_engine_from_string(engine_str)
 {
+    if (engine_str == null)
+      engine_str = 'qcengine';
     for (var i = 0; i < engine_list.length; ++i)
     {
         var engine = engine_list[i];
-        if (engine_str == engine.sample_file || sample_str == engine.shortcut)
+        if (engine_str.toLowerCase() == engine.name.toLowerCase())
             return engine;
     }
     return engine_list[0];
@@ -679,12 +878,14 @@ function try_to_get_program_from_passed_in_url()
     choose_sample_menu(sample, engine);
 }
 
-function load_code_sample(sample_str)
+function load_code_sample(sample_str, engine=null)
 {
     var sample = get_sample_from_string(sample_str);
     current_sample = sample;
 
     var qce = engine_list[0];
+    if (engine != null)
+      qce = engine;
     var raw_qce_code_url = qce.subdir + sample.sample_file + qce.suffix;
 
     var github_links_str = '';
@@ -774,6 +975,12 @@ function show_state_vector()
 
 function handle_run_button()
 {
+    if (current_engine.name != 'QCEngine')
+    {
+        do_engine_modal();
+        return;
+    }
+
     run_script();
     qc.panel_staff.setVisible(true);
     qc.panel_chart.setVisible(true);
