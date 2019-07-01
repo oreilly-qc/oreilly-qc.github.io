@@ -13,11 +13,9 @@ qc.reset(4);
 qc.write(0);
 qc.had();
 // Apply 2^k phase operations to kth qubit
-for (i=0; i<=3; i++) {
-    var val = 1<<i;
-    console.log(val);
-    for (j=0; j<=1<<i; j++) {
-        console.log(val);
-       qc.phase(phi, 1<<i);
+for (var i = 0; i < 4; i++) {
+    var val = 1 << i;
+    for (var j = 0; j < val; j++) {
+        qc.phase(phi, val);
     }
 }

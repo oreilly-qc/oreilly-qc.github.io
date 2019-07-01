@@ -6,31 +6,37 @@
 // Note: This sample may vary slightly from the text in the book,
 // due to revisions or aesthetic tweaks.
 
-function main()
-{
-    var a = [4, 3, 5, 1];
-    var reg_qubits = 3;
-    var qram_qubits = qram_qubits_required(4, reg_qubits);
-    qc.reset(2 + reg_qubits + qram_qubits);
-    var qreg = qint.new(3, 'qreg');
-    var addr = qint.new(2, 'addr');
-    var qram = qram_initialize(a, reg_qubits);
-    qreg.write(0);
-    
-    qc.label('set addr');
-    addr.write(2);
-    addr.hadamard(0x1);
-    qc.label('');
+// Programming Quantum Computers
+//   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
+//   O'Reilly Media
 
-    // Swap the QRAM address(es) into the working register
-    qram_load(addr, qreg);
+// To run this online, go to http://oreilly-qc.github.io?p=9-2
+// Note: This sample may vary slightly from the text in the book,
+// due to revisions or aesthetic tweaks.
 
-    qc.label('increment');
-    qreg.add(1);
+var a = [4, 3, 5, 1];
+var reg_qubits = 3;
+var qram_qubits = qram_qubits_required(4, reg_qubits);
+qc.reset(2 + reg_qubits + qram_qubits);
+var qreg = qint.new(3, 'qreg');
+var addr = qint.new(2, 'addr');
+var qram = qram_initialize(a, reg_qubits);
+qreg.write(0);
 
-    // Swap the working register back into QRAM
-    qram_store(addr, qreg);
-}
+qc.label('set addr');
+addr.write(2);
+addr.hadamard(0x1);
+qc.label('');
+
+// Swap the QRAM address(es) into the working register
+qram_load(addr, qreg);
+
+qc.label('increment');
+qreg.add(1);
+
+// Swap the working register back into QRAM
+qram_store(addr, qreg);
+
 
 // This QRAM implementation is for illustration only.
 // The actual implementation on a QPU will be quite different.
@@ -101,4 +107,3 @@ function qram_swap_to_zero(address)
     }
 }
 
-main();

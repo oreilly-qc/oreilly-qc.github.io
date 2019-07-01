@@ -3,76 +3,56 @@
 //   O'Reilly Media
 
 // To run this online, go to http://oreilly-qc.github.io?p=8-2
-// Implementing the phase_est primitive
+// Note: This sample may vary slightly from the text in the book,
+// due to revisions or aesthetic tweaks.
 
-function phase_est(theta, out_res)
+
+function phase_est(q_in, q_out, cont_u)
 {
     // Main phase estimation single run
-    // var theta = 80 // The val we want to find
-    // var out_res = 5
-    qc.reset(out_res+1);
-    // The output register that will read phi
-    var q_out = qint.new(out_res, 'q_out');
-    // The register that we will apply conditional u on
-    var q_in = qint.new(1, 'q_in');
-    // Prepare the input register in eigenstate
-    qc.label('prep');
-    q_in.write(0);
-    // Prepare the output register
-    q_out.write(0);
+    // HAD the output register
     q_out.had();
-    // Apply conditional powers of u
-    qc.label('apply conditional powers of u');
-    for (j = 0; j < out_res; j++) 
-        cont_u(theta, 2**j, 2**(out_res), 2**j);
 
-    qc.label('invQFT');
+    // Apply conditional powers of u
+    for (j = 0; j < q_out.numBits; j++)
+        cont_u(q_out, q_in, 1 << j);
+
+    // Inverse QFT on output register
     q_out.invQFT();
 }
 
-function main()
-{
-    var angle_rad = -Math.PI / 4; // Phase to use for unitaries eigenvalues
-    var out_res = 3; // Number of qubits for representing answer
-    var N = 1; // Number of iterations to run for generating stats
-    // var angle_deg = angle_rad * (180/Math.PI);
-    var angle_deg = -150;
-    var out = phase_est(angle_deg, out_res);
+
+//Specify the size of output register - determines precision
+// of our answer
+var m = 4;
+// Specify the size of input register that will specify
+// our eigenstate
+var n = 1;
+// Setup
+qc.reset(m + n);
+var qout = qint.new(m, 'output');
+var qin = qint.new(n, 'input');
+// Initialize output register all zeros
+qout.write(0);
+// Initialize input register as eigenstate of HAD
+qc.label('init');
+qin.write(0);
+qin.roty(-135);
+// This state will have an eigenphase of 180.
+// For eigenphase 0, we would instead use qin.roty(45);
+
+// Define our conditional unitary
+function cont_u(qcontrol, qtarget, control_count) {
+    // For Hadamard, we only need to know if control_count
+    // is even or odd, as applying HAD an even number of
+    // times does nothing.
+    if (control_count & 1)
+        qtarget.chadamard(null, ~0, qcontrol.bits(control_count));
 }
-
-// This is the unitary
-function cont_u(theta, q1, q2, iter)
-{
-    // Perform the controlled unitary between q1 and q2 iter times
-    var single_op = true;
-    if (single_op)
-    {
-        qc.phase(-theta / 2 * iter, q2);
-        qc.cnot(q2,q1);
-        qc.phase(theta * iter, q2);
-        qc.cnot(q2,q1);
-        qc.phase(-theta / 2 * iter, q2);
-    }
-    else
-    {
-        for (i=0; i<iter; i++) {
-            qc.phase(-theta / 2, q2);
-            qc.cnot(q2,q1);
-            qc.phase(theta, q2);
-            qc.cnot(q2,q1);
-            qc.phase(-theta / 2, q2);
-        }
-    }
-}
-
-var qft_flip = function(N, flipqint)
-{
-    for (i=0; i<=Math.floor(N/2)-1; i++) {
-        var val = 1<<i | 1<<(N-i-1);
-        qc.exchange(val);
-    }
-}
+// Operate phase estimation primitive on registers
+qc.label('phase estimation');
+phase_est(qin, qout, cont_u);
+// Read output register
+qout.read();
 
 
-// Kick it
-main();

@@ -6,20 +6,19 @@
 // Note: This sample may vary slightly from the text in the book,
 // due to revisions or aesthetic tweaks.
 
-function main()
-{
-    // We have ensured that our input vector has a length
-    // that is a power of two
-    vector = [-1.0, 1.0, 1.0, 5.0, 5.0, 6.0, 6.0, 6.0];
 
-    // Create register of right size to amplitude encode vector
-    num_qubits = Math.log2(vector.length);
-    qc.reset(num_qubits);
-    amp_enc_reg = qint.new(num_qubits, 'amp_enc_reg');
+// We have ensured that our input vector has a length
+// that is a power of two
+var vector = [-1.0, 1.0, 1.0, 5.0, 5.0, 6.0, 6.0, 6.0];
 
-    // Generate amplitude encoding in amp_enc_reg
-    amplitude_encode(vector, amp_enc_reg);
-}
+// Create register of right size to amplitude encode vector
+var num_qubits = Math.log2(vector.length);
+qc.reset(num_qubits);
+var amp_enc_reg = qint.new(num_qubits, 'amp_enc_reg');
+
+// Generate amplitude encoding in amp_enc_reg
+amplitude_encode(vector, amp_enc_reg);
+
 
 function amplitude_encode(vec, qreg)
 {
@@ -82,5 +81,4 @@ function amplitude_encode(vec, qreg)
     }
 }
 
-main();
 
