@@ -2,7 +2,7 @@
 //   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
 //   O'Reilly Media
 
-// To run this online, go to http://oreilly-qc.github.io?p=11-4
+// To run this online, go to http://oreilly-qc.github.io?p=12-X
 
 // PERFORMANCE NOTE: Increasing any of the following parameters by 1 will
 //   cause the program to take either 2x longer or 4x longer.
@@ -10,9 +10,9 @@
 //   then increasing them to 12,8,6,16 will cause the program to take approximately 2,700 years.
 //   ...so when experimenting here it's best to start with small changes.
 
-var res_full_bits    = 6;  // Number of bits in x,y in the complete image. 8 means the image is 256x256
+var res_full_bits    = 7;  // Number of bits in x,y in the complete image. 8 means the image is 256x256
 var res_aa_bits      = 2;  // Number of bits in x,y per sub-pixel tile. 2 means tiles are 4x4
-var num_counter_bits = 1;  // The effective bit depth of the result.
+var num_counter_bits = 2;  // The effective bit depth of the result.
 var accum_bits       = 10; // Scratch qubits for the shader. More scratch bits means we can do more complicated math
 
 var res_full        = 1 << res_full_bits; // The x and y size of the full image, before sampling.
@@ -22,7 +22,13 @@ var res_tiles       = res_full / res_aa;  // The number of tiles which make up o
 var qss_full_lookup_table = null;
 var qss_count_to_hits = [];
 
-var do_shortcut_qss = false; // Use classical sampling based on the ideal result to approximate the QSS result
+// NOTE: To run the actual QPU simulation, turn the following
+//       variable (do_shortcut_qss) to false. When it is true,
+//       we cheat to make the program faster, "peeking" at the
+//       result without really simulating it.
+//          true  = cheating, and fast
+//          false = full-sim, and slow
+var do_shortcut_qss = true; // Use classical sampling based on the ideal result to approximate the QSS result
 var do_monte_carlo  = true; // Generate the MonteCarlo image
 
 // The main function draws the full-size image for reference, then constructs the QSS lookup table,
