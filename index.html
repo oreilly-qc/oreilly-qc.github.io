@@ -203,11 +203,75 @@
                   </button>
                 </div>
               </div>
-              <div  id="staff_boot_panel" class="panel-body panel-resizable">
+              <div  id="how_to_boot_panel" class="panel-body panel-resizable">
 
                 <span id="how-to-span">(text goes here)</span>
 
 
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div id="image_output_div" class="col-*-*" style="display:none;">
+          <div class="container-fluid pad-right-only">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <b>Image output</b>
+                  <div class="btn-group">
+
+<!--                     <span id="example_language_span">
+                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                      Choose a Language <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                      </ul>
+                    </span>
+ -->
+                  </div>
+              </div>
+              <div  id="image_boot_panel" class="panel-body panel-resizable">
+
+                <span id="image_info_span"></span>
+                <table>
+                  <tr>
+                    <td align="center">
+                      <canvas id="display_ground_truth" />
+                      <span id="display_ground_truth_span"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center">
+                      <canvas id="display_monte_carlo" />
+                      <span id="display_monte_carlo_span"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center">
+                      <canvas id="display_qfull_res" />
+                      <span id="display_qfull_res_span"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center">
+                      <canvas id="display_qss" />
+                      <span id="display_qss_span"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center">
+                      <canvas id="display_confidence" />
+                      <span id="display_confidence_span"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center">
+                      <canvas id="display_cwtable" />
+                      <span id="display_cwtable_span"></span>
+                    </td>
+                  </tr>
+                </table>
               </div>
             </div>
           </div>
@@ -889,8 +953,18 @@ function try_to_get_program_from_passed_in_url()
     //               QASM by default.
     if (sample_str == '4-1' && engine_str == null)
       engine = get_engine_from_string('QASM');
+    show_graphics_output(false);
 
     choose_sample_menu(sample, engine);
+}
+
+function show_graphics_output(do_show)
+{
+    var div = document.getElementById("image_output_div");
+    if (do_show)
+        div.style.display = 'block';
+    else
+        div.style.display = 'none';
 }
 
 function load_code_sample(sample_str, engine=null)
