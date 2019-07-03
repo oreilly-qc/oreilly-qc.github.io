@@ -639,6 +639,7 @@ var display_cwtable = null;
 
 function setup_display_boxes()
 {
+    show_graphics_output(true);
     display_ground_truth = new DisplayBox('display_ground_truth');
     display_monte_carlo = new DisplayBox('display_monte_carlo');
     display_qfull_res = new DisplayBox('display_qfull_res');

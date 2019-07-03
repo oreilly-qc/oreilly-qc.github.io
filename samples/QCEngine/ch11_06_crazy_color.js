@@ -2,7 +2,7 @@
 //   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
 //   O'Reilly Media
 
-// To run this online, go to http://oreilly-qc.github.io?p=12-X
+// To run this online, go to http://oreilly-qc.github.io?p=11-6
 
 // PERFORMANCE NOTE: Increasing any of the following parameters by 1 will
 //   cause the program to take either 2x longer or 4x longer.
@@ -10,10 +10,10 @@
 //   then increasing them to 12,8,6,16 will cause the program to take approximately 2,700 years.
 //   ...so when experimenting here it's best to start with small changes.
 
-var res_full_bits    = 6;  // Number of bits in x,y in the complete image. 8 means the image is 256x256
-var res_aa_bits      = 2;  // Number of bits in x,y per sub-pixel tile. 2 means tiles are 4x4
-var num_counter_bits = 1;  // The effective bit depth of the result.
-var accum_bits       = 10; // Scratch qubits for the shader. More scratch bits means we can do more complicated math
+var res_full_bits    = 7; //9  // Number of bits in x,y in the complete image. 8 means the image is 256x256
+var res_aa_bits      = 2; //3  // Number of bits in x,y per sub-pixel tile. 2 means tiles are 4x4
+var num_counter_bits = 4; //5  // The effective bit depth of the result.
+var accum_bits       = 13; //13 // Scratch qubits for the shader. More scratch bits means we can do more complicated math
 
 var res_full        = 1 << res_full_bits; // The x and y size of the full image, before sampling.
 var res_aa          = 1 << res_aa_bits;   // The x and y size of each subpixel tile.
@@ -22,25 +22,32 @@ var res_tiles       = res_full / res_aa;  // The number of tiles which make up o
 var qss_full_lookup_table = null;
 var qss_count_to_hits = [];
 
-var do_shortcut_qss = false; // Use classical sampling based on the ideal result to approximate the QSS result
+var do_shortcut_qss = true; // Use classical sampling based on the ideal result to approximate the QSS result
 var do_monte_carlo  = true; // Generate the MonteCarlo image
 
+var all_color_planes = ['red', 'green', 'blue'];
+
+var color_plane = 'red';
 // The main function draws the full-size image for reference, then constructs the QSS lookup table,
 // and then finally uses QSS to draw the sampled image.
 function main()
 {
     setup_display_boxes();
 
-    // Draw the whole image, so we can see what we're sampling.
-    draw_reference_res_images();
-
-    // Create the QSS lookup table
-    // This can be done beforehand and saved for use with multiple QSS images
-    create_qss_lookup_table();
-
-    do_qss_image();
-
-    draw_confidence_map();
+    for (var c = 0; c < 3; ++c)
+    {
+        color_plane = all_color_planes[c];
+        // Draw the whole image, so we can see what we're sampling.
+        draw_reference_res_images();
+    
+        // Create the QSS lookup table
+        // This can be done beforehand and saved for use with multiple QSS images
+        create_qss_lookup_table();
+    
+        do_qss_image();
+    
+        draw_confidence_map();
+    }
 }
 
 // The quantum pixel shader is the function which is called for each iteration.
@@ -51,14 +58,22 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
     var hbin = 0|(num_bins * tx / res_tiles);
     var vbin = 0|(num_bins * ty / res_tiles);
 
-    var ball_pos = [2, 2];
-    var ball_radius = 1;
+    var ball_pos = [4, 2];
+    var ball_radius = 2;
     var is_ball = hbin >= (ball_pos[0] - ball_radius) && hbin < (ball_pos[0] + ball_radius)
                          && vbin >= (ball_pos[1] - ball_radius) && vbin < (ball_pos[1] + ball_radius);
-    var is_sky = (vbin & 4) == 0 && !is_ball;
-    var is_ground = !is_ball && !is_sky;
+//    var is_sky = (vbin & 4) == 0;// && !is_ball;
+    var is_sky = vbin == 2 || vbin == 3;
+    var is_ground = vbin >= 4 && vbin < 8;
+//    var is_ground = !is_ball && !is_sky;
 
-    if (1 || is_ball)
+    if (color_plane == 'blue')
+    {
+      ball_radius = 9;
+      is_ball = vbin < 4;
+    }
+
+    if (is_ball)// && color_plane != 'blue')
     {
         // drawing a circle is tricky, because we want x^2+y^2<r^2, but we don't have
         // a great way to accumulate the squared sum of tx*res+qx. Instead,
@@ -87,6 +102,8 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
 //        qacc.add(dx + dy - br);
         var acc_sign_bit = 1 << (accum_bits - 1);
         var mask = qacc.bits(acc_sign_bit);
+        if (color_plane == 'blue')
+          mask.orEquals(qy.bits(0x1));
         mask.orEquals(condition);
         xor_color(null, mask, out_color);
 //        qacc.subtract(dx + dy - br);
@@ -102,15 +119,29 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
         if (ty < by)
             qy.not();
     }
-    if (0 && is_sky)
+    if (is_sky && color_plane == 'green')
     {
         // sky
-        if (0) {
+        if (1) {
+                // Make big fuzzy stripes
+    var stripe_size = res_full_bits - 3;
+    var bmask = 1 << stripe_size;
+
+    var mask = qacc.bits(bmask);
+    mask.orEquals(condition);
+    var ty_shift = res_aa_bits - 1;
+    var tx_shift = res_aa_bits - 3;
+    var qy_shift = res_full_bits - res_aa_bits - 4;
+    var qx_shift = res_full_bits - res_aa_bits - 5;
+    qx_shift = (qx_shift < 0) ? 0 : qx_shift;
+    qy_shift = (qy_shift < 0) ? 0 : qy_shift;
         qacc.addShifted(ty, ty_shift);
         qacc.addShifted(qy, qy_shift);
         xor_color(null, mask, out_color);
+//        qacc.addShifted(tx, tx_shift);
         qacc.subtractShifted(ty, ty_shift);
         qacc.subtractShifted(qy, qy_shift);
+
         } else {
             // just gray sky
             qx.cnot(qy, 0x1);
@@ -120,8 +151,27 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
             qx.cnot(qy, 0x1);
         }
     }
-    if (0 && is_ground)
+    if (1 && is_ground)
     {
+        if (color_plane == 'red')
+        {
+            // 50% gray
+            qx.cnot(qy, 0x1);
+            var mask = qx.bits(0x1);
+            mask.orEquals(condition);
+            xor_color(null, mask, out_color);
+            qx.cnot(qy, 0x1);
+        }
+        else if (color_plane == 'blue')
+        {
+            // 75% gray
+            qx.cnot(qy);
+            var mask = qx.bits(0x3);
+            mask.orEquals(condition);
+            xor_color(null, mask, out_color);
+            qx.cnot(qy);
+        }
+
         // perspective checkerboard
         var tile_shift = res_aa_bits;
         var y_offset = res_full >> 2;
@@ -171,7 +221,7 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
         }
 
         // Draw checkerboard parallel
-        for (var band = 0; band < 6; ++band)
+        for (var band = 0; band < 7; ++band)
         {
                 var band_bit = 1 << (band + 1);
                 qacc.subtract((ty << (tile_shift)) - (y_offset));
@@ -589,6 +639,7 @@ var display_cwtable = null;
 
 function setup_display_boxes()
 {
+    show_graphics_output(true);
     display_ground_truth = new DisplayBox('display_ground_truth');
     display_monte_carlo = new DisplayBox('display_monte_carlo');
     display_qfull_res = new DisplayBox('display_qfull_res');
@@ -658,7 +709,21 @@ function DisplayBox(canvas_name)
         var h = this.canvas.height / this.resolution_y;
         var x1 = x * w;
         var y1 = y * h;
-        this.ctx.fillStyle = 'rgb('+bright+','+bright+','+bright+')';
+        if (color_plane == 'red')
+        {
+            this.ctx.fillStyle = 'rgb('+bright+','+0+','+0+')';
+            this.ctx.globalCompositeOperation = 'source-over';
+        }
+        else if (color_plane == 'green')
+        {
+            this.ctx.fillStyle = 'rgb('+0+','+bright+','+0+')';
+            this.ctx.globalCompositeOperation = 'lighter';
+        }
+        else if (color_plane == 'blue')
+        {
+            this.ctx.fillStyle = 'rgb('+0+','+0+','+bright+')';
+            this.ctx.globalCompositeOperation = 'lighter';
+        }
         this.ctx.fillRect(x1, y1, w, h);
     }
 
@@ -683,29 +748,6 @@ function DisplayBox(canvas_name)
     {
         this.span.innerHTML = text;
     }
-
-    this.get_bw_pixels = function(width, height)
-    {
-        var imgd = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-        var pix = imgd.data;
-        var out_bytes = new Array();
-        var src_row_index = 0;
-        var src_col_pitch = 4 * this.canvas.width / width;
-        var src_row_pitch = src_col_pitch * width * this.canvas.height / height;
-
-        for (var row = 0; row < height; ++row)
-        {
-            var src_index = src_row_index;
-            for (var col = 0; col < width; ++col)
-            {
-                out_bytes.push(pix[src_index]);
-                src_index += src_col_pitch;
-            }
-            src_row_index += src_row_pitch;
-        }
-    }
-
-
 }
 
 
