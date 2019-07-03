@@ -8,15 +8,16 @@ var res_aa_bits      = 2;  // Number of bits in x,y per sub-pixel tile. 2 means 
 var num_counter_bits = 4;  // The effective bit depth of the result.
 var res_aa           = 1 << res_aa_bits;   // The x and y size of each subpixel tile.
 
-// Interesting post-press advance:
+// Author's note:
 // While cleaning up this code sample, I made a discovery
 // too late to be included in the book. By reversing the
 // order of the bits, the table rows are re-ordered,
-// so that the entire QSS table simply becomes a sine wave.
-// Give it a try. - ej
+// so that the entire QSS table becomes much more interesting.
+// Give it a try by changing try_version_2 to true. - ej
 var try_version_2  = false;
-// This means we can do away with the QSS lookup table
-// altogether, and replace it with a simple trig function.
+// The QSS lookup table is still useful as a tool for creating
+// new applications, building confidence maps and such, but
+// the actual QSS process can be performed without it.
 
 var qss_full_lookup_table = null;
 var qss_count_to_hits = [];
