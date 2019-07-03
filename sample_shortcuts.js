@@ -69,7 +69,7 @@ var sample_menu = [
 
     {shortcut:'12-1', menu_title:'Ex 12-1: Shor\'s Factoring Algorithm', sample_file: 'ch12_shor1',          num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'12-2', menu_title:'Ex 12-2: Shor without a QPU',           sample_file: 'ch12_shor_no_qpu',    num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'12-3', menu_title:'Ex 12-3: Shor step-by-step',           sample_file: 'ch12_shor_complete',    num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'12-3', menu_title:'Ex 12-3: Shor step-by-step',           sample_file: 'ch12_shor_step_by_step',    num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'12-4', menu_title:'Ex 12-4: Shor classical followup',      sample_file: 'ch12_shor_spike_est', num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'12-A', menu_title:'Ex 12-A: Shor time/space trade',        sample_file: 'ch12_shor_time_space', num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 
