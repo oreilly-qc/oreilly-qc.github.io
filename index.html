@@ -234,11 +234,11 @@
               <div  id="image_boot_panel" class="panel-body panel-resizable">
 
                 <span id="image_info_span"></span>
-                <table>
+                <table id="images_table">
                   <tr>
                     <td align="center" style="padding: 10px; border: 4px solid #ddd;">
                       <canvas id="display_ground_truth"></canvas><br/>
-                      <span id="display_ground_truth_span">hihihi</span>
+                      <span id="display_ground_truth_span"></span>
                     </td>
                     <td align="center" style="padding: 10px; border: 4px solid #ddd;">
                       <canvas id="display_qfull_res"></canvas><br/>
@@ -963,6 +963,11 @@ function show_graphics_output(do_show)
         div.style.display = 'block';
     else
         div.style.display = 'none';
+}
+
+function hide_qss_image_panes()
+{
+    document.getElementById('images_table').style.display = 'none';
 }
 
 function load_code_sample(sample_str, engine=null)

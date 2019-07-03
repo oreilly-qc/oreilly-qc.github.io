@@ -64,7 +64,7 @@ var sample_menu = [
     {shortcut:'11-2', menu_title:'Ex 11-2: Drawing Curves',         sample_file: 'ch11_basic_gfx4',     num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'11-3', menu_title:'Ex 11-3: Drawing into small tiles', sample_file: 'ch11_basic_gfx3',     num_qubits: 16, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'11-4', menu_title:'Ex 11-4: Quantum Supersampling',        sample_file: 'ch11_supersampling1', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'11-5', menu_title:'Ex 11-5: Build QSS Lookup Table',        sample_file: 'ch11_circles1', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'11-5', menu_title:'Ex 11-5: Build QSS Lookup Table',        sample_file: 'ch11_lookup_table', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'11-6', menu_title:'Ex 11-6: Adding Color',           sample_file: 'ch11_06_crazy_color', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 
     {shortcut:'12-1', menu_title:'Ex 12-1: Shor\'s Factoring Algorithm', sample_file: 'ch12_shor1',          num_qubits: 12, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
