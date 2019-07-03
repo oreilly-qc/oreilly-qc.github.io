@@ -19,9 +19,6 @@ var res_full        = 1 << res_full_bits; // The x and y size of the full image,
 var res_aa          = 1 << res_aa_bits;   // The x and y size of each subpixel tile.
 var res_tiles       = res_full / res_aa;  // The number of tiles which make up one image row or column.
 
-var qss_full_lookup_table = null;
-var qss_count_to_hits = [];
-
 // NOTE: To run the actual QPU simulation, turn the following
 //       variable (do_shortcut_qss) to false. When it is true,
 //       we cheat to make the program faster, "peeking" at the
@@ -49,6 +46,9 @@ function main()
     draw_confidence_map();
 }
 
+var qss_full_lookup_table = null;
+var qss_count_to_hits = [];
+
 // The quantum pixel shader is the function which is called for each iteration.
 // When drawing the full-size image, this is called per sub-pixel. 
 function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
@@ -59,137 +59,48 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
 
     var ball_pos = [2, 2];
     var ball_radius = 1;
-    var is_ball = hbin >= (ball_pos[0] - ball_radius) && hbin < (ball_pos[0] + ball_radius)
-                         && vbin >= (ball_pos[1] - ball_radius) && vbin < (ball_pos[1] + ball_radius);
-    var is_sky = (vbin & 4) == 0 && !is_ball;
-    var is_ground = !is_ball && !is_sky;
 
-    if (1 || is_ball)
-    {
-        // drawing a circle is tricky, because we want x^2+y^2<r^2, but we don't have
-        // a great way to accumulate the squared sum of tx*res+qx. Instead,
-        // we can make use of (a+b)^2 = a^2+2ab+b^2.
-        var tiles_per_bin = res_tiles / num_bins;
-        var bx = ball_pos[0] * tiles_per_bin;
-        var by = ball_pos[1] * tiles_per_bin;
-        var br = ball_radius * tiles_per_bin * res_aa;
-        var dx = tx - bx;
-        var dy = ty - by;
-        if (dx < 0) dx = -(dx + 1);
-        if (dy < 0) dy = -(dy + 1);
-        dx *= res_aa;
-        dy *= res_aa;
-        qacc.add(dx * dx + dy * dy - br * br);
-        if (tx < bx)
-            qx.not();
-        if (ty < by)
-            qy.not();
-        for (var i = 0; i < dx; ++i)
-            qacc.addShifted(qx, 1);
-        for (var i = 0; i < dy; ++i)
-            qacc.addShifted(qy, 1);
-        qacc.addSquared(qx);
-        qacc.addSquared(qy);
+    // drawing a circle is tricky, because we want x^2+y^2<r^2, but we don't have
+    // a great way to accumulate the squared sum of tx*res+qx. Instead,
+    // we can make use of (a+b)^2 = a^2+2ab+b^2.
+    var tiles_per_bin = res_tiles / num_bins;
+    var bx = ball_pos[0] * tiles_per_bin;
+    var by = ball_pos[1] * tiles_per_bin;
+    var br = ball_radius * tiles_per_bin * res_aa;
+    var dx = tx - bx;
+    var dy = ty - by;
+    if (dx < 0) dx = -(dx + 1);
+    if (dy < 0) dy = -(dy + 1);
+    dx *= res_aa;
+    dy *= res_aa;
+    qacc.add(dx * dx + dy * dy - br * br);
+    if (tx < bx)
+        qx.not();
+    if (ty < by)
+        qy.not();
+    for (var i = 0; i < dx; ++i)
+        qacc.addShifted(qx, 1);
+    for (var i = 0; i < dy; ++i)
+        qacc.addShifted(qy, 1);
+    qacc.addSquared(qx);
+    qacc.addSquared(qy);
 //        qacc.add(dx + dy - br);
-        var acc_sign_bit = 1 << (accum_bits - 1);
-        var mask = qacc.bits(acc_sign_bit);
-        mask.orEquals(condition);
-        xor_color(null, mask, out_color);
+    var acc_sign_bit = 1 << (accum_bits - 1);
+    var mask = qacc.bits(acc_sign_bit);
+    mask.orEquals(condition);
+    xor_color(null, mask, out_color);
 //        qacc.subtract(dx + dy - br);
-        qacc.subtractSquared(qx);
-        qacc.subtractSquared(qy);
-        for (var i = 0; i < dx; ++i)
-            qacc.subtractShifted(qx, 1);  // todo make this shifted again
-        for (var i = 0; i < dy; ++i)
-            qacc.subtractShifted(qy, 1);
-        qacc.subtract(dx * dx + dy * dy - br * br);
-        if (tx < bx)
-            qx.not();
-        if (ty < by)
-            qy.not();
-    }
-    if (0 && is_sky)
-    {
-        // sky
-        if (0) {
-        qacc.addShifted(ty, ty_shift);
-        qacc.addShifted(qy, qy_shift);
-        xor_color(null, mask, out_color);
-        qacc.subtractShifted(ty, ty_shift);
-        qacc.subtractShifted(qy, qy_shift);
-        } else {
-            // just gray sky
-            qx.cnot(qy, 0x1);
-            var mask = qx.bits(0x1);
-            mask.orEquals(condition);
-            xor_color(null, mask, out_color);
-            qx.cnot(qy, 0x1);
-        }
-    }
-    if (0 && is_ground)
-    {
-        // perspective checkerboard
-        var tile_shift = res_aa_bits;
-        var y_offset = res_full >> 2;
-        if (ty >= (res_tiles >> 1))
-            y_offset += res_full >> 1;
-
-        var x_offset = (res_full) >> 1;
-
-        var left_side = (tx < (res_tiles >> 1));
-        var slopes = [[1,0],[0,1],[0,2]]; // checkerboard vertical edge slopes
-        if (left_side)
-            slopes = [[0,0],[0,1],[0,2]];
-// Draw checkerboard perspective
-        for (var slope = 0; slope < slopes.length; ++slope)
-        {
-
-            var num = slopes[slope][0];
-            var denom = slopes[slope][1];
-
-            // mirror horiz
-            x_offset = 0;
-            txx = tx % (res_tiles >> 1);
-            if (left_side)
-            {
-                txx = (res_tiles >> 1) - txx;
-                qx.not();
-            }
-
-            qacc.add((txx << (tile_shift + num)) - (x_offset << num));
-            qacc.addShifted(qx, num);
-            qacc.subtract((ty << (tile_shift + denom)) - (y_offset << denom));
-            qacc.subtractShifted(qy, denom);
-            var acc_sign_bit = 1 << (accum_bits - 1);
-            var mask = qacc.bits(acc_sign_bit);
-            mask.orEquals(condition);
-            xor_color(null, mask, out_color);
-            qacc.addShifted(qy, denom);
-            qacc.add((ty << (tile_shift + denom)) - (y_offset << denom));
-            qacc.subtractShifted(qx, num);
-            qacc.subtract((txx << (tile_shift + num)) - (x_offset << num));
-
-            if (left_side)
-            {
-                txx = (res_tiles >> 1) - txx;
-                qx.not();
-            }
-        }
-
-        // Draw checkerboard parallel
-        for (var band = 0; band < 6; ++band)
-        {
-                var band_bit = 1 << (band + 1);
-                qacc.subtract((ty << (tile_shift)) - (y_offset));
-                qacc.subtract(qy);
-                var acc_bit =qacc.bits(~(band_bit - 1));
-                var mask = acc_bit;
-                mask.orEquals(condition);
-                xor_color(null, mask, out_color);
-                qacc.add(qy);
-                qacc.add((ty << (tile_shift)) - (y_offset));
-        }
-    }
+    qacc.subtractSquared(qx);
+    qacc.subtractSquared(qy);
+    for (var i = 0; i < dx; ++i)
+        qacc.subtractShifted(qx, 1);  // todo make this shifted again
+    for (var i = 0; i < dy; ++i)
+        qacc.subtractShifted(qy, 1);
+    qacc.subtract(dx * dx + dy * dy - br * br);
+    if (tx < bx)
+        qx.not();
+    if (ty < by)
+        qy.not();
 }
 
 // Flip num_terms_to_flip terms of quantum reg x, conditional on condition
@@ -306,7 +217,8 @@ function create_table_column(color, qxy, qcount)
             grover_iteration(qxy.bits(), mask_with_condition);
         }
     }
-    invQFT(qcount);
+    qcount.invQFT();
+    qcount.reverseBits();
 
     // Construct the translation table
     var table = [];
@@ -476,7 +388,8 @@ function qss_tile(sp)
             grover_iteration(qxy_bits, mask_with_condition);
         }
     }
-    invQFT(sp.counter);
+    sp.counter.invQFT();
+    sp.counter.reverseBits();
 
     sp.readVal = sp.counter.read();
     sp.hits = qss_count_to_hits[sp.readVal];
@@ -555,25 +468,6 @@ function grover_iteration(mask, mask_with_condition)
     qc.hadamard(mask);
 }
 
-function invQFT(x)
-{
-    var bits = x.numBits;
-    qc.label('inverse QFT');
-    for (var i = 0; i < bits; ++i)
-    {
-        var bit1 = bits - (i + 1);
-        var mask1 = 1 << bit1;
-        x.hadamard(mask1);
-        var theta = -90.0;
-        for (var j = i + 1; j < bits; ++j)
-        {
-            var bit2 = bits - (j + 1);
-            var mask2 = 1 << bit2;
-            x.cphase(theta, mask1 + mask2);
-            theta *= 0.5;
-        }
-    }
-}
 
 
 
@@ -668,51 +562,10 @@ function DisplayBox(canvas_name)
         this.ctx.fillStyle = 'rgb('+bright+','+bright+','+bright+')';
         this.ctx.fillRect(x1, y1, w, h);
     }
-
-    this.pixelRGB = function(x, y, color)
-    {
-        var inv_gamma = 1.0 / 2.2;
-        var r = Math.pow(color[0], inv_gamma);
-        var g = Math.pow(color[1], inv_gamma);
-        var b = Math.pow(color[2], inv_gamma);
-        r = (255 * r).toFixed(0);
-        g = (255 * g).toFixed(0);
-        b = (255 * b).toFixed(0);
-        var w = this.canvas.width / this.resolution_x;
-        var h = this.canvas.height / this.resolution_y;
-        var x1 = x * w;
-        var y1 = y * h;
-        this.ctx.fillStyle = 'rgb('+r+','+g+','+b+')';
-        this.ctx.fillRect(x1, y1, w, h);
-    }
-
     this.label = function(text)
     {
         this.span.innerHTML = text;
     }
-
-    this.get_bw_pixels = function(width, height)
-    {
-        var imgd = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-        var pix = imgd.data;
-        var out_bytes = new Array();
-        var src_row_index = 0;
-        var src_col_pitch = 4 * this.canvas.width / width;
-        var src_row_pitch = src_col_pitch * width * this.canvas.height / height;
-
-        for (var row = 0; row < height; ++row)
-        {
-            var src_index = src_row_index;
-            for (var col = 0; col < width; ++col)
-            {
-                out_bytes.push(pix[src_index]);
-                src_index += src_col_pitch;
-            }
-            src_row_index += src_row_pitch;
-        }
-    }
-
-
 }
 
 
