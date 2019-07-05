@@ -5,9 +5,10 @@
 // };
 
 var engine_list = [
-    {name : 'QCEngine', suffix : '.js',   subdir : 'samples/QCEngine/', dir_list : ''},
-    {name : 'Qiskit',   suffix : '.py',   subdir : 'samples/Qiskit/',   dir_list : ''},
-    {name : 'QASM',     suffix : '.qasm', subdir : 'samples/QASM/',     dir_list : ''},
+    {name : 'QCEngine', link_name: 'QCEngine', suffix : '.js',   subdir : 'samples/QCEngine/', dir_list : ''},
+    {name : 'Qiskit',   link_name: 'Qiskit',   suffix : '.py',   subdir : 'samples/Qiskit/',   dir_list : ''},
+    {name : 'QASM',     link_name: 'OpenQASM', suffix : '.qasm', subdir : 'samples/QASM/',     dir_list : ''},
+    {name : 'QSharp',   link_name: 'Q#',       suffix : '.qs',   subdir : 'samples/QSharp/',   dir_list : ''},
 ];
 
 var sample_menu = [
