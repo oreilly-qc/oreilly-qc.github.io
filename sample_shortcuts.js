@@ -12,10 +12,10 @@ var engine_list = [
 ];
 
 var sample_menu = [
-    {shortcut:'2-1', menu_title:'Ex 2-1: Random bit',         sample_file: 'ch02_random_bit',  num_qubits: 1, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'2-2', menu_title:'Ex 2-2: Random byte',        sample_file: 'ch02_random_byte', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'2-3', menu_title:'Ex 2-3: Root-of-not',        sample_file: 'ch02_root_not',    num_qubits: 1, num_instructions: 13, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
-    {shortcut:'2-4', menu_title:'Ex 2-4: Quantum Spy Hunter', sample_file: 'ch02_spy_hunter',  num_qubits: 3, num_instructions: 35, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'2-1', menu_title:'Ex 2-1: Random bit',         sample_file: 'ch02_01_random_bit',  num_qubits: 1, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'2-2', menu_title:'Ex 2-2: Random byte',        sample_file: 'ch02_02_random_byte', num_qubits: 8, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'2-3', menu_title:'Ex 2-3: Root-of-not',        sample_file: 'ch02_03_root_not',    num_qubits: 1, num_instructions: 13, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
+    {shortcut:'2-4', menu_title:'Ex 2-4: Quantum Spy Hunter', sample_file: 'ch02_04_spy_hunter',  num_qubits: 3, num_instructions: 35, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
 
     {shortcut:'3-1', menu_title:'Ex 3-1: Separable qubits', sample_file: 'ch03_separable_qubits',          num_qubits: 3, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
     {shortcut:'3-2', menu_title:'Ex 3-2: Entangled qubits', sample_file: 'ch03_entangled_qubits',          num_qubits: 2, num_instructions: 6, num_circle_cols: 8, num_circle_rows: 1, circle_scale: 1.0, gate_scale: 1.0},
