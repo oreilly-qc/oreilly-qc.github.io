@@ -4,66 +4,70 @@
 
 // To run this online, go to http://oreilly-qc.github.io?p=14-GT
 
-//////////////////////////////////////////////
-//////////////////////////////////////////////
-//////////////////////////////////////////////
-//////////////////////////////////////////////
-// NOTE: This sample is undergoing revision.
-//       (almost done)
-//////////////////////////////////////////////
-//////////////////////////////////////////////
-//////////////////////////////////////////////
-//////////////////////////////////////////////
 
-qc.reset(3);
+
+qc.reset(4);
 var alice = qint.new(1, 'alice');
-var ep    = qint.new(1, 'ep');
+var epa    = qint.new(1, 'ep-a');
+var epb    = qint.new(1, 'ep-b');
 var bob   = qint.new(1, 'bob');
 
-ep.write(0);
-bob.write(0);
-qc.label('entangle');
-ep.had();
-bob.cnot(ep);
-qc.label('');
+qc.write(0);
+qc.nop();
 
-alice.write(0);
-qc.label('prep payload');
+
+// Prepare Alice's qubit
+qc.label('prep alice');
 alice.had();
 alice.phase(45);
 alice.had();
 qc.label('');
 qc.nop();
-qc.print('alice prob:' + alice.peekProbability(1));
 
-qc.label('send');
-ep.cnot(alice);
-alice.had();
-alice.read();
-ep.read();
+
+//Prepare Bob's qubit
+qc.label('prep bob');
+bob.had();
+bob.phase(30);
+bob.had();
 qc.label('');
 qc.nop();
 
-// ej TODO: Check code order issue
-qc.label('apply gate');
-bob.had();
-//bob.phase(30);
-bob.had();
+// Prepare standard entangled state that will be shared by Alice and Bob
+qc.label('entangle');
+epa.had();
+epb.cnot(epa);
 qc.label('');
+qc.nop();
 
-qc.label('receive');
-bob.cnot(ep);
-bob.cz(alice);
-
+// Teleport and apply conditional operation (portrayed here as quantum gates, 
+// but they are acting from classical information)
+qc.label('teleport');
+epa.cnot(alice);
+qc.read(epa);
+epb.cnot(epa);
+bob.cnot(epb);
+epb.had();
+qc.read(epb);
+alice.cz(epb);
 qc.label('');
 qc.nop();
 
 
+//This operation should be equal to applying a CNOT and undoing the preparationg
+// of Alice's and Bob's qubits. We can verify by applying the operations in reverse
 qc.label('verify');
+bob.cnot(alice);
 bob.had();
-//bob.phase(-45-30);
-bob.phase(-45);
+bob.phase(-30);
 bob.had();
-bob.read();
-qc.label('');
-qc.nop();
+alice.had();
+alice.phase(-45);
+alice.had();
+
+//Note that all the outcomes correspond to Alice and Bob's qubits 
+// being zero (first and last digits of the binary representation of the register):
+// If epa=0 and epb=0, then output state is |0000> = |0>
+// If epa=1 and epb=0, then output state is |0010> = |2>
+// If epa=0 and epb=1, then output state is |0100> = |4>
+// If epa=1 and epb=1, then output state is |0110> = |6>
