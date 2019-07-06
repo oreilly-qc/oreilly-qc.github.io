@@ -11,8 +11,8 @@ import math
 %matplotlib inline
 
 # Set up the registers
-reg   = QuantumRegister(1, name='reg')
-reg_c = ClassicalRegister(1, name='regc')
+reg   = QuantumRegister(8, name='reg')
+reg_c = ClassicalRegister(8, name='regc')
 qc    = QuantumCircuit(reg, reg_c)
 
 
