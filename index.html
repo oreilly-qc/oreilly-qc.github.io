@@ -470,7 +470,7 @@
         </button>
       </div>
       <div class="modal-body">
-        The QASM versions of examples in this book are designed to run
+        The OpenQASM versions of examples in this book are designed to run
         using the <b>IBM Q Experience Quantum Composer</b>, at <a href="https://quantum-computing.ibm.com" target="_blank">https://quantum-computing.ibm.com</a>.
         <br/><br/>
         The <b>Quantum Composer</b> is a graphical user interface for programming a quantum processor.
@@ -845,7 +845,7 @@ function set_current_engine(engine)
     {
         editor.session.setMode("ace/mode/python");
     }
-    else if (current_engine.name == 'QASM')
+    else if (current_engine.name == 'OpenQASM')
     {
         editor.session.setMode("ace/mode/plain_text");
     }
@@ -1003,7 +1003,7 @@ function try_to_get_program_from_passed_in_url()
     // Special case: sample 4-1 in the book needs to appear in
     //               QASM by default.
     if (sample_str == '4-1' && engine_str == null)
-      engine = get_engine_from_string('QASM');
+      engine = get_engine_from_string('OpenQASM');
     do_sample_special_cases(sample_str);
 
     show_graphics_output(false);
@@ -1017,8 +1017,6 @@ function do_sample_special_cases(sample_str)
     var sample_info_span = document.getElementById("sample_info_span");
     sample_info_span.style.display = 'none';
 
-    // Special case: sample 4-1 in the book needs to appear in
-    //               QASM by default.
     if (sample_str == '4-2')
     {
         // Takes a while to eat a chocodile
