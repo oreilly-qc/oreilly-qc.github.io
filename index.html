@@ -158,6 +158,7 @@
           </div>
 
           <img src="images/icon_question.png" title="About QCEngine" height=20 onclick="do_aboutqce_modal();" />
+          <img src="images/icon_cheatsheet.png" title="Command cheat sheet" height=20 onclick="do_cheatsheet_modal();" />
 
           <span id="bug_span">
           </span>
@@ -427,6 +428,8 @@
         <br/>
         It will let you run JavaScript code, simulating the quantum computing as
         though you had a real QC, up to about 25 qubits (depending on your browser).
+        The best way to get familiar with QCEngine is to run the book samples on
+        this page.
         <br/>
         <br/>
         For more serious development tasks, there are many other simulation engines available:
@@ -452,6 +455,45 @@
         about running these book samples, the authors would love to hear from you
         at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>.
               </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="CheatSheet_runModal" tabindex="-1" role="dialog" aria-labelledby="CheatSheet_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="CheatSheet_runModalLabel">QCEngine Command Cheat Sheet</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This sheet provides a quick-reference for most common QCEngine commands.
+        The best way to become familiar with QCEngine commands is to try running the book
+        samples in this page.
+        If you find things missing or unclear, the authors would love to hear from you
+        at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>.
+
+        <br/>
+        <br/>
+        <b>"qc." Commands:</b> Commands such as <code>qc.reset()</code> and <code>qc.cnot(t, c)</code> execute
+        using a quantum computation simulator. In most cases, they take a <b>target mask</b> and a <b>condition mask</b>,
+        to specify which qubits the instructions act on. Some commands also take a rotation angle.
+
+        <br/>
+        <br/>
+        <b>Qubit Masks:</b> Qubits are be specified using an integer, where each bit corresponds to one of the
+        qubits in the quantum computer.
+
+        <br/>
+        <br/>
+        (...this is under sonstruction)
+        
+      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
@@ -972,6 +1014,12 @@ function do_aboutqce_modal()
     var val = $('#AboutQCE_runModal').modal(options);
 }
 
+function do_cheatsheet_modal()
+{
+    var options = null;
+    var val = $('#CheatSheet_runModal').modal(options);
+}
+
 function make_github_source_links()
 {
     var sample = current_sample;
@@ -1260,6 +1308,7 @@ function handle_run_button()
 
 var default_program = `
 qc.reset(3);
+qc.write(0);
 qc.had(0x1);
 qc.cnot(0x2, 0x1);
 `;
