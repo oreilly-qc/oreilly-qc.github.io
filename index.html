@@ -157,6 +157,8 @@
             </button>
           </div>
 
+          <img src="images/icon_question.png" title="About QCEngine" height=20 onclick="do_aboutqce_modal();" />
+
           <span id="bug_span">
           </span>
           <span id="example_github_span">
@@ -408,6 +410,56 @@
 </div>
 
 
+<div class="modal fade" id="AboutQCE_runModal" tabindex="-1" role="dialog" aria-labelledby="AboutQCE_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AboutQCE_runModalLabel">QCEngine Notes</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        QCEngine is intended to be a lightweight quantum computation simulator,
+        useful for quick sketches and demonstrations.
+
+        <br/>
+        <br/>
+        It will let you run JavaScript code, simulating the quantum computing as
+        though you had a real QC, up to about 25 qubits (depending on your browser).
+        <br/>
+        <br/>
+        For more serious development tasks, there are many other simulation engines available:
+        <br/>
+        <ul>
+          <li><b><a href="qiskit.org" target="_default">Qiskit</a></b> - 
+            An open-source software development kit (SDK) for working with OpenQASM and the
+            IBM Q quantum processors. Create quantum computing programs, compile, and execute them online
+            in a real quantum processors.</li>
+          <li><b><a href="https://quantum-computing.ibm.com" target="_default">IBM Q Experience</a></b> - 
+            A complete online environment, containing tools and information for programming quantum
+            simulations as well as physical quantum computers.</li>
+          <li><b><a href="https://www.microsoft.com/en-us/quantum/development-kit" target="_default">Microsoft QDK</a></b> - 
+            A complete software development system for developing and running programs for quantum computers.</li>
+          <li><b><a href="http://www.quantumplayground.net" target="_default">Google QC Playground</a></b> - 
+            An approachable online environment for discovering quantum computing.</li>
+        </ul>
+
+        ...just to name a few.
+        <br/>
+        <br/>
+        If you have questions or comments
+        about running these book samples, the authors would love to hear from you
+        at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>.
+              </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="modal fade" id="AddEngine_runModal" tabindex="-1" role="dialog" aria-labelledby="AddEngine_runModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -432,7 +484,6 @@
     </div>
   </div>
 </div>
-
 
 <div class="modal fade" id="Qiskit_runModal" tabindex="-1" role="dialog" aria-labelledby="Qiskit_runModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -913,6 +964,12 @@ function do_addengine_modal()
 {
     var options = null;
     var val = $('#AddEngine_runModal').modal(options);
+}
+
+function do_aboutqce_modal()
+{
+    var options = null;
+    var val = $('#AboutQCE_runModal').modal(options);
 }
 
 function make_github_source_links()
