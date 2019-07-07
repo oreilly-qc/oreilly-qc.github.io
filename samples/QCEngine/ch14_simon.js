@@ -59,8 +59,10 @@ scratch.read();
 //Read register
 qc.label('read register');
 register.had();
-output = register.read();
+var output = register.read();
 qc.label('');
+qc.print('String z such that z OR str = 0,\t');
+qc.print('z = '+output.toString(2) + '\n');  // print binary string
 
 // The output we obtain is not the string str, but rather a string z such that
 // z OR str =  0. By running this algorithm a number of times, we will obtain a
