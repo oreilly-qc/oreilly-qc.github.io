@@ -6,7 +6,6 @@
 // Note: This sample may vary slightly from the text in the book,
 // due to revisions or aesthetic tweaks.
 
-
 // Secret oracle string
 var str = "001101";
 
@@ -34,8 +33,8 @@ register.had();
 qc.nop();
 qc.label('');
 
-// Call oracle.
-// Bitwise multiplication of the strings is equivalent to performing AND.
+// Call oracle. 
+// Bitwise multiplication of the strings is equivalent to performing AND. 
 // We want the result of bitwise AND between oracle qubits and register qubits
 // stored in the phase, we can use directly CZ gates without the need of ancillas
 
