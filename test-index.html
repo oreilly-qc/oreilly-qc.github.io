@@ -162,6 +162,8 @@
 
           <span id="bug_span">
           </span>
+          <span id="info_span">
+          </span>
           <span id="example_github_span">
           </span>
 
@@ -619,7 +621,6 @@
         }
     });
 
-/*
 var editor_div = document.getElementById('editor_div');
 var editor_boot_panel = document.getElementById('editor_boot_panel');
 var staff_boot_panel = document.getElementById('staff_boot_panel');
@@ -672,9 +673,13 @@ function check_for_editor_resize()
 }
 
 window.onload = function() {
+    show_info('101');
     check_for_editor_resize();
+    show_info('102');
     fetch_sample_contents();
+    show_info('103');
     make_sample_menu();
+    show_info('104');
 };
 
 function click_circle_style(style)
@@ -1210,6 +1215,18 @@ function show_bug(enable, err)
     span.innerHTML = sstr;
 }
 
+function show_info(message)
+{
+    var span = document.getElementById('info_span');
+    var sstr = '';
+    if (message)
+    {
+        sstr += '<br/>';
+        sstr += message;
+    }
+    span.innerHTML = sstr;
+}
+
 function run_script()
 {
     qc_options.color_by_phase = false;
@@ -1315,7 +1332,7 @@ qc.cnot(0x2, 0x1);
 `;
 
 
-*/
+
 
 
 
