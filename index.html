@@ -157,6 +157,8 @@
             </button>
           </div>
 
+          <span id="bug_span">
+          </span>
           <span id="example_github_span">
           </span>
 
@@ -1087,6 +1089,20 @@ function load_code_sample(sample_str, engine=null)
 //     ctx.restore();
 // }
 
+function show_bug(enable, err)
+{
+    var span = document.getElementById('bug_span');
+    var sstr = '';
+    if (enable)
+    {
+        sstr += '<br/>';
+        sstr += '<span style="color:darkred;">'
+        sstr += '<b>Error:</b> ' + err.message;
+        sstr += '</span>';
+    }
+    span.innerHTML = sstr;
+}
+
 function run_script()
 {
     qc_options.color_by_phase = false;
@@ -1101,7 +1117,13 @@ function run_script()
     qc.enableAnimation();
 
     show_state_vector();
-    runQCScriptInTextArea('editor', 'script_output_textarea');
+    try {
+      show_bug(false);
+      runQCScriptInTextArea('editor', 'script_output_textarea');
+    }
+    catch (err) {
+      show_bug(true, err);
+    }
 
     qc.qReg.changed();
     show_state_vector();
