@@ -10,6 +10,10 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script src="./external/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 
+<script>
+  window.onerror = function(message, source, lineno, colno, error)
+  { alert('Error: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
+</script>
 <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_bitfield.js"></script>
 <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_reg.js"></script>
 <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_int.js"></script>
@@ -947,7 +951,7 @@ function fetch_one_sample_dir(engine)
     };
     http_request.send(null);
 }
-show_info('cut6');
+show_info('cut7');
 /*
 
 function fetch_sample_contents()
