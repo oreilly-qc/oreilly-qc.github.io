@@ -633,6 +633,19 @@ var example_github_span = document.getElementById('example_github_span');
 var script_output_textarea = document.getElementById('script_output_textarea');
 var staff_popin_div = document.getElementById('staff_popin_div');
 
+function show_info(message)
+{
+    var span = document.getElementById('info_span');
+    var sstr = span.innerHTML;
+    if (message)
+    {
+        sstr += '<br/>';
+        sstr += message;
+    }
+    span.innerHTML = sstr;
+}
+
+show_info('001');
 
 ///////////////////////////////////////////////////////////////
 // This is a small workaround for the issue where the editor
@@ -866,14 +879,19 @@ function do_failed_load_sample(file_url)
   make_engine_menu();
 }
 
+show_info('002');
+
 qc_options.staff_canvas = document.getElementById('draw_gate_canvas');
 qc_options.staff_div = document.getElementById('staff_popin_div');
 qc_options.circle_canvas = document.getElementById('circle_canvas');
 qc_options.circle_div = document.getElementById('circle_div');
 var valid_engine_list = [];
 //qc_options.draw_scale = 3.0;
+show_info('003');
 var qc = QPU();
+show_info('004');
 qc.set_param('draw_scale', 1.0);
+show_info('005');
 // qc.set_canvas(document.getElementById('draw_gate_canvas'));
 // panel_staff = qc.panel_staff;
 // panel_chart = qc.panel_chart;
@@ -1215,18 +1233,6 @@ function show_bug(enable, err)
     span.innerHTML = sstr;
 }
 
-function show_info(message)
-{
-    var span = document.getElementById('info_span');
-    var sstr = '';
-    if (message)
-    {
-        sstr += '<br/>';
-        sstr += message;
-    }
-    span.innerHTML = sstr;
-}
-
 function run_script()
 {
     qc_options.color_by_phase = false;
@@ -1324,6 +1330,8 @@ function handle_run_button()
     qc.panel_staff.staff.fullSnapshot();
 }
 
+show_info('020');
+
 var default_program = `
 qc.reset(3);
 qc.write(0);
@@ -1331,6 +1339,7 @@ qc.had(0x1);
 qc.cnot(0x2, 0x1);
 `;
 
+show_info('021');
 
 
 
