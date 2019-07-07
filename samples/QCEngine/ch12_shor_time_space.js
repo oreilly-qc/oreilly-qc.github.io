@@ -6,3 +6,4 @@
 // Note: This sample may vary slightly from the text in the book,
 // due to revisions or aesthetic tweaks.
 
+// Pardon our dust while this sample is being re-worked.

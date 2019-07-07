@@ -2,7 +2,7 @@
 //   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
 //   O'Reilly Media
 
-// To run this online, go to http://oreilly-qc.github.io?p=12-3
+// To run this online, go to http://oreilly-qc.github.io?p=12-1
 // Note: This sample may vary slightly from the text in the book,
 // due to revisions or aesthetic tweaks.
 
@@ -10,6 +10,20 @@
 // illustration purposes, to help develop an intuition regarding
 // what the algorithm does. It is not intended to be an optimal
 // implementation on any specific QPU or simulation.
+
+// Here are some values of N to try:
+// 15, 21, 35, 39, 51, 55, 69, 77, 85, 87, 91, 93, 95, 111, 115, 117,
+// 119, 123, 133, 155, 187, 203, 221, 247, 259, 287, 341, 451
+
+// Larger numbers require more bits of precision.
+// N = 15    precision_bits >= 4
+// N = 21    precision_bits >= 5
+// N = 35    precision_bits >= 6
+// N = 123   precision_bits >= 7
+// N = 341   precision_bits >= 8  time: about 6 seconds
+// N = 451   precision_bits >= 9  time: about 23 seconds
+
+var increase_speed = false; // switch drawing off to increase sim speed
 
 function shor_sample()
 {
@@ -77,8 +91,23 @@ function ShorLogic(N, repeat_period_candidates, coprime)
     return factor_candidates;
 }
 
+function setup_speed()
+{
+    if (increase_speed)
+    {
+        qc.disableRecording();
+        qc.disableAnimation();
+    }
+    else
+    {
+        qc.enableRecording();
+        qc.enableAnimation();
+    }
+}
+
 function ShorQPU(N, precision_bits, coprime)
 {
+    setup_speed();
     // Quantum part of Shor's algorithm
     // For this implementation, the coprime must be 2.
     coprime = 2;
@@ -146,98 +175,76 @@ function ShorQPU_WithoutModulo(N, precision_bits, coprime)
 // need to be concerned with performing a quantum int modulus.
 // That's a complicated operation, and it also requires us to
 // do the shifts one at a time.
-// function ShorQPU_WithModulo(N, precision_bits, coprime)
-// {
-//     var scratch = null;
-//     var max_value = 1;
-//     var mod_engaged = false;
+function ShorQPU_WithModulo(N, precision_bits, coprime)
+{
+    var scratch = null;
+    var max_value = 1;
+    var mod_engaged = false;
 
-//   var N_bits = 1;
-//   var scratch_bits = 0;
-//   while ((1 << N_bits) < N)
-//     N_bits++;
-//   if (N != 15) // For this implementation, numbers other than 15 need an extra bit
-//     N_bits++;
-//   if (do_modulo)
-//     scratch_bits = 1;
-//   var total_bits = N_bits + precision_bits + scratch_bits;
+    var N_bits = 1;
+    var scratch_bits = 0;
+    while ((1 << N_bits) < N)
+        N_bits++;
+    if (N != 15) // For this implementation, numbers other than 15 need an extra bit
+        N_bits++;
+    scratch_bits = 1;
+    var total_bits = N_bits + precision_bits + scratch_bits;
 
-//   // Set up the QPU and the working registers
-//   qc.reset(total_bits);
-//   num = qint.new(N_bits, 'work');
-//   precision = qint.new(precision_bits, 'precision');
-//   if (do_modulo)
-//     scratch = qint.new(1, 'scratch');
+    // Set up the QPU and the working registers
+    qc.reset(total_bits);
+    num = qint.new(N_bits, 'work');
+    precision = qint.new(precision_bits, 'precision');
+    scratch = qint.new(1, 'scratch');
 
-//   qc.label('init');
-//   num.write(1);
-//   precision.write(0);
-//   precision.hadamard();
-//   if (do_modulo)
-//     scratch.write(0);
+    qc.label('init');
+    num.write(1);
+    precision.write(0);
+    precision.hadamard();
+    scratch.write(0);
 
-//   var N_sign_bit_place = 1 << (N_bits - 1);
-//   var N_sign_bit = num.bits(N_sign_bit_place);
-//   for (var iter = 0; iter < precision_bits; ++iter)
-//   {
-//     var condition = precision.bits(1 << iter);
-//     var N_sign_bit_with_condition = num.bits(N_sign_bit_place);
-//     N_sign_bit_with_condition.orEquals(condition);
+    var N_sign_bit_place = 1 << (N_bits - 1);
+    var N_sign_bit = num.bits(N_sign_bit_place);
+    for (var iter = 0; iter < precision_bits; ++iter)
+    {
+        var condition = precision.bits(1 << iter);
+        var N_sign_bit_with_condition = num.bits(N_sign_bit_place);
+        N_sign_bit_with_condition.orEquals(condition);
 
-//     var shifts = 1 << iter;
-//     if (!do_modulo)
-//     {
-//       qc.label('iter ' + iter);
-//       shifts %= num.numBits;
-// //      num.rollLeft(shifts, condition);
-//         if (shifts == 1)
-//             num.rollLeft(shifts, condition);
-//         else if (shifts == 2)
-// {
-//     qc.exchange(0x2|0x8, 32);
-//     qc.exchange(0x1|0x4, 32);
-// //            num.rollLeft(shifts, condition);
-// }
-//     }
-//     else
-//     {
-//       for (var sh = 0; sh < shifts; ++sh)
-//       {
-//         qc.label('num *= coprime');
-//         num.rollLeft(1, condition);   // Multiply by the coprime
-//         if (do_modulo)
-//         {
-//           max_value <<= 1;
-//           if (max_value >= N)
-//             mod_engaged = true;
-//           if (mod_engaged)
-//           {
-//             qc.label('modulo N');
-//             var wrap_mask = scratch.bits();
-//             var wrap_mask_with_condition = scratch.bits();
-//             wrap_mask_with_condition.orEquals(condition);
+        var shifts = 1 << iter;
+        for (var sh = 0; sh < shifts; ++sh)
+        {
+            qc.label('num *= coprime');
+            num.rollLeft(1, condition);   // Multiply by the coprime
+            max_value <<= 1;
+            if (max_value >= N)
+                mod_engaged = true;
+            if (mod_engaged)
+            {
+                qc.label('modulo N');
+                var wrap_mask = scratch.bits();
+                var wrap_mask_with_condition = scratch.bits();
+                wrap_mask_with_condition.orEquals(condition);
 
-//             // Here's the modulo code.
-//             num.subtract(N, condition); // subtract N, causing this to go negative if we HAVEN'T wrapped.
-//             scratch.cnot(N_sign_bit_with_condition); // Skim off the sign bit
-//             num.add(N, wrap_mask_with_condition); // If we went negative, undo the subtraction.
-//             num.not(1);
-//             scratch.cnot(num, 1, condition); // If it's odd, then we wrapped, so clear the wrap bit
-//             num.not(1);
-//           }
-//         }
-//       }
-//     }
-//   }
-//   qc.label('QFT');
-//   precision.QFT();
-// //  precision.reverseBits();  // TODO: This is a temporary fix
-//   qc.label('');
-//     var read_result = precision.read();
-//     var repeat_period = 0;
+                // Here's the modulo code.
+                num.subtract(N, condition); // subtract N, causing this to go negative if we HAVEN'T wrapped.
+                scratch.cnot(N_sign_bit_with_condition); // Skim off the sign bit
+                num.add(N, wrap_mask_with_condition); // If we went negative, undo the subtraction.
+                num.not(1);
+                scratch.cnot(num, 1, condition); // If it's odd, then we wrapped, so clear the wrap bit
+                num.not(1);
+            }
+        }
+    }
+    qc.label('QFT');
+    precision.QFT();
+    qc.label('');
 
-//   return true;
-// }
+    var read_result = read_unsigned(precision);
+    qc.print('QPU read result: '+read_result+'\n')
+    var repeat_period_candidates = estimate_num_spikes(read_result, 1 << precision_bits);
+
+    return repeat_period_candidates;
+}
 
 function estimate_num_spikes(spike, range)
 {
