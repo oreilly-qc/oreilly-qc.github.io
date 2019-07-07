@@ -645,6 +645,21 @@ function show_info(message)
     span.innerHTML = sstr;
 }
 
+function show_bug(enable, err)
+{
+    var span = document.getElementById('bug_span');
+    var sstr = '';
+    if (enable)
+    {
+        sstr += '<br/>';
+        sstr += '<span style="color:darkred;">';
+        sstr += '<img src="images/icon_bug.png" height="20" /> '
+        sstr += '<b>Error:</b> ' + err.message;
+        sstr += '</span>';
+    }
+    span.innerHTML = sstr;
+}
+
 show_info('001');
 
 ///////////////////////////////////////////////////////////////
@@ -889,7 +904,12 @@ qc_options.circle_div = document.getElementById('circle_div');
 var valid_engine_list = [];
 //qc_options.draw_scale = 3.0;
 show_info('003');
+try {
 var qc = QPU();
+}
+catch (err) {
+  show_bug(true, err);
+}
 show_info('004');
 qc.set_param('draw_scale', 1.0);
 show_info('005');
@@ -1220,21 +1240,6 @@ function load_code_sample(sample_str, engine=null)
 //     }
 //     ctx.restore();
 // }
-
-function show_bug(enable, err)
-{
-    var span = document.getElementById('bug_span');
-    var sstr = '';
-    if (enable)
-    {
-        sstr += '<br/>';
-        sstr += '<span style="color:darkred;">';
-        sstr += '<img src="images/icon_bug.png" height="20" /> '
-        sstr += '<b>Error:</b> ' + err.message;
-        sstr += '</span>';
-    }
-    span.innerHTML = sstr;
-}
 
 function run_script()
 {
