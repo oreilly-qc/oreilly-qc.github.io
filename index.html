@@ -981,6 +981,7 @@ function set_current_engine(engine)
 
 function choose_sample_menu(sample, engine=null)
 {
+  show_graphics_output(false);
   do_sample_special_cases(sample.shortcut);
   console.log('Sample menu chosen: ' + sample.sample_file);
   if (engine == null)
@@ -1142,8 +1143,6 @@ function try_to_get_program_from_passed_in_url()
       engine = get_engine_from_string('OpenQASM');
     do_sample_special_cases(sample_str);
 
-    show_graphics_output(false);
-
     choose_sample_menu(sample, engine);
 }
 
@@ -1279,6 +1278,7 @@ function run_script()
 //      qc.enableRecording();
       qc.codeLabel('');
     }
+    show_graphics_output(false);
 
     qc.enableAnimation();
 
