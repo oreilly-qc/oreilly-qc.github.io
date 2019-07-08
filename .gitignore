@@ -2,3 +2,5 @@
 *.pyc
 venv/
 tags
+*.swp
+notes/
