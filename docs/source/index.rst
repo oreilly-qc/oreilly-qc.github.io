@@ -3,13 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to qcengine's documentation!
-====================================
+QCEngine
+========
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+QCEngine is a quantum computer simulator accompanying the O'Reilly book `Programming Quantum Computers <https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683>`. Needing no installation, QCEngine makes use of the _circle notation_ introduced in the book, to provide a compelling pedagogical tool for learning how to build and understand quantum circuits.
 
+To get started with how to navigate and use the simulator, see the `quickstart <quickstart-label>`, or to see a list of useful QCEngine commands see the `cheatsheet <cheatsheet-label>`
 
 
 Indices and tables
@@ -18,3 +17,12 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+    Quickstart <quickstart>
+    CheatSheet <cheatsheet>
+
+
