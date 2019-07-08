@@ -1077,10 +1077,34 @@ function make_github_source_links()
                 str += '<span style="color:#aaa" title="This version is not implemented yet, but if you\'d like to add it, please contact us at octopus@qcengine.com">' + engine.link_name + '</span>';
             }
         }
-        str += '<span style="font-size:8pt; color:#77a">';
-        str += '<br/>Developers: Add your engine, or add a sample! <b><a href="#" onclick="do_addengine_modal();">Click here</a></b> for more info.';
-        str += '</span>';
     }
+
+    // If there's a chapter notebook, link to that.
+    if (current_engine.name == 'Qiskit')
+    {
+        var wb_text = null;
+        var wb_name = null;
+        var wb_link = null;
+        if (sample.shortcut.startsWith('2-'))
+        {
+            wb_text = 'Download the complete Chapter2 ';
+            wb_name = 'Qiskit Notebook';
+            wb_link = current_engine.subdir + '/Chapter2-samples.ipynb';
+        }
+        if (wb_text)
+        {
+            str += '<br/>';
+            str += '<b>';
+            str += wb_text;
+            str += '<a href="'+wb_link+'" download>'+wb_name+'</a>';
+            str += '</b>';
+        }
+    }
+
+    str += '<span style="font-size:8pt; color:#77a">';
+    str += '<br/>Developers: Add your engine, or add a sample! <b><a href="#" onclick="do_addengine_modal();">Click here</a></b> for more info.';
+    str += '</span>';
+
     example_github_span.innerHTML = str;
 }
 
