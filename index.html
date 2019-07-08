@@ -349,16 +349,24 @@
                 </div>
                 <div class="btn-group">
                   <button type="button" class="btn btn-default ej-btn-cstyle">
-                    <img src="images/circ_style_00a.png" width="40" onclick="click_circle_style(0);"></span>
+                    <img src="images/circ_style_00a.png" height="18" onclick="click_circle_style(0);"></span>
                   </button>
                   <button type="button" class="btn btn-default ej-btn-cstyle">
-                    <img src="images/circ_style_01a.png" width="40" onclick="click_circle_style(1);"></span>
+                    <img src="images/circ_style_01a.png" height="18" onclick="click_circle_style(1);"></span>
                   </button>
                   <button type="button" class="btn btn-default ej-btn-cstyle">
-                    <img src="images/circ_style_10a.png" width="40" onclick="click_circle_style(2);"></span>
+                    <img src="images/circ_style_10a.png" height="18" onclick="click_circle_style(2);"></span>
                   </button>
                   <button type="button" class="btn btn-default ej-btn-cstyle">
-                    <img src="images/circ_style_11a.png" width="40" onclick="click_circle_style(3);"></span>
+                    <img src="images/circ_style_11a.png" height="18" onclick="click_circle_style(3);"></span>
+                  </button>
+                </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default ej-btn-cstyle">
+                    <img src="images/circ_fill_small.png" height="18" onclick="click_circle_fill(-1);"></span>
+                  </button>
+                  <button type="button" class="btn btn-default ej-btn-cstyle">
+                    <img src="images/circ_fill_big.png" height="18" onclick="click_circle_fill(1);"></span>
                   </button>
                 </div>
 
@@ -679,6 +687,23 @@ window.onload = function() {
     fetch_sample_contents();
     make_sample_menu();
 };
+
+function click_circle_fill(up_down)
+{
+    var e = {ctrlKey:false, shiftKey:true, deltaY:-up_down};
+
+    list = qc.panel_chart.widgets;
+    for (var i = 0; i < list.length; ++i)
+    {
+      var widget = list[i];
+      // Boost the reaction a bit
+      if (up_down > 0)
+        list[i].magScale *= 1.5;
+      else
+        list[i].magScale *= 1.0/1.5;
+      list[i].mouseWheel(e);
+    }
+}
 
 function click_circle_style(style)
 {
