@@ -1338,7 +1338,8 @@ function handle_run_button()
     run_script();
     qc.panel_staff.setVisible(true);
     qc.panel_chart.setVisible(true);
-    qc.panel_staff.staff.fullSnapshot();
+    max_width = 20000;
+    qc.panel_staff.staff.fullSnapshot(max_width);
 }
 
 var default_program = `
