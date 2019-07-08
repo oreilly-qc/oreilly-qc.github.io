@@ -10,11 +10,13 @@ from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, execute, 
 import math
 %matplotlib inline
 
-# Set up the registers
-reg   = QuantumRegister(1, name='reg')
+## Example 2-3: Root-of-not
+# Set up the program
+reg = QuantumRegister(1, name='reg')
 reg_c = ClassicalRegister(1, name='regc')
-qc    = QuantumCircuit(reg, reg_c)
+qc = QuantumCircuit(reg, reg_c)
 
+qc.reset(reg)          # write the value 0
 
 # One root-of-not gate
 qc.h(reg)
@@ -27,15 +29,9 @@ qc.rz(math.radians(-90), reg)
 qc.h(reg)
 qc.barrier()
 
-
-# Run the program 
 backend = BasicAer.get_backend('statevector_simulator')
 job = execute(qc, backend)
 result = job.result()
-
-# Display the output and draw the circuit
 outputstate = result.get_statevector(qc, decimals=3)
 print(outputstate)
-qc.draw()
-
-
+qc.draw()        # draw the circuit
