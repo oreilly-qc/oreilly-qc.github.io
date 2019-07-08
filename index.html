@@ -162,12 +162,16 @@
 
           <span id="bug_span">
           </span>
+          <span id="info_span">
+          </span>
           <span id="example_github_span">
           </span>
 
           <span id="sample_info_span" style="display:none;">
             <img src="images/caution.png" height="28" />
             <b>This sample takes a while to run.</b>
+          </span>
+          <span id="disable_info_span" style="display:none;">
           </span>
         </div>
 
@@ -480,7 +484,7 @@
 
         <br/>
         <br/>
-        <b>"qc." Commands:</b> Commands such as <code>qc.reset()</code> and <code>qc.cnot(t, c)</code> execute
+        <b>"qc." Commands:</b> Commands such as <code>qc.reset()</code> and <code>qc.cnot(t,c)</code> execute
         using a quantum computation simulator. In most cases, they take a <b>target mask</b> and a <b>condition mask</b>,
         to specify which qubits the instructions act on. Some commands also take a rotation angle.
 
@@ -1142,6 +1146,24 @@ function do_sample_special_cases(sample_str)
     }
 }
 
+function show_sim_disabled(do_reset)
+{
+    // Sample special cases
+    var span = document.getElementById("disable_info_span");
+    span.style.display = 'none';
+
+    var disabled = qc.qReg.disableSimulation;
+    if (disabled && !do_reset)
+    {
+        var num_qubits = qc.qReg.numQubits;
+        var size_gb = (Math.pow(2, num_qubits + 3) / (1024 * 1024 * 1024)).toFixed(1);
+        var sstr = '<img src="images/caution.png" height="28" />';
+        sstr += '<b>The sim is disabled.</b> ('+num_qubits+' qubits would require '+size_gb+' GB of memory.)';
+        span.innerHTML = sstr;
+        span.style.display = 'block';
+    }
+}
+
 function show_graphics_output(do_show)
 {
     var div = document.getElementById("image_output_div");
@@ -1209,6 +1231,18 @@ function show_bug(enable, err)
     span.innerHTML = sstr;
 }
 
+function show_info(message)
+{
+    var span = document.getElementById('info_span');
+    var sstr = '';
+    if (message)
+    {
+        sstr += '<br/>';
+        sstr += message;
+    }
+    span.innerHTML = sstr;
+}
+
 function run_script()
 {
     qc_options.color_by_phase = false;
@@ -1222,6 +1256,7 @@ function run_script()
 
     qc.enableAnimation();
 
+    show_sim_disabled('reset');
     show_state_vector();
     try {
       show_bug(false);
@@ -1230,7 +1265,7 @@ function run_script()
     catch (err) {
       show_bug(true, err);
     }
-
+    show_sim_disabled();
     qc.qReg.changed();
     show_state_vector();
     qc.panel_staff.draw();
