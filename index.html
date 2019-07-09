@@ -979,7 +979,7 @@ function set_current_engine(engine)
     }
 }
 
-function choose_sample_menu(sample, engine=null)
+function choose_sample_menu(sample, engine)
 {
   show_graphics_output(false);
   do_sample_special_cases(sample.shortcut);
@@ -1227,7 +1227,7 @@ function hide_qss_image_panes()
     document.getElementById('images_table').style.display = 'none';
 }
 
-function load_code_sample(sample_str, engine=null)
+function load_code_sample(sample_str, engine)
 {
     var sample = get_sample_from_string(sample_str);
     current_sample = sample;
@@ -1325,8 +1325,10 @@ function run_script()
     qc.enableAnimation();
 }
 
-function clear_output(show_default_message=true)
+function clear_output(show_default_message)
 {
+  if (show_default_message == null)
+    show_default_message = true;
   if (show_default_message)
     script_output_textarea.value = '(output prints here)\n';
   else
@@ -1393,12 +1395,7 @@ function handle_run_button()
     qc.panel_staff.staff.fullSnapshot(max_width);
 }
 
-var default_program = `
-qc.reset(3);
-qc.write(0);
-qc.had(0x1);
-qc.cnot(0x2, 0x1);
-`;
+var default_program = 'qc.reset(3);\nqc.write(0);\nqc.had(0x1);\nqc.cnot(0x2, 0x1);\n';
 
 
 
