@@ -14,17 +14,17 @@
   window.onerror = function(message, source, lineno, colno, error)
   { alert('ErrorA: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
 </script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_bitfield.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_bitfield.js"></script>
 <script>
   window.onerror = function(message, source, lineno, colno, error)
   { alert('ErrorB: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
 </script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_reg.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_reg.js"></script>
 <script>
   window.onerror = function(message, source, lineno, colno, error)
   { alert('ErrorC: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
 </script>
-<!-- <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_int.js"></script>
+<!-- <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_int.js"></script>
  -->
 
 
@@ -81,21 +81,18 @@
 //   numBits  the integer size in bits (any positive integer)
 //   qReg     the QReg to use for storage. This may be active or inactive.
 
-// function make_sub_int(parent, name, sub_start, num_bits)
-// {
-//    var new_qint = new QInt(num_bits, parent.qReg, name);
+function make_sub_int(parent, name, sub_start, num_bits)
+{
+   var new_qint = new QInt(num_bits, parent.qReg, name);
 
-//    new_qint.startBit = parent.startBit + sub_start;
-//    new_qint.baseMask = 0;
-//    for (var i = 0; i < new_qint.numBits; ++i)
-//        new_qint.baseMask |= 1 << i;
-//    new_qint.maskBF = newShiftedMask(new_qint.baseMask, new_qint.startBit);
-//    new_qint.valid = true;
-//    return new_qint;
-// }
-
-//   window.onerror = function(message, source, lineno, colno, error)
-//   { alert('ErrorC1: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
+   new_qint.startBit = parent.startBit + sub_start;
+   new_qint.baseMask = 0;
+   for (var i = 0; i < new_qint.numBits; ++i)
+       new_qint.baseMask |= 1 << i;
+   new_qint.maskBF = newShiftedMask(new_qint.baseMask, new_qint.startBit);
+   new_qint.valid = true;
+   return new_qint;
+}
 
 function Qubits(numBits, name, qReg)
 {
@@ -949,13 +946,17 @@ function Qubits(numBits, name, qReg)
         }
     }
 
-    this.invQFT = function(target_mask=~0)
+    this.invQFT = function(target_mask)
     {
+        if (target_mask == null)
+            target_mask = ~0;
         this.QFT(target_mask, true)
     }
 
-    this.QFT = function(target_mask=~0, flip_h=false)
+    this.QFT = function(target_mask, flip_h)
     {
+        if (target_mask == null)
+            target_mask = ~0;
         this.qReg.qpu.QFT(this.mask(target_mask), flip_h);
     }
 
@@ -1320,15 +1321,10 @@ function Qubits(numBits, name, qReg)
     this.reserve();
 }
 
-  window.onerror = function(message, source, lineno, colno, error)
-  { alert('ErrorC100: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
-
 function QUInt(numBits, qReg, name)
 {
     Qubits.call( this, numBits, qReg, name);
 }
-  window.onerror = function(message, source, lineno, colno, error)
-  { alert('ErrorC101: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
 
 function QInt(numBits, qReg, name)
 {
@@ -1350,8 +1346,6 @@ function QInt(numBits, qReg, name)
     this.read_int = this.read;
     this.write_int = this.write;
 }
-  window.onerror = function(message, source, lineno, colno, error)
-  { alert('ErrorC102: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
 
 function QFixed(numBits, radix, qReg, name)
 {
@@ -1370,16 +1364,12 @@ function QFixed(numBits, radix, qReg, name)
         this.write_int(value, mask);
     }
 }
-  window.onerror = function(message, source, lineno, colno, error)
-  { alert('ErrorC103: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
 
 function is_qint(value)
 {
     // Check to see if a variable is a qint (otherwise it's likely a bitfield or an integer)
     return value != null && value.startBit != null;
 }
-  window.onerror = function(message, source, lineno, colno, error)
-  { alert('ErrorC104: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
 
 // Given an array of qints and masks, return a bitfield which is a combined mask.
 // Input is like this:
@@ -1401,8 +1391,6 @@ function qintMask(list)
     }
     return result;
 }
-  window.onerror = function(message, source, lineno, colno, error)
-  { alert('ErrorC105: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
 
 // Node.js hookups
 module.exports.is_qint = is_qint;
@@ -1426,27 +1414,27 @@ module.exports.QFixed = QFixed;
   window.onerror = function(message, source, lineno, colno, error)
   { alert('ErrorD: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
 </script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_basicops.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_basicops.js"></script>
 <script>
   window.onerror = function(message, source, lineno, colno, error)
   { alert('ErrorE: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
 </script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_widgets.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_widgets.js"></script>
 <script>
   window.onerror = function(message, source, lineno, colno, error)
   { alert('ErrorF: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
 </script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_staff.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_staff.js"></script>
 <script>
   window.onerror = function(message, source, lineno, colno, error)
   { alert('ErrorG: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
 </script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_scriptpanel.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_scriptpanel.js"></script>
 <script>
   window.onerror = function(message, source, lineno, colno, error)
   { alert('ErrorH: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
 </script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_panel.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_panel.js"></script>
 <script>
   window.onerror = function(message, source, lineno, colno, error)
   { alert('ErrorI: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
