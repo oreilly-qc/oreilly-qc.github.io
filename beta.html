@@ -10,6 +10,11 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script src="./external/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 
+<script type="text/javascript">
+  window.onerror = function(message, source, lineno, colno, error)
+  { alert('Beta Error: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
+</script>
+
 <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_bitfield.js"></script>
 <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_reg.js"></script>
 <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_int.js"></script>
