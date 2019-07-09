@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Programming Quantum Computers</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="https://oreilly-qc.github.io/external/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<!--   <script src="./external/jailed/lib/jailed.js" type="text/javascript" charset="utf-8"></script>
+ -->
+<script type="text/javascript">
+  window.onerror = function(message, source, lineno, colno, error)
+  { alert('Beta Error: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
+</script>
+
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_bitfield.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_reg.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_int.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_basicops.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_widgets.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_staff.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_scriptpanel.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_panel.js"></script>
+
+<script type="text/javascript" src="https://oreilly-qc.github.io/sample_shortcuts.js"></script>
+
+    <style>
+        .panel-resizable {
+            resize: vertical;
+          overflow: auto;
+        }
+
+        .ej-no-margin {
+          margin: 0px !important;
+/*          margin-bottom:50px !important;
+*/           padding: 0px !important;
+          padding-bottom:10px !important;
+        }
+
+        .xxxpad-left-only {
+          margin: 0px !important;
+/*           padding: 8px !important;
+           padding-left: 10px !important;
+           padding-right: 0px !important;
+           margin: 0px !important;
+           margin-left: 10px;
+*/        }
+        .xxxpad-right-only {
+           padding: 8px !important;
+/*           padding-left: 0px !important;
+           padding-right: 10px !important;
+           margin: 0px !important;
+           margin-right: 10px;
+*/        }
+        .less-padding {
+           padding: 0px !important;
+           margin: 0px !important;
+        }
+        .ej-btn-cstyle {
+           padding: 4px !important;
+        }
+
+        .editor {
+/*          background-color:#e5e5e5;
+          padding:0px;
+          margin-top:1%;
+          margin-left:1%;
+          margin-right:1%;
+          margin-bottom:1%;
+          float:bottom;
+          width:98%;
+*/          
+/*          resize:vertical;
+          overflow:auto;
+*/
+          overflow: hidden;
+          width:100%;
+          height:400px;
+        }
+
+         .info-button {
+         background-color: #1c87c9;
+         border: none;
+         color: white;
+         padding: 5px 8px;
+         text-align: center;
+         text-decoration: none;
+         display: inline-block;
+         font-size: 16px;
+         margin: 4px 2px;
+         cursor: pointer;
+         }
+    </style>
+
+</head>
+<body>
+ <div id="info-buttons-div" style="position:absolute; left:0px; top:0px;">
+  <table cellpadding="10">
+    <tr>
+      <td colspan="3">
+        <img src="https://oreilly-qc.github.io/images/cs-title-bar-spacer.png" style="width:100%;" />
+      </td>
+    </tr>
+    <tr>
+      <td style="width:60%;">
+      </td>
+      <td>
+    <a href="https://shop.oreilly.com/product/0636920167433.do" class="info-button" target="_blank">Book Info</a>
+  </td>
+      <td>
+    <a href="https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683" class="info-button" target="_blank">Buy on Amazon</a>
+  </td>
+</tr>
+</table>
+</div>
+<div id="title-div">
+        <img src="https://oreilly-qc.github.io/images/cs-title-bar.jpg" width="100%" />
+</div>
+
+<br/>
+
+<div class="row">
+  <div class="col-sm-6">
+    <div class="container-fluid pad-left-only">
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+
+          <div class="btn-group">
+            <button type="button" class="btn btn-success" onclick="handle_run_button();">
+              <span class="glyphicon glyphicon-play"></span>
+              Run Program
+            </button>
+            <div class="btn-group">
+              <span id="example_choice_span">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                Choose a sample <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                </ul>
+              </span>
+            </div>
+            <div class="btn-group">
+              <span id="engine_choice_span">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                QCEngine <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                </ul>
+              </span>
+            </div>
+          </div>
+
+
+          <div class="btn-group">
+            <button type="button" class="btn btn-default" onclick="click_editor_zoom(-2);">
+              <span class="glyphicon glyphicon-zoom-out"></span>
+            </button>
+            <button type="button" class="btn btn-default" onclick="click_editor_zoom(2);">
+              <span class="glyphicon glyphicon-zoom-in"></span>
+            </button>
+          </div>
+
+          <img src="https://oreilly-qc.github.io/images/icon_question.png" title="About QCEngine" height=20 onclick="do_aboutqce_modal();" />
+          <img src="https://oreilly-qc.github.io/images/icon_cheatsheet.png" title="Command cheat sheet" height=20 onclick="do_cheatsheet_modal();" />
+
+          <span id="bug_span">
+          </span>
+          <span id="info_span">
+          </span>
+          <span id="example_github_span">
+          </span>
+
+          <span id="sample_info_span" style="display:none;">
+            <img src="https://oreilly-qc.github.io/images/caution.png" height="28" />
+            <b>This sample takes a while to run.</b>
+          </span>
+          <span id="disable_info_span" style="display:none;">
+          </span>
+        </div>
+
+        <div id="editor_boot_panel" class="panel-body panel-resizable ej-no-margin">
+          <div id="editor_div" class="editor"></div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="container-fluid pad-right-only">
+      <div class="row">
+
+
+
+        <div id="progress_panel" class="col-*-*" style="display:none;">
+          <div class="container-fluid pad-right-only">
+              <div class="progress">
+                <div id="progress_bar" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+              </div>
+          </div>
+        </div>
+
+
+        <div class="col-*-*" style="display:none;">
+          <div class="container-fluid pad-right-only">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <b>How to run this sample</b>
+                  <div class="btn-group">
+
+<!--                     <span id="example_language_span">
+                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                      Choose a Language <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                      </ul>
+                    </span>
+ -->
+                  </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default" onclick="click_gate_zoom(-1);">
+                    <span class="glyphicon glyphicon-zoom-out"></span>
+                  </button>
+                  <button type="button" class="btn btn-default" onclick="click_gate_zoom(1);">
+                    <span class="glyphicon glyphicon-zoom-in"></span>
+                  </button>
+                </div>
+              </div>
+              <div  id="how_to_boot_panel" class="panel-body panel-resizable">
+
+                <span id="how-to-span">(text goes here)</span>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div id="image_output_div" class="col-*-*" style="display:none;">
+          <div class="container-fluid pad-right-only">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <b>Image output</b>
+                  <div class="btn-group">
+
+<!--                     <span id="example_language_span">
+                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                      Choose a Language <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                      </ul>
+                    </span>
+ -->
+                  </div>
+              </div>
+              <div  id="image_boot_panel" class="panel-body panel-resizable">
+
+                <span id="image_info_span"></span>
+                <table id="images_table">
+                  <tr>
+                    <td align="center" style="padding: 10px; border: 4px solid #ddd;">
+                      <canvas id="display_ground_truth"></canvas><br/>
+                      <span id="display_ground_truth_span"></span>
+                    </td>
+                    <td align="center" style="padding: 10px; border: 4px solid #ddd;">
+                      <canvas id="display_qfull_res"></canvas><br/>
+                      <span id="display_qfull_res_span"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="padding: 10px; border: 4px solid #ddd;">
+                      <canvas id="display_monte_carlo"></canvas><br/>
+                      <span id="display_monte_carlo_span"></span>
+                    </td>
+                    <td align="center" style="padding: 10px; border: 4px solid #ddd;">
+                      <canvas id="display_qss"></canvas><br/>
+                      <span id="display_qss_span"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="padding: 10px; border: 4px solid #ddd;">
+                      <canvas id="display_confidence"></canvas><br/>
+                      <span id="display_confidence_span"></span>
+                    </td>
+                  </tr>
+                </table>
+                <table>
+                  <tr>
+                    <td colspan="2" align="center" style="padding: 10px; border: 4px solid #ddd;">
+                      <canvas id="display_cwtable"></canvas><br/>
+                      <span id="display_cwtable_span"></span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+        <div class="col-*-*">
+          <div class="container-fluid pad-right-only">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <b>Program gates</b>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default" onclick="click_gate_zoom(-1);">
+                    <span class="glyphicon glyphicon-zoom-out"></span>
+                  </button>
+                  <button type="button" class="btn btn-default" onclick="click_gate_zoom(1);">
+                    <span class="glyphicon glyphicon-zoom-in"></span>
+                  </button>
+                </div>
+
+<!--                 <button type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-new-window"></span>
+                </button>
+ -->
+              </div>
+              <div  id="staff_boot_panel" class="panel-body panel-resizable">
+
+
+
+                <div id="staff_popin_div" class="right" style="resize: both; overflow: auto;">
+<!--                  <img src="https://oreilly-qc.github.io/images/click_tag.png" height="32" /><br/> -->
+                  <canvas id="draw_gate_canvas"></canvas>
+                </div>
+
+
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-*-*">
+          <div class="container-fluid pad-right-only">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <b>State vector</b>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default" onclick="click_circle_zoom(-1);">
+                    <span class="glyphicon glyphicon-zoom-out"></span>
+                  </button>
+                  <button type="button" class="btn btn-default" onclick="click_circle_zoom(1);">
+                    <span class="glyphicon glyphicon-zoom-in"></span>
+                  </button>
+                </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default ej-btn-cstyle">
+                    <img src="https://oreilly-qc.github.io/images/circ_style_00a.png" height="18" onclick="click_circle_style(0);"></span>
+                  </button>
+                  <button type="button" class="btn btn-default ej-btn-cstyle">
+                    <img src="https://oreilly-qc.github.io/images/circ_style_01a.png" height="18" onclick="click_circle_style(1);"></span>
+                  </button>
+                  <button type="button" class="btn btn-default ej-btn-cstyle">
+                    <img src="https://oreilly-qc.github.io/images/circ_style_10a.png" height="18" onclick="click_circle_style(2);"></span>
+                  </button>
+                  <button type="button" class="btn btn-default ej-btn-cstyle">
+                    <img src="https://oreilly-qc.github.io/images/circ_style_11a.png" height="18" onclick="click_circle_style(3);"></span>
+                  </button>
+                </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default ej-btn-cstyle">
+                    <img src="https://oreilly-qc.github.io/images/circ_fill_small.png" height="18" onclick="click_circle_fill(-1);"></span>
+                  </button>
+                  <button type="button" class="btn btn-default ej-btn-cstyle">
+                    <img src="https://oreilly-qc.github.io/images/circ_fill_big.png" height="18" onclick="click_circle_fill(1);"></span>
+                  </button>
+                </div>
+
+<!--                 <button type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-new-window"></span>
+                </button>
+ -->
+              </div>
+              <div  id="circle_boot_panel" class="panel-body panel-resizable">
+
+                <div id="circle_div" class="right" style="resize: both; overflow: auto;">
+                  <canvas id="circle_canvas"></canvas>
+                </div>
+
+
+              </div>
+            </div>
+
+
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+                <b>Program output</b>
+
+          <div class="btn-group">
+            <button type="button" class="btn btn-default" onclick="click_output_zoom(-1);">
+              <span class="glyphicon glyphicon-zoom-out"></span>
+            </button>
+            <button type="button" class="btn btn-default" onclick="click_output_zoom(1);">
+              <span class="glyphicon glyphicon-zoom-in"></span>
+            </button>
+          </div>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default" onclick="clear_output(false);" title="Clear output">
+              <span class="glyphicon glyphicon-erase"></span>
+            </button>
+          </div>
+        </div>
+        <div class="panel-body panel-resizable">
+          <textarea id="script_output_textarea" style="font-family:monospace; font-size:12pt; width:100%; height:100px; resize:both;">
+(program output goes here)
+          </textarea>
+        </div>
+      </div>
+
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="AboutQCE_runModal" tabindex="-1" role="dialog" aria-labelledby="AboutQCE_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AboutQCE_runModalLabel">QCEngine Notes</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        QCEngine is intended to be a lightweight quantum computation simulator,
+        useful for quick sketches and demonstrations.
+
+        <br/>
+        <br/>
+        It will let you run JavaScript code, simulating the quantum computing as
+        though you had a real QC, up to about 25 qubits (depending on your browser).
+        The best way to get familiar with QCEngine is to run the book samples on
+        this page.
+        <br/>
+        <br/>
+        For more serious development tasks, there are many other simulation engines available:
+        <br/>
+        <ul>
+          <li><b><a href="qiskit.org" target="_default">Qiskit</a></b> - 
+            An open-source software development kit (SDK) for working with OpenQASM and the
+            IBM Q quantum processors. Create quantum computing programs, compile, and execute them online
+            in a real quantum processors.</li>
+          <li><b><a href="https://quantum-computing.ibm.com" target="_default">IBM Q Experience</a></b> - 
+            A complete online environment, containing tools and information for programming quantum
+            simulations as well as physical quantum computers.</li>
+          <li><b><a href="https://www.microsoft.com/en-us/quantum/development-kit" target="_default">Microsoft QDK</a></b> - 
+            A complete software development system for developing and running programs for quantum computers.</li>
+          <li><b><a href="http://www.quantumplayground.net" target="_default">Google QC Playground</a></b> - 
+            An approachable online environment for discovering quantum computing.</li>
+        </ul>
+
+        ...just to name a few.
+        <br/>
+        <br/>
+        If you have questions or comments
+        about running these book samples, the authors would love to hear from you
+        at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>.
+              </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="CheatSheet_runModal" tabindex="-1" role="dialog" aria-labelledby="CheatSheet_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="CheatSheet_runModalLabel">QCEngine Command Cheat Sheet</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This sheet provides a quick-reference for most common QCEngine commands.
+        The best way to become familiar with QCEngine commands is to try running the book
+        samples in this page.
+        If you find things missing or unclear, the authors would love to hear from you
+        at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>.
+
+        <br/>
+        <br/>
+        <b>"qc." Commands:</b> Commands such as <code>qc.reset()</code> and <code>qc.cnot(t,c)</code> execute
+        using a quantum computation simulator. In most cases, they take a <b>target mask</b> and a <b>condition mask</b>,
+        to specify which qubits the instructions act on. Some commands also take a rotation angle.
+
+        <br/>
+        <br/>
+        <b>Qubit Masks:</b> Qubits are be specified using an integer, where each bit corresponds to one of the
+        qubits in the quantum computer.
+
+        <br/>
+        <br/>
+        (...this is under sonstruction)
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="AddEngine_runModal" tabindex="-1" role="dialog" aria-labelledby="AddEngine_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AddEngine_runModalLabel">Add new engines and samples!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <b>Have a favorite quantum simulator, or even a real QPU?</b>
+        <br/>
+        We'd love to add your sample code here.
+        <br/>
+        <br/>
+        Providing these samples for as many systems as possible helps our readers, so please contact us
+        at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="Qiskit_runModal" tabindex="-1" role="dialog" aria-labelledby="Qiskit_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Qiskit_runModalLabel">Running Qiskit Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The Qiskit versions of examples in this book are written in Python, designed to run
+        as Qiskit notebooks, at <a href="https://qiskit.org" target="_blank">https://qiskit.org</a>.
+        <br/><br/>
+        Qiskit is an open-source software development kit (SDK) for working with OpenQASM and the
+        IBM Q quantum processors. Create quantum computing programs, compile, and execute them online
+        in a real quantum processors.
+        <br/><br/>
+        To run this sample, go to the Qiskit site and create a new notebook, and then paste this
+        sample code into it.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://qiskit.org', '_blank');">Go to Qiskit.org</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="QASM_runModal" tabindex="-1" role="dialog" aria-labelledby="QASM_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="QASM_runModalLabel">Running QASM Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The OpenQASM versions of examples in this book are designed to run
+        using the <b>IBM Q Experience Quantum Composer</b>, at <a href="https://quantum-computing.ibm.com" target="_blank">https://quantum-computing.ibm.com</a>.
+        <br/><br/>
+        The <b>Quantum Composer</b> is a graphical user interface for programming a quantum processor.
+        <br/><br/>
+        To run this sample, go to the Q Experience site and create new circuit using the Circuit Composer,
+        then paste the code into the Circuit Editor.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://quantum-computing.ibm.com', '_blank');">Go to IBM Q Experience</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="QSharp_runModal" tabindex="-1" role="dialog" aria-labelledby="QSharp_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="QSharp_runModalLabel">Running Q# Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The Q# (pronounced "Q Sharp") versions of examples in this book are designed to run
+        using the <b>Microsoft QDK</b>, at <a href="https://www.microsoft.com/en-us/quantum/development-kit" target="_blank">https://www.microsoft.com/en-us/quantum/development-kit</a>.
+        <br/><br/>
+          Q# is a quantum-focused programming language with native type, operators, and other abstraction.
+        <br/><br/>
+        To run this sample, go to the QDK site and create a new IQ# Notebook, and then paste this
+        sample code into it.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://www.microsoft.com/en-us/quantum/development-kit', '_blank');">Go to QDK Website</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <iframe id="sandbox_iframe" src="./sandbox.html" sandbox="allow-scripts"></iframe>
+ -->
+<script>
+
+window.addEventListener('message', function(event) { 
+    // IMPORTANT: Check the origin of the data! 
+    if (1 || ~event.origin.indexOf('http://yoursite.com')) { 
+        // The data has been sent from your site 
+
+        // The data sent with postMessage is stored in event.data 
+        console.log(event.data);
+        if (event.data.cmd == 'got_sample')
+        {
+            editor.focus();
+            editor.setValue(event.data.sample_code);
+            editor.gotoLine(0);
+            make_github_source_links();
+            make_engine_menu();
+        }
+        else if (event.data.cmd == 'get_sample_failed')
+        {
+          do_failed_load_sample(event.data.sample_url);
+        }
+    } else { 
+        // The data hasn't been sent from your site! 
+        // Be careful! Do not use it.
+        return; 
+    } 
+}); 
+
+
+    var editor = ace.edit("editor_div");
+    editor.session.setMode("ace/mode/javascript");
+    editor.commands.addCommand({
+        name: "run",
+        bindKey: {win: "Shift-Enter", mac: "Shift-Enter"},
+        exec: function(editor) {
+            handle_run_button();
+        }
+    });
+
+var editor_div = document.getElementById('editor_div');
+var editor_boot_panel = document.getElementById('editor_boot_panel');
+var staff_boot_panel = document.getElementById('staff_boot_panel');
+var circle_boot_panel = document.getElementById('circle_boot_panel');
+var editor_frame_div = document.getElementById('editor_frame_div');
+var example_choice_span = document.getElementById('example_choice_span');
+var engine_choice_span = document.getElementById('engine_choice_span');
+var example_github_span = document.getElementById('example_github_span');
+// var language_choice_span = document.getElementById('language_choice_span');
+var script_output_textarea = document.getElementById('script_output_textarea');
+var staff_popin_div = document.getElementById('staff_popin_div');
+
+
+///////////////////////////////////////////////////////////////
+// This is a small workaround for the issue where the editor
+// doesn't get informed about size changes
+var last_editor_div_width = 0;
+var last_editor_div_height = 0;
+var last_circle_div_width = 0;
+var last_circle_div_height = 0;
+var check_serial = 0;
+function check_for_editor_resize()
+{
+    // Editor
+    var w = editor_boot_panel.offsetWidth;
+    var h = editor_boot_panel.offsetHeight;
+    if (w != last_editor_div_width || h != last_editor_div_height)
+    {
+        editor_div.style.height = "" + (h - 10) + "px";
+        editor.resize();
+        last_editor_div_width = w;
+        last_editor_div_height = h;
+    }
+
+    // Circle chart
+    var w = circle_boot_panel.offsetWidth;
+    var h = circle_boot_panel.offsetHeight;
+    if (w != last_circle_div_width || h != last_circle_div_height)
+    {
+        qc_options.circle_div.width = w;
+        qc_options.circle_div.height = h;
+        qc.panel_chart.draw();
+        last_circle_div_width = w;
+        last_circle_div_height = h;
+    }
+
+    var seconds_per_check_for_editor_resize = 0.5;
+    window.setTimeout(check_for_editor_resize,
+                      1000 * seconds_per_check_for_editor_resize);
+}
+
+window.onload = function() {
+    check_for_editor_resize();
+    fetch_sample_contents();
+    make_sample_menu();
+};
+
+function click_circle_fill(up_down)
+{
+    var e = {ctrlKey:false, shiftKey:true, deltaY:-up_down};
+
+    list = qc.panel_chart.widgets;
+    for (var i = 0; i < list.length; ++i)
+    {
+      var widget = list[i];
+      // Boost the reaction a bit
+      if (up_down > 0)
+        list[i].magScale *= 1.5;
+      else
+        list[i].magScale *= 1.0/1.5;
+      list[i].mouseWheel(e);
+    }
+}
+
+function click_circle_style(style)
+{
+  if (style == 0)
+  {
+    qc_options.color_by_phase = false;
+    qc_options.book_render = false;
+  }
+  else if (style == 1)
+  {
+    qc_options.color_by_phase = false;
+    qc_options.book_render = true;
+  }
+  else if (style == 2)
+  {
+    qc_options.color_by_phase = true;
+    qc_options.book_render = false;
+  }
+  else if (style == 3)
+  {
+    qc_options.color_by_phase = true;
+    qc_options.book_render = true;
+  }
+  qc.panel_chart.draw();
+}
+
+function click_editor_zoom(up_down)
+{
+  var editor_fontsize = parseInt(editor.getOption('fontSize'));
+  if (up_down == 0)
+    editor_fontsize = 12;
+  else
+    editor_fontsize += up_down;
+  if (editor_fontsize < 4)
+    editor_fontsize = 4;
+  editor.setOptions({fontSize: '' + editor_fontsize + 'pt'});
+}
+
+function click_gate_zoom(up_down)
+{
+  var old_scale = qc.get_param('draw_scale', 1.0);
+  var new_scale = 1.0;
+  if (up_down == 1)
+    new_scale = old_scale * 1.1;
+  if (up_down == -1)
+    new_scale = old_scale / 1.1;
+  qc.set_param('draw_scale', new_scale);
+  qc.draw();
+}
+
+function click_circle_zoom(up_down)
+{
+  var e = {ctrlKey:true, shiftKey:false, deltaY:-up_down};
+
+  list = qc.panel_chart.widgets;
+  for (var i = 0; i < list.length; ++i)
+  {
+    var widget = list[i];
+    list[i].mouseWheel(e);
+  }
+}
+
+function click_output_zoom(up_down)
+{
+  var fontsize = parseInt(script_output_textarea.style.fontSize);
+  if (up_down == 0)
+    fontsize = 12;
+  else
+    fontsize += up_down;
+  if (fontsize < 4)
+    fontsize = 4;
+  script_output_textarea.style.fontSize = '' + fontsize + 'pt';
+}
+
+
+
+
+
+
+
+
+
+function load_json_from_url(file_url)
+{
+    fetch(file_url, {cache: 'reload'})
+      .then(
+        function(response) {
+          if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' + response.status);
+            return false;
+          }
+
+          response.json().then(function(data) {
+            console.log(data);
+          });
+          return true;
+        }
+      )
+      .catch(function(err) {
+        console.log('Fetch Error :-S', err);
+        return false;
+      });
+}
+
+function load_code_from_url(file_url)
+{
+    parent.postMessage({cmd:'get_sample',sample_url:file_url}, '*');
+    return;
+    var use_fetch = false; // fetch is not supported on Kindles
+    if (use_fetch)
+    {
+        fetch(file_url, {cache: 'reload'})
+          .then(
+            function(response) {
+              if (response.status !== 200) {
+                console.log('Error loading ' + file_url + '. Status Code: ' + response.status);
+                return false;
+              }
+              response.text().then(function(data) {
+                editor.focus();
+                editor.setValue(data);
+                editor.gotoLine(0);
+              });
+              return true;
+            }
+          )
+          .catch(function(err) {
+            console.log('Fetch Error :-S', err);
+            return false;
+          });
+    }
+    else
+    {
+        var http_request = new XMLHttpRequest();
+        http_request.open('GET', file_url, true);
+
+        // If specified, responseType must be empty string or "text"
+        http_request.responseType = 'text';
+
+        http_request.onload = function ()
+        {
+            if (http_request.readyState === http_request.DONE)
+            {
+                if (http_request.status === 200)
+                {
+                    // console.log(http_request.response);
+                    // console.log(http_request.responseText);
+                    editor.focus();
+                    editor.setValue(http_request.responseText);
+                    editor.gotoLine(0);
+                    make_github_source_links();
+                    make_engine_menu();
+                }
+                else
+                {
+                  do_failed_load_sample(file_url);
+                }
+            }
+        };
+        http_request.onerror = function ()
+        {
+          do_failed_load_sample(file_url);
+        };
+        try {
+          http_request.send(null);
+        }
+        catch (error) {
+          do_failed_load_sample(file_url);
+        }
+        return true;
+    }
+    make_github_source_links();
+    make_engine_menu();
+}
+
+function do_failed_load_sample(file_url)
+{
+  var code_str = '// The sample ' + file_url + '\n// could not be loaded.\n//\n';
+  code_str += default_program;
+  editor.focus();
+  editor.setValue(code_str);
+  editor.gotoLine(0);
+  make_github_source_links();
+  make_engine_menu();
+}
+
+qc_options.staff_canvas = document.getElementById('draw_gate_canvas');
+qc_options.staff_div = document.getElementById('staff_popin_div');
+qc_options.circle_canvas = document.getElementById('circle_canvas');
+qc_options.circle_div = document.getElementById('circle_div');
+var valid_engine_list = [];
+//qc_options.draw_scale = 3.0;
+var qc = QPU();
+qc.set_param('draw_scale', 1.0);
+// qc.set_canvas(document.getElementById('draw_gate_canvas'));
+// panel_staff = qc.panel_staff;
+// panel_chart = qc.panel_chart;
+
+var current_sample = null;
+var current_engine = engine_list[0];
+var all_sample_contents = {};
+function fetch_one_sample_dir(engine)
+{
+    var base_url = 'https://api.github.com/repos/oreilly-qc/oreilly-qc.github.io/contents/samples/';
+    var http_request = new XMLHttpRequest();
+    http_request.open('GET', base_url + engine.name, true);
+
+    // If specified, responseType must be empty string or "text"
+    http_request.responseType = 'text';
+
+    http_request.onload = function ()
+    {
+        if (http_request.readyState === http_request.DONE)
+        {
+            if (http_request.status === 200)
+            {
+                engine.dir_list = http_request.responseText;
+                make_github_source_links();
+                make_engine_menu();
+            }
+            else
+            {
+                engine.dir_list = '';
+            }
+        }
+    };
+    http_request.send(null);
+}
+
+function fetch_sample_contents()
+{
+    for (var i = 0; i < engine_list.length; ++i)
+        fetch_one_sample_dir(engine_list[i]);
+}
+
+function make_sample_menu()
+{
+    str = '';
+    str += '<button id="sample_menu_button" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
+    str += 'Choose a sample <span class="caret"></span></button>';
+    str += '<ul class="dropdown-menu" role="menu">';
+    for (i = 0; i < sample_menu.length; ++i)
+    {
+        sample = sample_menu[i];
+        str += '<li><a href="#" onclick="choose_sample_menu(sample_menu['+i+'], null);">';
+        str += sample.menu_title;
+        str += '</a></li>';
+    }
+    str += '</ul>'
+    example_choice_span.innerHTML = str;
+    try_to_get_program_from_passed_in_url();
+}
+
+function set_current_engine(engine)
+{
+    if (engine == null)
+        engine = engine_list[0];
+    current_engine = engine;
+    if (current_engine.name == 'QCEngine')
+    {
+        editor.session.setMode("ace/mode/javascript");
+    }
+    else if (current_engine.name == 'Qiskit')
+    {
+        editor.session.setMode("ace/mode/python");
+    }
+    else if (current_engine.name == 'OpenQASM')
+    {
+        editor.session.setMode("ace/mode/plain_text");
+    }
+    else if (current_engine.name == 'QSharp')
+    {
+        editor.session.setMode("ace/mode/plain_text");
+    }
+}
+
+function choose_sample_menu(sample, engine)
+{
+  show_graphics_output(false);
+  do_sample_special_cases(sample.shortcut);
+  console.log('Sample menu chosen: ' + sample.sample_file);
+  if (engine == null)
+    engine = engine_list[0];
+  set_current_engine(engine);
+  var sample_menu_button = document.getElementById('sample_menu_button');
+  sample_menu_button.innerHTML = sample.menu_title;
+  load_code_sample(sample.sample_file, engine);
+  var engine_menu_button = document.getElementById('engine_menu_button');
+  if (engine_menu_button)
+      engine_menu_button.innerHTML = engine.name;
+  clear_output();
+}
+
+function choose_engine_menu(engine)
+{
+  console.log('Engine menu chosen: ' + engine.name);
+  var engine_menu_button = document.getElementById('engine_menu_button');
+  engine_menu_button.innerHTML = engine.name;
+  set_current_engine(engine);
+  load_code_sample(current_sample.sample_file, engine);
+  clear_output();
+}
+
+function make_engine_menu()
+{
+    str = '';
+    str += '<button id="engine_menu_button" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
+    str += 'Choose an engine <span class="caret"></span></button>';
+    str += '<ul class="dropdown-menu" role="menu">';
+    for (i = 0; i < valid_engine_list.length; ++i)
+    {
+        var engine_index = valid_engine_list[i];
+        engine = engine_list[engine_index];
+        str += '<li><a href="#" onclick="choose_engine_menu(engine_list['+engine_index+']);">';
+        str += engine.name;
+        str += '</a></li>';
+    }
+    str += '</ul>'
+    engine_choice_span.innerHTML = str;
+    var engine_menu_button = document.getElementById('engine_menu_button');
+    engine_menu_button.innerHTML = current_engine.name;
+}
+
+function do_engine_modal()
+{
+    var options = null;
+    var val = $('#'+current_engine.name+'_runModal').modal(options);
+}
+
+function do_addengine_modal()
+{
+    var options = null;
+    var val = $('#AddEngine_runModal').modal(options);
+}
+
+function do_aboutqce_modal()
+{
+    var options = null;
+    var val = $('#AboutQCE_runModal').modal(options);
+}
+
+function do_cheatsheet_modal()
+{
+    var options = null;
+    var val = $('#CheatSheet_runModal').modal(options);
+}
+
+function make_github_source_links()
+{
+    var sample = current_sample;
+    valid_engine_list = [0];
+    str = '<br/>';
+//    if (sample != null)
+    {
+        str += 'View source in Github: ';
+        for (i = 0; i < engine_list.length; ++i)
+        {
+            engine = engine_list[i];
+            if (i > 0)
+                str += ' / ';
+            var sample_ok = engine.dir_list.includes(sample.sample_file);
+            if (sample_ok)
+            {
+                var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/blob/master/samples/';
+                link += engine.name + '/' + sample.sample_file + engine.suffix;
+                str += '<b><a href="'+link+'" target="_blank">'+engine.link_name+'</a></b>';
+                if (i > 0)
+                  valid_engine_list.push(i);
+            }
+            else
+            {
+                str += '<span style="color:#aaa" title="This version is not implemented yet, but if you\'d like to add it, please contact us at octopus@qcengine.com">' + engine.link_name + '</span>';
+            }
+        }
+    }
+
+    // If there's a chapter notebook, link to that.
+    if (current_engine.name == 'Qiskit')
+    {
+        var wb_text = null;
+        var wb_name = null;
+        var wb_link = null;
+        if (sample.shortcut.startsWith('2-'))
+        {
+            wb_text = 'Download the complete Chapter2 ';
+            wb_name = 'Qiskit Notebook';
+            wb_link = current_engine.subdir + '/Chapter2-samples.ipynb';
+        }
+        if (wb_text)
+        {
+            str += '<br/>';
+            str += '<b>';
+            str += wb_text;
+            str += '<a href="'+wb_link+'" download>'+wb_name+'</a>';
+            str += '</b>';
+        }
+    }
+
+    str += '<span style="font-size:8pt; color:#77a">';
+    str += '<br/>Developers: Add your engine, or add a sample! <b><a href="#" onclick="do_addengine_modal();">Click here</a></b> for more info.';
+    str += '</span>';
+
+    example_github_span.innerHTML = str;
+}
+
+// get_url_param() is adapted from JeffreyCrofte's work here: https://www.creativejuiz.fr/blog/en/javascript-en/read-url-get-parameters-with-javascript
+function get_url_param(param)
+{
+  var vars = {};
+  window.location.href.replace( location.hash, '' ).replace( 
+    /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+    function( m, key, value ) { // callback
+      vars[key] = value !== undefined ? value : '';
+    }
+  );
+  if (param) {
+    result = vars[param]
+    if (!result)
+      return null;
+    // Strip stray # symbols
+    result = result.replace('#','');
+    return result;
+  }
+  return vars;
+}
+
+function get_sample_from_string(sample_str)
+{
+    for (var i = 0; i < sample_menu.length; ++i)
+    {
+        var sample = sample_menu[i];
+        if (sample_str == sample.sample_file || sample_str == sample.shortcut)
+            return sample;
+    }
+    return sample_menu[0];
+}
+
+function get_engine_from_string(engine_str)
+{
+    if (engine_str == null)
+      engine_str = 'qcengine';
+    for (var i = 0; i < engine_list.length; ++i)
+    {
+        var engine = engine_list[i];
+        if (engine_str.toLowerCase() == engine.name.toLowerCase())
+            return engine;
+    }
+    return engine_list[0];
+}
+
+function try_to_get_program_from_passed_in_url()
+{
+    var sample_str = get_url_param('p');
+    var engine_str = get_url_param('e');
+
+    var sample = get_sample_from_string(sample_str);
+    var engine = get_engine_from_string(engine_str);
+
+    // Special case: sample 4-1 in the book needs to appear in
+    //               QASM by default.
+    if (sample_str == '4-1' && engine_str == null)
+      engine = get_engine_from_string('OpenQASM');
+    do_sample_special_cases(sample_str);
+
+    choose_sample_menu(sample, engine);
+}
+
+function do_sample_special_cases(sample_str)
+{
+    // Sample special cases
+    var sample_info_span = document.getElementById("sample_info_span");
+    sample_info_span.style.display = 'none';
+
+    if (sample_str == '4-2')
+    {
+        // Takes a while to eat a chocodile
+        var sstr = '<img src="https://oreilly-qc.github.io/images/caution.png" height="28" /><b>This sample takes a while to run.</b>';
+        sample_info_span.innerHTML = sstr;
+        sample_info_span.style.display = 'block';
+    }
+    else if (sample_str == '11-4' || sample_str == '11-5' || sample_str == '11-6')
+    {
+        // Takes a while to eat a chocodile
+        var sstr = '<img src="https://oreilly-qc.github.io/images/caution.png" height="28" /><b>This sample takes a while to run.</b>';
+        sstr += '<br/>For a video demo of quantum supersampling, <a href="https://vimeo.com/180284417" target="_blank">chick here</a>.';
+        console.log(sstr);
+        sample_info_span.innerHTML = sstr;
+        sample_info_span.style.display = 'block';
+    }
+}
+
+function show_sim_disabled(do_reset)
+{
+    // Sample special cases
+    var span = document.getElementById("disable_info_span");
+    span.style.display = 'none';
+
+    var disabled = qc.qReg.disableSimulation;
+    if (disabled && !do_reset)
+    {
+        var num_qubits = qc.qReg.numQubits;
+        var size_gb = (Math.pow(2, num_qubits + 3) / (1024 * 1024 * 1024)).toFixed(1);
+        var sstr = '<img src="https://oreilly-qc.github.io/images/caution.png" height="28" />';
+        sstr += '<b>The sim is disabled.</b> ('+num_qubits+' qubits would require '+size_gb+' GB of memory.)';
+        span.innerHTML = sstr;
+        span.style.display = 'block';
+    }
+}
+
+function show_graphics_output(do_show)
+{
+    var div = document.getElementById("image_output_div");
+    if (do_show)
+        div.style.display = 'block';
+    else
+        div.style.display = 'none';
+    document.getElementById('images_table').style.display = 'block';
+}
+
+function hide_qss_image_panes()
+{
+    document.getElementById('images_table').style.display = 'none';
+}
+
+function load_code_sample(sample_str, engine)
+{
+    var sample = get_sample_from_string(sample_str);
+    current_sample = sample;
+
+    var qce = engine_list[0];
+    if (engine != null)
+      qce = engine;
+    var raw_qce_code_url = qce.subdir + sample.sample_file + qce.suffix;
+
+    var github_links_str = '';
+
+    ok = load_code_from_url(raw_qce_code_url);
+    if (!ok)
+    {
+        var code_str = '// sample ' + raw_qce_code_url + ' could not be loaded.\n';
+        editor.focus();
+        editor.setValue(code_str);
+        editor.gotoLine(0);
+    }
+    return ok;
+}
+
+// function test_cc(canvas, color)
+// {
+//     canvas.width = 200;
+//     canvas.height = 200;
+
+//     console.log(canvas);
+//     var ctx = canvas.getContext('2d');
+//     ctx.save();
+//     {
+//         ctx.fillStyle = color;
+//         ctx.fillRect(0, 0, canvas.width, canvas.height);
+//     }
+//     ctx.restore();
+// }
+
+function show_bug(enable, err)
+{
+    var span = document.getElementById('bug_span');
+    var sstr = '';
+    if (enable)
+    {
+        sstr += '<br/>';
+        sstr += '<span style="color:darkred;">';
+        sstr += '<img src="https://oreilly-qc.github.io/images/icon_bug.png" height="20" /> '
+        sstr += '<b>Error:</b> ' + err.message;
+        sstr += '</span>';
+    }
+    span.innerHTML = sstr;
+}
+
+function show_info(message)
+{
+    var span = document.getElementById('info_span');
+    var sstr = '';
+    if (message)
+    {
+        sstr += '<br/>';
+        sstr += message;
+    }
+    span.innerHTML = sstr;
+}
+
+
+function run_script()
+{
+    qc_options.color_by_phase = false;
+    qc_options.circle_scale = 0.5;
+    qc.start();
+    if (qc) {
+//      qc.disableAnimation();
+//      qc.enableRecording();
+      qc.codeLabel('');
+    }
+    show_graphics_output(false);
+
+    qc.enableRecording();
+    qc.enableAnimation();
+
+    show_sim_disabled('reset');
+    show_state_vector();
+    try {
+      show_bug(false);
+      runQCScriptInTextArea('editor', 'script_output_textarea');
+    }
+    catch (err) {
+      show_bug(true, err);
+    }
+    show_sim_disabled();
+    qc.qReg.changed();
+    show_state_vector();
+    qc.panel_staff.draw();
+    qc.panel_chart.draw();
+
+    qc.enableAnimation();
+}
+
+function clear_output(show_default_message)
+{
+  if (show_default_message == null)
+    show_default_message = true;
+  if (show_default_message)
+    script_output_textarea.value = '(output prints here)\n';
+  else
+    script_output_textarea.value = '';
+}
+
+function rewind_to_beginning()
+{
+  // if (current_language != 'javascript')
+  //   return;
+  console.log('instructions: ' + qc.qReg.staff.insertionStart);
+  qc.qReg.staff.rewind_insertion_to_start();
+}
+
+function show_state_vector()
+{
+  list = qc.panel_chart.widgets;
+  for (var i = 0; i < list.length; ++i)
+  {
+    if (list[i].stateVector)
+    {
+      // console.log(list[i]);
+      list[i].collapsed = false;
+    }
+    else if (list[i].blochSphere ||
+             list[i].densityMatrix || 
+             list[i].graphState || 
+             list[i].stabilizerState ||
+             list[i].drawQInt)
+    {
+        list[i].in_use = false;
+    }
+  }
+}
+
+function set_progress(percent, message)
+{
+    var progress_panel = document.getElementById('progress_panel');
+    var progress_bar = document.getElementById('progress_bar');
+    progress_panel.style.display = 'block';
+    // console.log(progress_bar);
+//    progress_bar['aria-valuenow'] = percent;
+    percent = Math.round(percent);
+    progress_bar.style.width = ''+percent+'%';
+    progress_bar.setAttribute('aria-valuenow', percent);
+    if (message)
+        progress_bar.innerHTML = ''+percent+'%'+' ('+message+')';
+    else
+        progress_bar.innerHTML = ''+percent+'%';
+}
+
+function handle_run_button()
+{
+    if (current_engine.name != 'QCEngine')
+    {
+        do_engine_modal();
+        return;
+    }
+    // set_progress(50, '');
+    run_script();
+    qc.panel_staff.setVisible(true);
+    qc.panel_chart.setVisible(true);
+    max_width = 20000;
+    qc.panel_staff.staff.fullSnapshot(max_width);
+}
+
+var default_program = 'qc.reset(3);\nqc.write(0);\nqc.had(0x1);\nqc.cnot(0x2, 0x1);\n';
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
