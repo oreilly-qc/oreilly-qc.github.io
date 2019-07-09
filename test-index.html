@@ -81,21 +81,21 @@
 //   numBits  the integer size in bits (any positive integer)
 //   qReg     the QReg to use for storage. This may be active or inactive.
 
-function make_sub_int(parent, name, sub_start, num_bits)
-{
-   var new_qint = new QInt(num_bits, parent.qReg, name);
+// function make_sub_int(parent, name, sub_start, num_bits)
+// {
+//    var new_qint = new QInt(num_bits, parent.qReg, name);
 
-   new_qint.startBit = parent.startBit + sub_start;
-   new_qint.baseMask = 0;
-   for (var i = 0; i < new_qint.numBits; ++i)
-       new_qint.baseMask |= 1 << i;
-   new_qint.maskBF = newShiftedMask(new_qint.baseMask, new_qint.startBit);
-   new_qint.valid = true;
-   return new_qint;
-}
+//    new_qint.startBit = parent.startBit + sub_start;
+//    new_qint.baseMask = 0;
+//    for (var i = 0; i < new_qint.numBits; ++i)
+//        new_qint.baseMask |= 1 << i;
+//    new_qint.maskBF = newShiftedMask(new_qint.baseMask, new_qint.startBit);
+//    new_qint.valid = true;
+//    return new_qint;
+// }
 
-  window.onerror = function(message, source, lineno, colno, error)
-  { alert('ErrorC1: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
+//   window.onerror = function(message, source, lineno, colno, error)
+//   { alert('ErrorC1: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
 
 function Qubits(numBits, name=null, qReg=null)
 {
