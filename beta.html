@@ -1400,12 +1400,7 @@ function handle_run_button()
     qc.panel_staff.staff.fullSnapshot(max_width);
 }
 
-var default_program = `
-qc.reset(3);
-qc.write(0);
-qc.had(0x1);
-qc.cnot(0x2, 0x1);
-`;
+var default_program = 'qc.reset(3);\nqc.write(0);\nqc.had(0x1);\nqc.cnot(0x2, 0x1);\n';
 
 
 
