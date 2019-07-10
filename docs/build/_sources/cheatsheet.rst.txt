@@ -1,0 +1,51 @@
+.. _cheatsheet-label:
+
+.. |br| raw:: html
+
+   <br />
+
+Cheatsheet
+==========
+
+.. contents:: Contents
+   :local:
+
+This page gives a summary of essential QCEngine commands. For more detail on how to combine these commands into full quantum programs see the :ref:`quickstart <quickstart-label>` section.
+
+
+Setting up qubits
+-----------------
+
+:code:`qc.reset(num_qubits)`
+    Reset the QPU and initialize it with :code:`num_qubits` qubits. |br|
+    **Example:** :code:`qc.reset(4)`
+
+:code:`qc.write(val)`
+    Write the integer value :code:`val` in binary using all qubits in the QPU. |br|
+    **Example:** :code:`qc.write(2)`
+
+:code:`qint.new(num_qubits, qint_label)`
+    Create a QInt with the first :code:`num_qubits` free in the QPU and label it with the string :code:`qint_label` in circuit diagrams. QInt's provide a way to group qubits together and act on them in these groups.|br|
+    **Example:** :code:`qint.new(2, 'myqint')`
+
+Single-qubit operations
+-----------------------
+
+Most single-qubit operations can either be performed as methods of the :code:`qc` object or of a :code:`qint` object. In either case, a specific qubit for the operation to act on can be specified using hexadecimal, or if no specific qubit is specified, the single-qubit operation is applied separately to all qubits in the object. When used as a :code:`qc` method, qubit specifications are relative to all qubits from the whole QPU. For :code:`qint` methods, qubit specifications are relative only to qubits in the :code:`qint`.
+
+:code:`qc.had(qubit)` (alias :code:`qc.hadamard(qubit)`)
+    Applies the Hadamard operation (HAD) to :code:`qubit`, creating an equal superposition when acted on :math:`|0\rangle`, and an equal superposition with a relative phase of :math:`180^{\circ}` when acted on :math:`|1\rangle`. Can also be acted on a qint as :code:`qint.had(qubit)`. When called without a specific qubit address, acts HAD operations on all qubits in the parent object. |br|
+    **Example:** :code:`qc.had(0x2)`
+
+:code:`qc.phase(qubit)`
+    
+
+Multi-qubit operations
+----------------------
+
+
+Formatting commands
+-------------------
+
+
+

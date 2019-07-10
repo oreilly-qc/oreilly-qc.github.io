@@ -6,9 +6,9 @@
 QCEngine
 ========
 
-QCEngine is a quantum computer simulator accompanying the O'Reilly book `Programming Quantum Computers <https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683>`. Needing no installation, QCEngine makes use of the _circle notation_ introduced in the book, to provide a compelling pedagogical tool for learning how to build and understand quantum circuits.
+QCEngine is a quantum computer simulator accompanying the O'Reilly book `Programming Quantum Computers <https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683>`_. Needing no installation, QCEngine makes use of the _circle notation_ introduced in the book, to provide a compelling pedagogical tool for learning how to build and understand quantum circuits.
 
-To get started with how to navigate and use the simulator, see the `quickstart <quickstart-label>`, or to see a list of useful QCEngine commands see the `cheatsheet <cheatsheet-label>`
+To get started with how to navigate and use the simulator, see the :ref:`quickstart <quickstart-label>`, or to see a list of useful QCEngine commands see the :ref:`cheatsheet <cheatsheet-label>`
 
 
 Indices and tables
@@ -24,5 +24,7 @@ Indices and tables
 
     Quickstart <quickstart>
     CheatSheet <cheatsheet>
+    JavaScript <javascript>
+
 
 

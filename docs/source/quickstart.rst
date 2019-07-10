@@ -8,3 +8,12 @@ QCEngine quickstart
 
 No installation is required to use QCEngine, simply visit `the QCEngine website <https://oreilly-qc.github.io/>` to start using it's JavaScript interface directly immediately.
 
+
+Labeling qubits
+----------------
+
+The :code:`qc` object
+---------------------
+
+Using :code:`qint`s
+--------------------

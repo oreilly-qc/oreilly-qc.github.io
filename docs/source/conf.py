@@ -23,6 +23,9 @@ project = 'qcengine'
 copyright = '2019, Eric Johnston, Nic Harrigan, and Mercedes Gimeno-Segovia'
 author = 'Eric Johnston, Nic Harrigan, and Mercedes Gimeno-Segovia'
 
+def setup(app):
+    app.add_stylesheet('css/custom.css')
+
 
 # -- General configuration ---------------------------------------------------
 
