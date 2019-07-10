@@ -1091,6 +1091,12 @@ function make_github_source_links()
             wb_name = 'Qiskit Notebook';
             wb_link = current_engine.subdir + '/Chapter2-samples.ipynb';
         }
+        else if (sample.shortcut.startsWith('3-'))
+        {
+            wb_text = 'Download the complete Chapter3 ';
+            wb_name = 'Qiskit Notebook';
+            wb_link = current_engine.subdir + '/Chapter3-samples.ipynb';
+        }
         if (wb_text)
         {
             str += '<br/>';
