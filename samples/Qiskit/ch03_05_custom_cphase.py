@@ -4,8 +4,6 @@
 ##
 ## More samples like this can be found at http://oreilly-qc.github.io
 
-## This sample generates a single random bit.
-
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, execute, Aer, IBMQ, BasicAer
 import math
 %matplotlib inline
