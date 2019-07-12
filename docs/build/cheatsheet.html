@@ -16,6 +16,7 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="JavaScript Introduction" href="javascript.html" />
     <link rel="prev" title="QCEngine quickstart" href="quickstart.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -38,24 +39,45 @@
 <div class="contents local topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#setting-up-qubits" id="id1">Setting up qubits</a></p></li>
+<li><p><a class="reference internal" href="#working-with-qubits" id="id1">Working with qubits</a></p></li>
 <li><p><a class="reference internal" href="#single-qubit-operations" id="id2">Single-qubit operations</a></p></li>
 <li><p><a class="reference internal" href="#multi-qubit-operations" id="id3">Multi-qubit operations</a></p></li>
-<li><p><a class="reference internal" href="#formatting-commands" id="id4">Formatting commands</a></p></li>
+<li><p><a class="reference internal" href="#primitives" id="id4">Primitives</a></p>
+<ul>
+<li><p><a class="reference internal" href="#arithmetic-primitives" id="id5">Arithmetic primitives</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#formatting-commands" id="id6">Formatting commands</a></p></li>
 </ul>
 </div>
 <p>This page gives a summary of essential QCEngine commands. For more detail on how to combine these commands into full quantum programs see the <a class="reference internal" href="quickstart.html#quickstart-label"><span class="std std-ref">quickstart</span></a> section.</p>
-<div class="section" id="setting-up-qubits">
-<h2><a class="toc-backref" href="#id1">Setting up qubits</a><a class="headerlink" href="#setting-up-qubits" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="working-with-qubits">
+<h2><a class="toc-backref" href="#id1">Working with qubits</a><a class="headerlink" href="#working-with-qubits" title="Permalink to this headline">¶</a></h2>
+<p>A number of methods exist for helping setup and create qubits for use in QCEngine programs. In many commands qubits from either the whole QPU or a QInt object (introduced below) can be specified using either hexadecimal, binary, or decimal notation. For example, <code class="code docutils literal notranslate"><span class="pre">0x4</span></code>, <code class="code docutils literal notranslate"><span class="pre">0b001</span></code> and <code class="code docutils literal notranslate"><span class="pre">4</span></code> would all specify the third of three qubits (having a weight of <span class="math notranslate nohighlight">\(2^2=4\)</span>). Multiple qubits can be selected using JavaScript’s bitwise OR operation between hexadecimal or binary values (for example, <code class="code docutils literal notranslate"><span class="pre">0x2|0x4</span></code>, <code class="code docutils literal notranslate"><span class="pre">0b010|0b001</span></code> and <code class="code docutils literal notranslate"><span class="pre">3</span></code> all specify the second two of three qubits (having weights <span class="math notranslate nohighlight">\(2^1=2\)</span> and <span class="math notranslate nohighlight">\(2^2=4\)</span>).</p>
 <dl class="simple">
 <dt><code class="code docutils literal notranslate"><span class="pre">qc.reset(num_qubits)</span></code></dt><dd><p>Reset the QPU and initialize it with <code class="code docutils literal notranslate"><span class="pre">num_qubits</span></code> qubits. <br />
 <strong>Example:</strong> <code class="code docutils literal notranslate"><span class="pre">qc.reset(4)</span></code></p>
 </dd>
-<dt><code class="code docutils literal notranslate"><span class="pre">qc.write(val)</span></code></dt><dd><p>Write the integer value <code class="code docutils literal notranslate"><span class="pre">val</span></code> in binary using all qubits in the QPU. <br />
+<dt><code class="code docutils literal notranslate"><span class="pre">qc.write(val,</span> <span class="pre">qubit)</span></code></dt><dd><p>Write the integer value <code class="code docutils literal notranslate"><span class="pre">val</span></code> in binary to the qubit at location <code class="code docutils literal notranslate"><span class="pre">qubit</span></code>. If no <code class="code docutils literal notranslate"><span class="pre">qubit</span></code> argument is passed, then write the value using all qubits in the QPU if called as a method on <code class="code docutils literal notranslate"><span class="pre">qc</span></code> or in the QInt if called as a method on a <code class="code docutils literal notranslate"><span class="pre">qint</span></code> object. <br />
 <strong>Example:</strong> <code class="code docutils literal notranslate"><span class="pre">qc.write(2)</span></code></p>
 </dd>
-<dt><code class="code docutils literal notranslate"><span class="pre">qint.new(num_qubits,</span> <span class="pre">qint_label)</span></code></dt><dd><p>Create a QInt with the first <code class="code docutils literal notranslate"><span class="pre">num_qubits</span></code> free in the QPU and label it with the string <code class="code docutils literal notranslate"><span class="pre">qint_label</span></code> in circuit diagrams. QInt’s provide a way to group qubits together and act on them in these groups.|br|
-<strong>Example:</strong> <code class="code docutils literal notranslate"><span class="pre">qint.new(2,</span> <span class="pre">'myqint')</span></code></p>
+<dt><code class="code docutils literal notranslate"><span class="pre">qint.new(num_qubits,</span> <span class="pre">qint_label)</span></code></dt><dd><p>Create a QInt with the first <code class="code docutils literal notranslate"><span class="pre">num_qubits</span></code> free in the QPU and label it with the string <code class="code docutils literal notranslate"><span class="pre">qint_label</span></code> in circuit diagrams. QInt’s provide a way to group qubits together and act on them in these groups. <br />
+<strong>Example:</strong> <code class="code docutils literal notranslate"><span class="pre">var</span> <span class="pre">myqint</span> <span class="pre">=</span> <span class="pre">qint.new(2,</span> <span class="pre">'myqint')</span></code></p>
+</dd>
+<dt><code class="code docutils literal notranslate"><span class="pre">qc.discard()</span></code></dt><dd><p>Remvoves a specified qubit from the QPU. Can be used as a method on the <cite>qc</cite> object or a QInt object. If called without an argument then discards all qubits associated with the parent object. <br />
+<strong>Example:</strong> <code class="code docutils literal notranslate"><span class="pre">qc.discard(0x2);</span></code></p>
+</dd>
+</dl>
+<p><code class="code docutils literal notranslate"><span class="pre">qint.bits()</span></code></p>
+<dl class="simple">
+<dt><code class="code docutils literal notranslate"><span class="pre">qint.peekProbability(value)</span></code></dt><dd><p>Returns the probability of observing the specified value if the parent QInt were to have all of its qubits measured. Note that although <code class="code docutils literal notranslate"><span class="pre">qint.peekProbability()</span></code> can be useful for debugging QPU programs, a real QPU could not implement this function directly as in general it is not possible to determine the amplitudes (and therefore probabilities) of a QPU register’s possible configurations. Take care not to rely on it for any critical component of your QPU programs. <br />
+<strong>Example:</strong> <code class="code docutils literal notranslate"><span class="pre">myqint.peekProbability(2)</span></code></p>
+</dd>
+<dt><code class="code docutils literal notranslate"><span class="pre">qint.numBits()</span></code></dt><dd><p>Returns an integer specifying the number of qubits contained within a QInt object. <br />
+<strong>Example:</strong> <code class="code docutils literal notranslate"><span class="pre">myqint.numBits()</span></code></p>
+</dd>
+<dt><code class="code docutils literal notranslate"><span class="pre">qint.reverseBits(qubits)</span></code></dt><dd><p>When called with no argument, reverses the ordering of all qubits in a QInt (so that first becomes last, second becomes second from last, etc…). The argument qubits can be used to specify a subset of qubits to be reversed. <br />
+<strong>Example:</strong> <code class="code docutils literal notranslate"><span class="pre">myqint.reverseBits(0x1|0x2|0x4)</span></code></p>
 </dd>
 </dl>
 </div>
@@ -67,13 +89,57 @@
 <strong>Example:</strong> <code class="code docutils literal notranslate"><span class="pre">qc.had(0x2)</span></code></p>
 </dd>
 </dl>
-<p><code class="code docutils literal notranslate"><span class="pre">qc.phase(qubit)</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.phase(angle,</span> <span class="pre">qubit)</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.rootnot(qubit)</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.read()</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.not()</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.roty(qubit)</span></code></p>
 </div>
 <div class="section" id="multi-qubit-operations">
 <h2><a class="toc-backref" href="#id3">Multi-qubit operations</a><a class="headerlink" href="#multi-qubit-operations" title="Permalink to this headline">¶</a></h2>
+<p>Many single-qubit operations can be used as multi-qubit operations simply by passing an additional argument specifying an additional condition qubit, whose value determines whether or not the operation is applied to the previously specified target qubit. In many cases, when called as methods on a <code class="code docutils literal notranslate"><span class="pre">qint</span></code> object, single qubit operations can also be conditioned by passing a qubit argument. The <code class="code docutils literal notranslate"><span class="pre">qint</span></code> that the operation is called on will then be the target qubit for the operation, whilst the other qubit(s) passed as the argument to this method will be the condition qubit(s). For example, <code class="code docutils literal notranslate"><span class="pre">qc.phase(angle,</span> <span class="pre">qubit)</span></code> is a single-qubit operation, but <code class="code docutils literal notranslate"><span class="pre">qc.phase(angle,</span> <span class="pre">target_qubit,</span> <span class="pre">condition_qubit)</span></code> and <code class="code docutils literal notranslate"><span class="pre">myqint.phase(angle,</span> <span class="pre">condition_qubit)</span></code> are both multi-qubit operations performing a conditional phase.</p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.cnot(condition_qubit,</span> <span class="pre">target_qubit)</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qint.exchange(qubit)</span></code></p>
+<dl class="simple">
+<dt><code class="code docutils literal notranslate"><span class="pre">qc.phase(control_qubit,</span> <span class="pre">target_qubit)</span></code></dt><dd><p><code class="code docutils literal notranslate"><span class="pre">qint.cphase(angle)</span></code> convenience?</p>
+</dd>
+</dl>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.cswap()</span></code></p>
+</div>
+<div class="section" id="primitives">
+<h2><a class="toc-backref" href="#id4">Primitives</a><a class="headerlink" href="#primitives" title="Permalink to this headline">¶</a></h2>
+<p>This section contains a reference commands for performing either full-blown primitives (such as the Quantum Fourier Transform), or smaller components of primitives (such as basic arithmetic functions).</p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.QFT()</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.invQFT()</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.Grover()</span></code></p>
+<dl class="simple">
+<dt><code class="code docutils literal notranslate"><span class="pre">qc.phase_est(q_in,</span> <span class="pre">q_out,</span> <span class="pre">cont_u)</span></code></dt><dd><p>See code example 8.1</p>
+</dd>
+<dt><code class="code docutils literal notranslate"><span class="pre">qc.amplitude_encode()</span></code></dt><dd><p>See example 9.3</p>
+</dd>
+</dl>
+<div class="section" id="arithmetic-primitives">
+<h3><a class="toc-backref" href="#id5">Arithmetic primitives</a><a class="headerlink" href="#arithmetic-primitives" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt><code class="code docutils literal notranslate"><span class="pre">qint.add(value)</span></code></dt><dd><p>Value can be a qint as well as an integer</p>
+</dd>
+<dt><code class="code docutils literal notranslate"><span class="pre">qint.subtract(value)</span></code></dt><dd><p>Value can be a qint as well as an integer</p>
+</dd>
+</dl>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.addSquared(value)</span></code></p>
+</div>
 </div>
 <div class="section" id="formatting-commands">
-<h2><a class="toc-backref" href="#id4">Formatting commands</a><a class="headerlink" href="#formatting-commands" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id6">Formatting commands</a><a class="headerlink" href="#formatting-commands" title="Permalink to this headline">¶</a></h2>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.label(label)</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.nop()</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc_options.color_by_phase=bool</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc_options.book_render=bool</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.print(qint)</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.panel_chart.widgets</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.clearOutput()</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.disableAnimation()</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">qc.disableRecording()</span></code></p>
 </div>
 </div>
 
@@ -103,12 +169,14 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html"> Quickstart</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#"> CheatSheet</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#setting-up-qubits">Setting up qubits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-with-qubits">Working with qubits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#single-qubit-operations">Single-qubit operations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#multi-qubit-operations">Multi-qubit operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#primitives">Primitives</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#formatting-commands">Formatting commands</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="javascript.html"> JavaScript</a></li>
 </ul>
 
 <div class="relations">
@@ -116,6 +184,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="quickstart.html" title="previous chapter">QCEngine quickstart</a></li>
+      <li>Next: <a href="javascript.html" title="next chapter">JavaScript Introduction</a></li>
   </ul></li>
 </ul>
 </div>

@@ -24,6 +24,7 @@ Indices and tables
 
     Quickstart <quickstart>
     CheatSheet <cheatsheet>
+    JavaScript <javascript>
 
 
 
