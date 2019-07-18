@@ -35,32 +35,62 @@
           <div class="body" role="main">
             
   <div class="section" id="qcengine-quickstart">
-<span id="quickstart-label"></span><h1><a class="toc-backref" href="#id3">QCEngine quickstart</a><a class="headerlink" href="#qcengine-quickstart" title="Permalink to this headline">¶</a></h1>
-<div class="contents topic" id="contents">
-<p class="topic-title first">Contents</p>
+<span id="quickstart-label"></span><h1>QCEngine quickstart<a class="headerlink" href="#qcengine-quickstart" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Assuming you’re reading this documentation through a web-browser, no installation is required to use QCEngine. Simply visit <a class="reference external" href="https://oreilly-qc.github.io/">the QCEngine website</a> to immediately start using it’s JavaScript interface.</p>
+</div>
+<div class="section" id="the-qcengine-ui">
+<h2>The QCengine UI<a class="headerlink" href="#the-qcengine-ui" title="Permalink to this headline">¶</a></h2>
+<p>Before detailing how to start writing problems, it’s worth describing the different UI elements on the QCEngine webpage which allow you to control simulations and the numerous visualizations that it offers. When using the QCEngine UI, three windows are displayed:</p>
+<div class="section" id="the-code-window">
+<h3>The code window<a class="headerlink" href="#the-code-window" title="Permalink to this headline">¶</a></h3>
+<p>This is used to enter and run code. JavaScript entered in the text-box will be syntax-highlighted. The window can be resized using the handle on the bottom right .</p>
+<img alt="_images/ui_codewindow.png" src="_images/ui_codewindow.png" />
 <ul class="simple">
-<li><p><a class="reference internal" href="#qcengine-quickstart" id="id3">QCEngine quickstart</a></p>
-<ul>
-<li><p><a class="reference internal" href="#labeling-qubits" id="id4">Labeling qubits</a></p></li>
-<li><p><a class="reference internal" href="#the-qc-object" id="id5">The <code class="code docutils literal notranslate"><span class="pre">qc</span></code> object</a></p></li>
-<li><p><a class="reference internal" href="#using-code-qint-s" id="id6">Using :code:`qint`s</a></p></li>
-</ul>
-</li>
+<li><p>The <strong>Run Program</strong> button executes the code currently in the code window and will generate visualizations of the results in the other windows.</p></li>
+<li><p>The <strong>Examples dropdown menu</strong> (set to <cite>Ex 2-1: Random qubit</cite> in the above image) can be used to populate the code window with existing code samples from book, referred to by their Example number.
+* The <strong>Engine dropdown menu</strong> (set to <cite>QCEngine</cite> in the above image) can be used to change the simulator engine language for the pre-existing book code-samples. Many code samples are also provided in the <a class="reference external" href="https://qiskit.org/">Qiskit</a> and <a class="reference external" href="https://github.com/Qiskit/openqasm">OpenQASM</a> languages.</p></li>
+<li><p>The <strong>magnifier</strong> buttons can be used to alter the text-size of code in the code window.</p></li>
 </ul>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">local</dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
-<p>No installation is required to use QCEngine, simply visit <cite>the QCEngine website &lt;https://oreilly-qc.github.io/&gt;</cite> to start using it’s JavaScript interface directly immediately.</p>
+<div class="section" id="the-circuit-window">
+<h3>The circuit window<a class="headerlink" href="#the-circuit-window" title="Permalink to this headline">¶</a></h3>
+<p>After the <strong>Run Program</strong> button has been clicked in the code window, the <em>circuit window</em> will display a circuit diagram for the code (assuming it is free from syntax errors).</p>
+<img alt="_images/ui_circwindow.png" src="_images/ui_circwindow.png" />
+<ul class="simple">
+<li><p>The <strong>magnifier</strong> buttons can be used to resize the circuit diagram within the circuit window. Using <strong>ctrl-scroll</strong> (holding <cite>ctrl</cite> whilst using a mouse/trackpad scroll gesture) also zooms in/out of the circuit diagram.</p></li>
+<li><p>The circuit window interacts closely with the <em>circle notation window</em> (see below). When the cursor is hovered over a circuit diagram, a vertical orange bar appears to show which point in the circuit is currently being visualized in the <em>circle notation window</em> (defaults to the end of the circuit). Clicking on another part of the circuit will refresh the <em>circle notation window</em> to show a visualization of the QPU’s state at this new point in the circuit (and the vertical orange marker line in the circuit will move accordingly). This interface can be used to ‘step through’ a QPU circuit.</p></li>
+</ul>
+</div>
+<div class="section" id="the-circle-notation-window">
+<h3>The circle notation window<a class="headerlink" href="#the-circle-notation-window" title="Permalink to this headline">¶</a></h3>
+<p>This shows a visualization of the state of the QPU at a given point within the code. How to interpret circle notation is explained in detail in Chapter 2 of <a class="reference external" href="https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683">Programming Quantum Computers</a>.</p>
+<img alt="_images/ui_circwindow.png" src="_images/ui_circwindow.png" />
+<ul class="simple">
+<li><p>The <strong>magnifier</strong> buttons can be used to resize the circle notation shown within the circle notation window. Using <strong>ctrl-scroll</strong> (holding <cite>ctrl</cite> whilst using a mouse/trackpad scroll gesture) also zooms in/out of the circle notation.</p></li>
+<li><p>The remaining <strong>visualization assistance</strong> buttons in the header of the circle notation window provide a number of options for making circle notation more easily visible (especially useful for large QPU registers visualized by large numbers of circles). These include adding ‘rotation needles’ for more prominently showing the rotation of circles, coloring the circles dependent on their rotation, and scaling the filled area of the circles (equivalent to a global phase - see page 20 of <a class="reference external" href="https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683">Programming Quantum Computers</a>).</p></li>
+<li><p>The point in the circuit at which a QPU’s state is represented in the circle notation window can be altered by interacting with the <em>circuit window</em> (see above).</p></li>
+</ul>
+</div>
+<div class="section" id="the-output-window">
+<h3>The output window<a class="headerlink" href="#the-output-window" title="Permalink to this headline">¶</a></h3>
+<p>The output window displays output printed from a QCEngine program using the <cite>qc.print()</cite> function. JavaScript output (for example, printed using <cite>console.log()</cite> will still appear in your web-browsers developer JS console as normal.</p>
+<img alt="_images/ui_outputwindow.png" src="_images/ui_outputwindow.png" />
+<ul class="simple">
+<li><p>The <strong>magnifier</strong> buttons can be used to resize the text-size used in the output window.</p></li>
+<li><p>The <strong>eraser</strong> button clears any current output in the output window.</p></li>
+</ul>
+</div>
+</div>
 <div class="section" id="labeling-qubits">
-<h2><a class="toc-backref" href="#id4">Labeling qubits</a><a class="headerlink" href="#labeling-qubits" title="Permalink to this headline">¶</a></h2>
+<h2>Labeling qubits<a class="headerlink" href="#labeling-qubits" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="the-qc-object">
-<h2><a class="toc-backref" href="#id5">The <code class="code docutils literal notranslate"><span class="pre">qc</span></code> object</a><a class="headerlink" href="#the-qc-object" title="Permalink to this headline">¶</a></h2>
+<h2>The <code class="code docutils literal notranslate"><span class="pre">qc</span></code> object<a class="headerlink" href="#the-qc-object" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="using-code-qint-s">
-<h2><a class="toc-backref" href="#id6">Using :code:<a href="#id1"><span class="problematic" id="id2">`</span></a>qint`s</a><a class="headerlink" href="#using-code-qint-s" title="Permalink to this headline">¶</a></h2>
+<h2>Using :code:<a href="#id2"><span class="problematic" id="id3">`</span></a>qint`s<a class="headerlink" href="#using-code-qint-s" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -89,12 +119,15 @@
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#"> Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-qcengine-ui">The QCengine UI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#labeling-qubits">Labeling qubits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-qc-object">The <code class="code docutils literal notranslate"><span class="pre">qc</span></code> object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#using-code-qint-s">Using :code:`qint`s</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="cheatsheet.html"> CheatSheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="javascript.html"> JavaScript</a></li>
 </ul>
 
 <div class="relations">
