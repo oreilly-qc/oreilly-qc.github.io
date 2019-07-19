@@ -45,7 +45,7 @@
 <p>Before detailing how to start writing problems, it’s worth describing the different UI elements on the QCEngine webpage which allow you to control simulations and the numerous visualizations that it offers. When using the QCEngine UI, three windows are displayed:</p>
 <div class="section" id="the-code-window">
 <h3>The code window<a class="headerlink" href="#the-code-window" title="Permalink to this headline">¶</a></h3>
-<p>This is used to enter and run code. JavaScript entered in the text-box will be syntax-highlighted. The window can be resized using the handle on the bottom right .</p>
+<p>This is used to enter and run code. JavaScript entered in the text-box will be syntax-highlighted. The window can be resized using the handle on the bottom right. We enter code in this window that describes a simulation we want to run via the QCEngine JavaScript syntax. Typically this code will setup a group of qubits in a QPU, perform some operations on them, and then read out values from them. The simulation specified by the code is only actually run (using the CPU of your local machine) once the <strong>Run Program</strong> button is clicked (see below).</p>
 <img alt="_images/ui_codewindow.png" src="_images/ui_codewindow.png" />
 <ul class="simple">
 <li><p>The <strong>Run Program</strong> button executes the code currently in the code window and will generate visualizations of the results in the other windows.</p></li>
@@ -83,14 +83,156 @@
 </ul>
 </div>
 </div>
-<div class="section" id="labeling-qubits">
-<h2>Labeling qubits<a class="headerlink" href="#labeling-qubits" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="writing-qcengine-code">
+<h2>Writing QCEngine code<a class="headerlink" href="#writing-qcengine-code" title="Permalink to this headline">¶</a></h2>
+<p>The QCEngine code that you will write in the <em>code window</em> of the UI is JavaScript. However, a number of JavaScript objects and functions are globally defined in the environment running these code samples that expose the QCEngine simulator. We will cover a quick introduction to these here, but for more detailed information on all available objects and functions see the <a class="reference internal" href="cheatsheet.html#cheatsheet-label"><span class="std std-ref">cheatsheet</span></a>. For a more general (and brief) introduction to JavaScript syntax, see the section on <cite>JavaScript &lt;javascript-label&gt;</cite>.</p>
+<p>The most fundamental tool we deal with in QCEngine code is the <code class="code docutils literal notranslate"><span class="pre">qc</span></code> object.</p>
+<div class="section" id="the-qc-object-and-single-qubit-operations">
+<h3>The <code class="code docutils literal notranslate"><span class="pre">qc</span></code> object and single-qubit operations<a class="headerlink" href="#the-qc-object-and-single-qubit-operations" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="code docutils literal notranslate"><span class="pre">qc</span></code> object represents the whole QPU we are simulating with QCEngine and exposes methods allowing us to associate qubits with this QPU and then manipulate and read them.</p>
+<p>We must always begin by specifying how many qubits we want to associate with our QPU using the <code class="code docutils literal notranslate"><span class="pre">qc.reset()</span></code> method. For example, we could prepare ourselves for a simulation of an 8-qubit QPU as follows:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Request 8 qubits for simulation in our QPU</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">reset</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+</pre></div>
 </div>
-<div class="section" id="the-qc-object">
-<h2>The <code class="code docutils literal notranslate"><span class="pre">qc</span></code> object<a class="headerlink" href="#the-qc-object" title="Permalink to this headline">¶</a></h2>
+<p>Considered together these 8 qubits can represent any 8-bit number (or, of course, superpositions of such numbers). Before we begin operating in these qubits we can initialize them to be a binary encoding of some integer value using the <code class="code docutils literal notranslate"><span class="pre">qc.write()</span></code> method:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Write the value 120 to our 8 qubits (01111000)</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">reset</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="mi">120</span><span class="p">);</span>
+</pre></div>
 </div>
-<div class="section" id="using-code-qint-s">
-<h2>Using :code:<a href="#id2"><span class="problematic" id="id3">`</span></a>qint`s<a class="headerlink" href="#using-code-qint-s" title="Permalink to this headline">¶</a></h2>
+<p>This means we’ve initialized the 8 qubits in our QPU in the states <span class="math notranslate nohighlight">\(|0\rangle|1\rangle|1\rangle|1\rangle|1\rangle|0\rangle|0\rangle|0\rangle\)</span>.</p>
+<p>Now we have a set of initialized qubits, we can consider performing operations on them. The <code class="code docutils literal notranslate"><span class="pre">qc</span></code> object has methods corresponding to many single- and multi-qubit operations. Many of the single-qubit operation methods can be called without any argument to act the same single-qubit operation on <em>all qubits</em> in the QPU separately.</p>
+<p>For example, the following code applies a <code class="code docutils literal notranslate"><span class="pre">HAD</span></code> (Hadamard) operation on each qubit in the QPU:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Perform HAD on all 8 qubits</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">reset</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="mi">120</span><span class="p">);</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">had</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>This results in the following circuit:</p>
+<img alt="_images/quickstart_allhads.png" src="_images/quickstart_allhads.png" />
+<p>We can similarly <code class="code docutils literal notranslate"><span class="pre">READ</span></code> all 8 qubits in the QPU using the <code class="code docutils literal notranslate"><span class="pre">qc.read()</span></code> method, and again passing no argument to stipulate that the single-qubit <code class="code docutils literal notranslate"><span class="pre">READ</span></code> operation should act on all qubits in the QPU:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Perform HAD on all 8 qubits</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">reset</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="mi">120</span><span class="p">);</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">had</span><span class="p">();</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">read</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>Producing the following circuit:</p>
+<img alt="_images/quickstart_allhadreads.png" src="_images/quickstart_allhadreads.png" />
+<p>So far we’ve dealt only with single-qubit operations that act on <em>all</em> qubits in the QPU. What if we wanted to act a <code class="code docutils literal notranslate"><span class="pre">HAD</span></code> on only one specific qubit? Or what if we wanted to perform a multi-qubit operation on some specific subset of qubits? To do this we need a method for referencing qubits in the QPU.</p>
+</div>
+<div class="section" id="referencing-qubits">
+<h3>Referencing qubits<a class="headerlink" href="#referencing-qubits" title="Permalink to this headline">¶</a></h3>
+<p>Many of the single qubit methods of the <code class="code docutils literal notranslate"><span class="pre">qc</span></code> object accept a parameter that references the location of a particular qubit to act the operation on. We can reference a qubit either using a decimal, binary or hexadecimal value. For example, the below snippet shows how we can use each of these methods to act a HAD operation only on the second highest weighted qubit from the 8 we have requested in our QPU:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Perform HAD only on the second highest weighted of 8 qubits</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">reset</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// In this case we intialize all qubits to be in |0&gt;</span>
+<span class="c1">// Each of these have the same effect</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">had</span><span class="p">(</span><span class="mi">64</span><span class="p">);</span> <span class="c1">// In decimal - second highest weight qubit correponds to value of 2**6=64</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">had</span><span class="p">(</span><span class="mb">0b01000000</span><span class="p">);</span> <span class="c1">// In binary - select out second highest weight qubit</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">had</span><span class="p">(</span><span class="mh">0x40</span><span class="p">);</span> <span class="c1">// In hex - 0x80 is 64 in decimal</span>
+</pre></div>
+</div>
+<p>Note that these different addressing methods work using JavaScript’s binary and hexadecimal literal syntax (<code class="code docutils literal notranslate"><span class="pre">0b</span></code> and <code class="code docutils literal notranslate"><span class="pre">0x</span></code> prefixes). In each case JavaScript is actually converting the values to decimal before passing them to <code class="code docutils literal notranslate"><span class="pre">qc.had()</span></code>.</p>
+<p>The above code corresponds to the following circuit:</p>
+<img alt="_images/quickstart_hadreferencing.png" src="_images/quickstart_hadreferencing.png" />
+<p>We can also easily operate single-qubit operations on a select subset of qubits in one call using the JavaScript <em>binary or</em> operator <code class="code docutils literal notranslate"><span class="pre">|</span></code> where necessary. For example, we can act <code class="code docutils literal notranslate"><span class="pre">qc.had()</span></code> on the first two lowest weight qubits in an 8 qubit QPU as follows:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Perform HAD only two lowest weighted of 8 qubits</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">reset</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// In this case we intialize all qubits to be in |0&gt;</span>
+<span class="c1">// Each of these have the same effect</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">had</span><span class="p">(</span><span class="mi">1</span><span class="o">|</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// In decimal - two lowest weight qubits have values of 2**0=1 and 2**1=2</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">had</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span> <span class="c1">// Alternatively specify the single decimal value selecting two lowest weight qubits</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">had</span><span class="p">(</span><span class="mb">0b00000011</span><span class="p">);</span> <span class="c1">// In binary</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">had</span><span class="p">(</span><span class="mh">0x1</span><span class="o">|</span><span class="mh">0x2</span><span class="p">);</span> <span class="c1">// In hex</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">had</span><span class="p">(</span><span class="mh">0x3</span><span class="p">);</span> <span class="c1">// Alternatively specify the single hexadecimal value selecting two lowest weight qubits</span>
+</pre></div>
+</div>
+<p>We can see the equivalent effects of these approaches in the circuit diagram produced by this code-snippet:</p>
+<img alt="_images/quickstart_hadreferencing2qubits.png" src="_images/quickstart_hadreferencing2qubits.png" />
+<p>Note that as well as an argument referencing the qubits to act on, some single-qubit operations also take additional parameters. For example, <code class="code docutils literal notranslate"><span class="pre">qc.phase()</span></code> accepts an angle to rotate the relative phase of a qubit through (first argument) as well as a specification of what qubits to act on (second argument). This code performs a relative phase rotation of 45 degrees on the middle two qubits in a 4-qubit QPU:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Perform PHASE(45) on middle two of 4 qubits</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">reset</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="mb">0b1111</span><span class="p">);</span> <span class="c1">// In this case we intiialize all qubits to be in |1&gt;</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">phase</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span> <span class="mb">0b0110</span><span class="p">);</span> <span class="c1">// Here we opt to reference our qubits using a binary literal</span>
+</pre></div>
+</div>
+<p>This produces the following circuit:</p>
+<img alt="_images/quickstart_phasereferencing.png" src="_images/quickstart_phasereferencing.png" />
+</div>
+<div class="section" id="multi-qubit-operations">
+<h3>Multi-qubit operations<a class="headerlink" href="#multi-qubit-operations" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="code docutils literal notranslate"><span class="pre">qc</span></code> object also has methods for performing multi-qubit operations. These operations normally require a specification of a <strong>target</strong> qubit, and a <strong>control</strong> qubit. The target qubit has a certain operation performed on it dependent on the value of the control qubit. For example, <code class="code docutils literal notranslate"><span class="pre">qc.cnot()</span></code> implements the important <code class="code docutils literal notranslate"><span class="pre">CNOT</span></code> operation, and takes a reference to the <strong>target</strong> qubit as its first argument, and a reference to the <strong>control</strong> qubit as its second argument:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Perform CNOT between highest (target) and lowest (control) weighted of 4 qubits</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">reset</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">cnot</span><span class="p">(</span><span class="mb">0b1000</span><span class="p">,</span> <span class="mb">0b0001</span><span class="p">);</span> <span class="c1">// Here we opt to reference our qubits using binary literals</span>
+</pre></div>
+</div>
+<p>Which results in the following circuit:</p>
+<img alt="_images/quickstart_cnotreferencing.png" src="_images/quickstart_cnotreferencing.png" />
+<p>We can easily specify more target or control qubits for a multi-qubit operation, using the referencing system we introduced above. For example, consider the following code-snippet employing a CNOT with two target and two control qubits and its associated circuit:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Perform CNOT between two highest (targets) and two lowest (controls) weighted of 4 qubits</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">reset</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">cnot</span><span class="p">(</span><span class="mb">0b1100</span><span class="p">,</span> <span class="mb">0b0011</span><span class="p">);</span> <span class="c1">// Here we opt to reference our qubits using binary literals</span>
+</pre></div>
+</div>
+<img alt="_images/quickstart_cnotreferencingmulti.png" src="_images/quickstart_cnotreferencingmulti.png" />
+</div>
+<div class="section" id="grouping-qubits-using-qint">
+<h3>Grouping qubits using <code class="code docutils literal notranslate"><span class="pre">qint</span></code><a class="headerlink" href="#grouping-qubits-using-qint" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes we may wish to logically associate small subsets of a full QPU’s set of qubits. We can think of such smaller groupings as ‘registers’ within our QPU. This kind of association can be achieved using <code class="code docutils literal notranslate"><span class="pre">qint</span></code> objects. After a set of qubits have been requested for a QPU using the <code class="code docutils literal notranslate"><span class="pre">qc.reset()</span></code> method, we can draw qubits from this available collection to associate with a <code class="code docutils literal notranslate"><span class="pre">qint</span></code> using the <code class="code docutils literal notranslate"><span class="pre">qint.new()</span></code> method. For example, the below code-snippet defines one 2-qubit <code class="code docutils literal notranslate"><span class="pre">qint</span></code> and one 6-qubit <code class="code docutils literal notranslate"><span class="pre">qint</span></code> from a QPU of 8 qubits.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Define two qints</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">reset</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// Initialize all qubits at once before introducing qints</span>
+<span class="kd">var</span> <span class="nx">myqint1</span> <span class="o">=</span> <span class="nx">qint</span><span class="p">.</span><span class="k">new</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;My Qint 1&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">myqint2</span> <span class="o">=</span> <span class="nx">qint</span><span class="p">.</span><span class="k">new</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;My Qint 2&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>We can see that the <code class="code docutils literal notranslate"><span class="pre">qint</span></code> object is created with two arguments. The first specifies a number of qubits to associate with the <code class="code docutils literal notranslate"><span class="pre">qint</span></code>.  Note that this number of qubits is <em>drawn from the stack available in the QPU, starting from the lowest weight first</em>. We can see this in the circuit diagram generated by this code-snippet:</p>
+<img alt="_images/quickstart_qintsdefn.png" src="_images/quickstart_qintsdefn.png" />
+<p>This circuit diagram also shows that the second argument to the <code class="code docutils literal notranslate"><span class="pre">qint</span></code> object is a label, which is shown on circuit diagrams in the <em>circuit window</em> to help us identify different <code class="code docutils literal notranslate"><span class="pre">qint</span></code>’s that we have defined. You’ll notice that we’ve also assigned our new <code class="code docutils literal notranslate"><span class="pre">qint</span></code> objects to JavaScript variables. This is crucial, as these new objects implement many single- and multi-qubit methods, allowing us to act on qubits in reference to these smaller <code class="code docutils literal notranslate"><span class="pre">qint</span></code> collections.</p>
+<p>For example we can act a <code class="code docutils literal notranslate"><span class="pre">HAD</span></code> operation on the lowest weight qubit in each <code class="code docutils literal notranslate"><span class="pre">qint</span></code> as follows:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Define two qints</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">reset</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// Initialize all qubits at once before introducing qints</span>
+<span class="kd">var</span> <span class="nx">myqint1</span> <span class="o">=</span> <span class="nx">qint</span><span class="p">.</span><span class="k">new</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;My Qint 1&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">myqint2</span> <span class="o">=</span> <span class="nx">qint</span><span class="p">.</span><span class="k">new</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;My Qint 2&#39;</span><span class="p">);</span>
+
+<span class="c1">// Act HADS on highest weight qubit in each qint.</span>
+<span class="c1">// Note that our references are now interpreted in relation</span>
+<span class="c1">// to the qint, not the whole QPU as they were with the qc object</span>
+<span class="nx">myqint1</span><span class="p">.</span><span class="nx">had</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="nx">myqint2</span><span class="p">.</span><span class="nx">had</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Giving the following circuit:</p>
+<img alt="_images/quickstart_qintshads.png" src="_images/quickstart_qintshads.png" />
+<p><code class="code docutils literal notranslate"><span class="pre">qint</span></code> objects are especially useful because they allow us (as their name suggests), to allocate a set of qubits to represent an integer (or other datatype), which we can then use in arithmetic, like we would in conventional CPU code. For example, the <code class="code docutils literal notranslate"><span class="pre">qint</span></code> object implements a <code class="code docutils literal notranslate"><span class="pre">qint.add()</span></code> method, which takes another <code class="code docutils literal notranslate"><span class="pre">qint</span></code> object as an argument, and produces the circuit required to perform quantum addition (i.e. addition that respects superpositions of values) between the integer values encoded in the two <code class="code docutils literal notranslate"><span class="pre">qint</span></code> objects:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Define two qints</span>
+<span class="nx">qc</span><span class="p">.</span><span class="nx">reset</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+<span class="c1">// Define two qints</span>
+<span class="kd">var</span> <span class="nx">myqint1</span> <span class="o">=</span> <span class="nx">qint</span><span class="p">.</span><span class="k">new</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;My Qint 1&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">myqint2</span> <span class="o">=</span> <span class="nx">qint</span><span class="p">.</span><span class="k">new</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;My Qint 2&#39;</span><span class="p">);</span>
+<span class="c1">// Write a value of 3 to the first qint</span>
+<span class="nx">myqint1</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="c1">// Write a value of 14 to the second qint</span>
+<span class="nx">myqint2</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="mi">14</span><span class="p">);</span>
+
+<span class="c1">// Perform (quantum) addition between the values stored in the two qints</span>
+<span class="c1">// Note will add onto the myqint2 register</span>
+<span class="nx">myqint2</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">myqint1</span><span class="p">);</span>
+
+<span class="c1">// Read output</span>
+<span class="nx">myqint2</span><span class="p">.</span><span class="nx">read</span><span class="p">()</span> <span class="c1">// Gives answer 17</span>
+</pre></div>
+</div>
+<img alt="_images/quickstart_qintsadd.png" src="_images/quickstart_qintsadd.png" />
+</div>
 </div>
 </div>
 
@@ -121,9 +263,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#"> Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-qcengine-ui">The QCengine UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#labeling-qubits">Labeling qubits</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-qc-object">The <code class="code docutils literal notranslate"><span class="pre">qc</span></code> object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#using-code-qint-s">Using :code:`qint`s</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-qcengine-code">Writing QCEngine code</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="cheatsheet.html"> CheatSheet</a></li>
