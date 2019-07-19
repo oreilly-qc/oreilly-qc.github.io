@@ -21,7 +21,7 @@ qc.nop();
 qc.label('');
 qc.nop();
 
-qc.label('a += b');
+qc.label('a += b * b');
 
 // a += b * b
 a.addSquared(b);
