@@ -154,7 +154,7 @@ Formatting commands
 -------------------
 
 :code:`qc.print(qint)`
-    This command can be used to print values to the QCEngine UI *output window*. One common usage would be to print the output of a :code:`qc.read()` operation as shown in the below example.
+    This command can be used to print values to the QCEngine UI *output window*. One common usage would be to print the output of a :code:`qc.read()` operation as shown in the below example. Note consecutive calls to :code:`qc.print()` will not automatically occur on new lines in the *output window*. You can force new lines yourself using :code:`qc.print("\n")`.
     **Example:** :code:`qc.print(qc.read(0x2))`
 
 :code:`qc.label(label)`
