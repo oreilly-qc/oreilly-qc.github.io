@@ -126,7 +126,7 @@ So far we've dealt only with single-qubit operations that act on *all* qubits in
 Referencing qubits
 ^^^^^^^^^^^^^^^^^^
 
-Many of the single qubit methods of the :code:`qc` object accept a parameter that references the location of a particular qubit to act the operation on. We can reference a qubit either using a decimal, binary or hexadecimal value. For example, the below snippet shows how we can use each of these methods to act a HAD operation only on the second highest weighted qubit from the 8 we have requested in our QPU:
+Many of the single qubit methods of the :code:`qc` object accept a parameter that references the location of a particular qubit to act the operation on. We can reference a qubit using decimal, binary or hexadecimal values. For example, the below snippet shows how each of these methods allows us to act a :code:`HAD` operation on only the second highest weighted qubit from 8 that we have requested for our QPU:
 
 .. code-block:: javascript
     
@@ -138,13 +138,13 @@ Many of the single qubit methods of the :code:`qc` object accept a parameter tha
     qc.had(0b01000000); // In binary - select out second highest weight qubit
     qc.had(0x40); // In hex - 0x80 is 64 in decimal 
 
-Note that these different addressing methods work using JavaScript's binary and hexadecimal literal syntax (:code:`0b` and :code:`0x` prefixes). In each case JavaScript is actually converting the values to decimal before passing them to :code:`qc.had()`.
+Note that we employ these addressing methods using JavaScript's binary and hexadecimal literal syntax (:code:`0b` and :code:`0x` prefixes). As an aside, in each case JavaScript is actually converting the values to decimal before passing them to our method :code:`qc.had()` (this is why :code:`console.log(0b101)` will actually print :code:`5`).
 
-The above code corresponds to the following circuit:
+The above code-snippet corresponds to the following circuit:
 
 .. image:: _static/quickstart_hadreferencing.png
 
-We can also easily operate single-qubit operations on a select subset of qubits in one call using the JavaScript *binary or* operator :code:`|` where necessary. For example, we can act :code:`qc.had()` on the first two lowest weight qubits in an 8 qubit QPU as follows:
+We can also easily operate single-qubit operations on a select *subset* of qubits in a single method call using the JavaScript *binary or* operator :code:`|` in our referencing. For example, we can act :code:`qc.had()` on the first two lowest weight qubits in an 8 qubit QPU as follows:
 
 .. code-block:: javascript
     
