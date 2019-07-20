@@ -164,14 +164,46 @@ New elements can be appended to an array using the :code:`array.push` method as 
 Strings
 ^^^^^^^
 
+Strings can be defined in JavaScript using double quotes to produce string literals. For example:
+
+.. code-block:: javascript
+
+    var my_string = "This is a string";
+
+Similar to arrays, the length of a string can be found using the :code:`String.length` property.
+
+Strings can be combined using the addition operation. This allows us to perform rudimentary string interpolation:
+
+.. code-block:: javascript
+
+    var a = 5;
+    my_string = "This value of x is " + a + ", so now you know!";
+    console.log(my_string);
+
+Strings in JavaScript also `implement many methods <https://www.w3schools.com/jsref/jsref_obj_string.asp>`_ that can be useful for manipulating them.
+
 Binary operations
 ^^^^^^^^^^^^^^^^^
 
-JavaScript provides a number of tools for manipulating binary values. These can be especially useful to us as we work with references to qubits.
+JavaScript provides a number of tools for manipulating binary values. These 'bitwise operators' can be especially useful to us as we work with references to qubits.
 
-~ - not operation
+:code:`&` - *Bitwise AND*. Binary operator. Performs the logical and between each bit in the two arguments
+**Example:** :code:`a & b`
 
->> bit shift
+:code:`|` - *Bitwise OR*. Binary operator. Performs the logical or between each bit in the two arguments
+**Example:** :code:`a | b`
+
+:code:`^` - *Bitwise XOR*. Binary operator. Performs the logical exclusive or between each bit in the two arguments
+**Example:** :code:`a ^ b`
+
+:code:`~` - *Bitwise NOT*. Unary operator. Performs the logical not on bit in its arguments
+**Example:** :code:`a ^ b`
+
+:code:`<<` - *Left shift*. Binary operator. Shifts the bits in a binary representation of a number to the left by a specified number of bits. :code:`x<<n` shifts the bits representing a number :code:`x` a number :code:`n` bits to the left, adding :code:`0` bits on the right as bits are removed from the left. Note that this is equivalent to multiplying the number :code:`x` by :code:`2^n`.
+**Example:** :code:`5<<2`
+
+:code:`>>` - *Right shift*. Binary operator. Shifts the bits in a binary representation of a number to the right by a specified number of bits. :code:`x>>n` shifts the bits representing a number :code:`x` a number :code:`n` bits to the right, adding either :code:`0` or :code:`1` as bits to the left as bits are removed from the right. The choice of whether :code:`0` or :code:`1` values are added on the left depends on the sign of the number :code:`x`, and is chosen to maintain its sign in a twos-complement representation. Note that this is equivalent to dividing the number :code:`x` by :code:`2^n`.
+**Example:** :code:`5>>2`
 
 Mathematical functions
 ^^^^^^^^^^^^^^^^^^^^^^

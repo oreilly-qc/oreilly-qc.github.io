@@ -188,12 +188,34 @@
 </div>
 <div class="section" id="strings">
 <h3><a class="toc-backref" href="#id12">Strings</a><a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h3>
+<p>Strings can be defined in JavaScript using double quotes to produce string literals. For example:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">my_string</span> <span class="o">=</span> <span class="s2">&quot;This is a string&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Similar to arrays, the length of a string can be found using the <code class="code docutils literal notranslate"><span class="pre">String.length</span></code> property.</p>
+<p>Strings can be combined using the addition operation. This allows us to perform rudimentary string interpolation:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="nx">my_string</span> <span class="o">=</span> <span class="s2">&quot;This value of x is &quot;</span> <span class="o">+</span> <span class="nx">a</span> <span class="o">+</span> <span class="s2">&quot;, so now you know!&quot;</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">my_string</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Strings in JavaScript also <a class="reference external" href="https://www.w3schools.com/jsref/jsref_obj_string.asp">implement many methods</a> that can be useful for manipulating them.</p>
 </div>
 <div class="section" id="binary-operations">
 <h3><a class="toc-backref" href="#id13">Binary operations</a><a class="headerlink" href="#binary-operations" title="Permalink to this headline">¶</a></h3>
-<p>JavaScript provides a number of tools for manipulating binary values. These can be especially useful to us as we work with references to qubits.</p>
-<p>~ - not operation</p>
-<p>&gt;&gt; bit shift</p>
+<p>JavaScript provides a number of tools for manipulating binary values. These ‘bitwise operators’ can be especially useful to us as we work with references to qubits.</p>
+<p><code class="code docutils literal notranslate"><span class="pre">&amp;</span></code> - <em>Bitwise AND</em>. Binary operator. Performs the logical and between each bit in the two arguments
+<strong>Example:</strong> <code class="code docutils literal notranslate"><span class="pre">a</span> <span class="pre">&amp;</span> <span class="pre">b</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">|</span></code> - <em>Bitwise OR</em>. Binary operator. Performs the logical or between each bit in the two arguments
+<strong>Example:</strong> <code class="code docutils literal notranslate"><span class="pre">a</span> <span class="pre">|</span> <span class="pre">b</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">^</span></code> - <em>Bitwise XOR</em>. Binary operator. Performs the logical exclusive or between each bit in the two arguments
+<strong>Example:</strong> <code class="code docutils literal notranslate"><span class="pre">a</span> <span class="pre">^</span> <span class="pre">b</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">~</span></code> - <em>Bitwise NOT</em>. Unary operator. Performs the logical not on bit in its arguments
+<strong>Example:</strong> <code class="code docutils literal notranslate"><span class="pre">a</span> <span class="pre">^</span> <span class="pre">b</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> - <em>Left shift</em>. Binary operator. Shifts the bits in a binary representation of a number to the left by a specified number of bits. <code class="code docutils literal notranslate"><span class="pre">x&lt;&lt;n</span></code> shifts the bits representing a number <code class="code docutils literal notranslate"><span class="pre">x</span></code> a number <code class="code docutils literal notranslate"><span class="pre">n</span></code> bits to the left, adding <code class="code docutils literal notranslate"><span class="pre">0</span></code> bits on the right as bits are removed from the left. Note that this is equivalent to multiplying the number <code class="code docutils literal notranslate"><span class="pre">x</span></code> by <code class="code docutils literal notranslate"><span class="pre">2^n</span></code>.
+<strong>Example:</strong> <code class="code docutils literal notranslate"><span class="pre">5&lt;&lt;2</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> - <em>Right shift</em>. Binary operator. Shifts the bits in a binary representation of a number to the right by a specified number of bits. <code class="code docutils literal notranslate"><span class="pre">x&gt;&gt;n</span></code> shifts the bits representing a number <code class="code docutils literal notranslate"><span class="pre">x</span></code> a number <code class="code docutils literal notranslate"><span class="pre">n</span></code> bits to the right, adding either <code class="code docutils literal notranslate"><span class="pre">0</span></code> or <code class="code docutils literal notranslate"><span class="pre">1</span></code> as bits to the left as bits are removed from the right. The choice of whether <code class="code docutils literal notranslate"><span class="pre">0</span></code> or <code class="code docutils literal notranslate"><span class="pre">1</span></code> values are added on the left depends on the sign of the number <code class="code docutils literal notranslate"><span class="pre">x</span></code>, and is chosen to maintain its sign in a twos-complement representation. Note that this is equivalent to dividing the number <code class="code docutils literal notranslate"><span class="pre">x</span></code> by <code class="code docutils literal notranslate"><span class="pre">2^n</span></code>.
+<strong>Example:</strong> <code class="code docutils literal notranslate"><span class="pre">5&gt;&gt;2</span></code></p>
 </div>
 <div class="section" id="mathematical-functions">
 <h3><a class="toc-backref" href="#id14">Mathematical functions</a><a class="headerlink" href="#mathematical-functions" title="Permalink to this headline">¶</a></h3>
