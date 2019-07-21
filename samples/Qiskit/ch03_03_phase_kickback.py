@@ -4,34 +4,24 @@
 ##
 ## More samples like this can be found at http://oreilly-qc.github.io
 
-## This sample demonstrates root-of-not.
-
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, execute, Aer, IBMQ, BasicAer
 import math
 %matplotlib inline
 
-## Example 2-3: Root-of-not
+## Example 3-3: Phase Kickback
 # Set up the program
-reg = QuantumRegister(1, name='reg')
-reg_c = ClassicalRegister(1, name='regc')
-qc = QuantumCircuit(reg, reg_c)
+reg1 = QuantumRegister(2, name='reg1')
+reg2 = QuantumRegister(1, name='reg2')
+qc = QuantumCircuit(reg1, reg2)
 
-qc.reset(reg)          # write the value 0
-
-# One root-of-not gate
-qc.h(reg)
-qc.rz(math.radians(-90), reg)
-qc.h(reg)
-qc.barrier()
-# One root-of-not gate
-qc.h(reg)
-qc.rz(math.radians(-90), reg)
-qc.h(reg)
-qc.barrier()
+qc.h(reg1)         # put a into reg1 superposition of 0,1,2,3
+qc.cu1(math.pi/4, reg1[0], reg2)
+qc.cu1(math.pi/2, reg1[1], reg2)
 
 backend = BasicAer.get_backend('statevector_simulator')
 job = execute(qc, backend)
 result = job.result()
+
 outputstate = result.get_statevector(qc, decimals=3)
 print(outputstate)
 qc.draw()        # draw the circuit

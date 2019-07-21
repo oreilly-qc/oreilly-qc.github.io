@@ -2,7 +2,7 @@
 //   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
 //   O'Reilly Media
 
-// To run this online, go to http://oreilly-qc.github.io?p=5-2
+// To run this online, go to http://oreilly-qc.github.io?p=5-4
 
 // In this sample, b will be incremented, but ONLY
 // for terms where a is less than 3

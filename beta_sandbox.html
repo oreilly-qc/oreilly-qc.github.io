@@ -4,58 +4,130 @@
   <title>Programming Quantum Computers</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
-  <link rel="stylesheet" href="static/css/custom.css">
-  <link rel="stylesheet" href="static/css/fontawesome-all.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="https://oreilly-qc.github.io/external/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<!--   <script src="./external/jailed/lib/jailed.js" type="text/javascript" charset="utf-8"></script>
+ -->
+<script type="text/javascript">
+  window.onerror = function(message, source, lineno, colno, error)
+  { alert('Beta Error: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
+</script>
 
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
-  <script src="./external/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_bitfield.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_reg.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_int.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_basicops.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_widgets.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_staff.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_scriptpanel.js"></script>
+<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/beta/src/qcengine_panel.js"></script>
 
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_bitfield.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_reg.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_int.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_basicops.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_widgets.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_staff.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_scriptpanel.js"></script>
-<script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_panel.js"></script>
+<script type="text/javascript" src="https://oreilly-qc.github.io/sample_shortcuts.js"></script>
 
-<script type="text/javascript" src="./sample_shortcuts.js"></script>
+    <style>
+        .panel-resizable {
+            resize: vertical;
+          overflow: auto;
+        }
 
+        .ej-no-margin {
+          margin: 0px !important;
+/*          margin-bottom:50px !important;
+*/           padding: 0px !important;
+          padding-bottom:10px !important;
+        }
+
+        .xxxpad-left-only {
+          margin: 0px !important;
+/*           padding: 8px !important;
+           padding-left: 10px !important;
+           padding-right: 0px !important;
+           margin: 0px !important;
+           margin-left: 10px;
+*/        }
+        .xxxpad-right-only {
+           padding: 8px !important;
+/*           padding-left: 0px !important;
+           padding-right: 10px !important;
+           margin: 0px !important;
+           margin-right: 10px;
+*/        }
+        .less-padding {
+           padding: 0px !important;
+           margin: 0px !important;
+        }
+        .ej-btn-cstyle {
+           padding: 4px !important;
+        }
+
+        .editor {
+/*          background-color:#e5e5e5;
+          padding:0px;
+          margin-top:1%;
+          margin-left:1%;
+          margin-right:1%;
+          margin-bottom:1%;
+          float:bottom;
+          width:98%;
+*/          
+/*          resize:vertical;
+          overflow:auto;
+*/
+          overflow: hidden;
+          width:100%;
+          height:400px;
+        }
+
+         .info-button {
+         background-color: #1c87c9;
+         border: none;
+         color: white;
+         padding: 5px 8px;
+         text-align: center;
+         text-decoration: none;
+         display: inline-block;
+         font-size: 16px;
+         margin: 4px 2px;
+         cursor: pointer;
+         }
+    </style>
 
 </head>
-
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">Navbar</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link" href="docs/build/index.html">Docs</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="http://shop.oreilly.com/product/0636920167433.do">O'Reilly</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683">Buy Book</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+ <div id="info-buttons-div" style="position:absolute; left:0px; top:0px;">
+  <table cellpadding="10">
+    <tr>
+      <td colspan="3">
+        <img src="https://oreilly-qc.github.io/images/cs-title-bar-spacer.png" style="width:100%;" />
+      </td>
+    </tr>
+    <tr>
+      <td style="width:60%;">
+      </td>
+      <td>
+    <a href="https://shop.oreilly.com/product/0636920167433.do" class="info-button" target="_blank">Book Info</a>
+  </td>
+      <td>
+    <a href="https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683" class="info-button" target="_blank">Buy on Amazon</a>
+  </td>
+</tr>
+</table>
+</div>
+<div id="title-div">
+        <img src="https://oreilly-qc.github.io/images/cs-title-bar.jpg" width="100%" />
+</div>
+
+<br/>
 
 <div class="row">
   <div class="col-sm-6">
-      <div class="card">
-        <div class="card-header">
+    <div class="container-fluid pad-left-only">
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
 
           <div class="btn-group">
             <button type="button" class="btn btn-success" onclick="handle_run_button();">
@@ -70,27 +142,29 @@
                 </ul>
               </span>
             </div>
-            <div class="btn-group" id="engine_choice_span">
-                <button type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">
+            <div class="btn-group">
+              <span id="engine_choice_span">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 QCEngine <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
                 </ul>
+              </span>
             </div>
           </div>
 
 
           <div class="btn-group">
-            <button type="button" class="btn btn-small btn-outline-dark" onclick="click_editor_zoom(-2);">
-                <i class="fas fa-search-minus"></i>
+            <button type="button" class="btn btn-default" onclick="click_editor_zoom(-2);">
+              <span class="glyphicon glyphicon-zoom-out"></span>
             </button>
-            <button type="button" class="btn btn-small btn-outline-dark" onclick="click_editor_zoom(2);">
-                <i class="fas fa-search-plus"></i>
+            <button type="button" class="btn btn-default" onclick="click_editor_zoom(2);">
+              <span class="glyphicon glyphicon-zoom-in"></span>
             </button>
           </div>
 
-          <!-- <img src="images/icon_question.png" title="About QCEngine" height=20 onclick="do_aboutqce_modal();" /> -->
-          <!-- <img src="images/icon_cheatsheet.png" title="Command cheat sheet" height=20 onclick="do_cheatsheet_modal();" /> -->
+          <img src="https://oreilly-qc.github.io/images/icon_question.png" title="About QCEngine" height=20 onclick="do_aboutqce_modal();" />
+          <img src="https://oreilly-qc.github.io/images/icon_cheatsheet.png" title="Command cheat sheet" height=20 onclick="do_cheatsheet_modal();" />
 
           <span id="bug_span">
           </span>
@@ -100,7 +174,7 @@
           </span>
 
           <span id="sample_info_span" style="display:none;">
-            <img src="images/caution.png" height="28" />
+            <img src="https://oreilly-qc.github.io/images/caution.png" height="28" />
             <b>This sample takes a while to run.</b>
           </span>
           <span id="disable_info_span" style="display:none;">
@@ -111,8 +185,10 @@
           <div id="editor_div" class="editor"></div>
         </div>
       </div>
-  </div>
 
+
+    </div>
+  </div>
   <div class="col-sm-6">
     <div class="container-fluid pad-right-only">
       <div class="row">
@@ -252,7 +328,7 @@
 
 
                 <div id="staff_popin_div" class="right" style="resize: both; overflow: auto;">
-<!--                  <img src="images/click_tag.png" height="32" /><br/> -->
+<!--                  <img src="https://oreilly-qc.github.io/images/click_tag.png" height="32" /><br/> -->
                   <canvas id="draw_gate_canvas"></canvas>
                 </div>
 
@@ -279,24 +355,24 @@
                 </div>
                 <div class="btn-group">
                   <button type="button" class="btn btn-default ej-btn-cstyle">
-                    <img src="images/circ_style_00a.png" height="18" onclick="click_circle_style(0);"></span>
+                    <img src="https://oreilly-qc.github.io/images/circ_style_00a.png" height="18" onclick="click_circle_style(0);"></span>
                   </button>
                   <button type="button" class="btn btn-default ej-btn-cstyle">
-                    <img src="images/circ_style_01a.png" height="18" onclick="click_circle_style(1);"></span>
+                    <img src="https://oreilly-qc.github.io/images/circ_style_01a.png" height="18" onclick="click_circle_style(1);"></span>
                   </button>
                   <button type="button" class="btn btn-default ej-btn-cstyle">
-                    <img src="images/circ_style_10a.png" height="18" onclick="click_circle_style(2);"></span>
+                    <img src="https://oreilly-qc.github.io/images/circ_style_10a.png" height="18" onclick="click_circle_style(2);"></span>
                   </button>
                   <button type="button" class="btn btn-default ej-btn-cstyle">
-                    <img src="images/circ_style_11a.png" height="18" onclick="click_circle_style(3);"></span>
+                    <img src="https://oreilly-qc.github.io/images/circ_style_11a.png" height="18" onclick="click_circle_style(3);"></span>
                   </button>
                 </div>
                 <div class="btn-group">
                   <button type="button" class="btn btn-default ej-btn-cstyle">
-                    <img src="images/circ_fill_small.png" height="18" onclick="click_circle_fill(-1);"></span>
+                    <img src="https://oreilly-qc.github.io/images/circ_fill_small.png" height="18" onclick="click_circle_fill(-1);"></span>
                   </button>
                   <button type="button" class="btn btn-default ej-btn-cstyle">
-                    <img src="images/circ_fill_big.png" height="18" onclick="click_circle_fill(1);"></span>
+                    <img src="https://oreilly-qc.github.io/images/circ_fill_big.png" height="18" onclick="click_circle_fill(1);"></span>
                   </button>
                 </div>
 
@@ -497,11 +573,11 @@
   </div>
 </div>
 
-<div class="modal fade" id="OpenQASM_runModal" tabindex="-1" role="dialog" aria-labelledby="OpenQASM_runModalLabel" aria-hidden="true">
+<div class="modal fade" id="QASM_runModal" tabindex="-1" role="dialog" aria-labelledby="QASM_runModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="OpenQASM_runModalLabel">Running QASM Sample Code</h5>
+        <h5 class="modal-title" id="QASM_runModalLabel">Running QASM Sample Code</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -549,8 +625,37 @@
   </div>
 </div>
 
-
+<!-- <iframe id="sandbox_iframe" src="./sandbox.html" sandbox="allow-scripts"></iframe>
+ -->
 <script>
+
+window.addEventListener('message', function(event) { 
+    // IMPORTANT: Check the origin of the data! 
+    if (1 || ~event.origin.indexOf('http://yoursite.com')) { 
+        // The data has been sent from your site 
+
+        // The data sent with postMessage is stored in event.data 
+        console.log(event.data);
+        if (event.data.cmd == 'got_sample')
+        {
+            editor.focus();
+            editor.setValue(event.data.sample_code);
+            editor.gotoLine(0);
+            make_github_source_links();
+            make_engine_menu();
+        }
+        else if (event.data.cmd == 'get_sample_failed')
+        {
+          do_failed_load_sample(event.data.sample_url);
+        }
+    } else { 
+        // The data hasn't been sent from your site! 
+        // Be careful! Do not use it.
+        return; 
+    } 
+}); 
+
+
     var editor = ace.edit("editor_div");
     editor.session.setMode("ace/mode/javascript");
     editor.commands.addCommand({
@@ -740,6 +845,8 @@ function load_json_from_url(file_url)
 
 function load_code_from_url(file_url)
 {
+    parent.postMessage({cmd:'get_sample',sample_url:file_url}, '*');
+    return;
     var use_fetch = false; // fetch is not supported on Kindles
     if (use_fetch)
     {
@@ -810,7 +917,6 @@ function load_code_from_url(file_url)
 function do_failed_load_sample(file_url)
 {
   var code_str = '// The sample ' + file_url + '\n// could not be loaded.\n//\n';
-  code_str += '// (basic teleportation sample follows)\n\n';
   code_str += default_program;
   editor.focus();
   editor.setValue(code_str);
@@ -1021,12 +1127,6 @@ function make_github_source_links()
             wb_name = 'Qiskit Notebook';
             wb_link = current_engine.subdir + '/Chapter2-samples.ipynb';
         }
-        else if (sample.shortcut.startsWith('3-'))
-        {
-            wb_text = 'Download the complete Chapter3 ';
-            wb_name = 'Qiskit Notebook';
-            wb_link = current_engine.subdir + '/Chapter3-samples.ipynb';
-        }
         if (wb_text)
         {
             str += '<br/>';
@@ -1115,14 +1215,14 @@ function do_sample_special_cases(sample_str)
     if (sample_str == '4-2')
     {
         // Takes a while to eat a chocodile
-        var sstr = '<img src="images/caution.png" height="28" /><b>This sample takes a while to run.</b>';
+        var sstr = '<img src="https://oreilly-qc.github.io/images/caution.png" height="28" /><b>This sample takes a while to run.</b>';
         sample_info_span.innerHTML = sstr;
         sample_info_span.style.display = 'block';
     }
     else if (sample_str == '11-4' || sample_str == '11-5' || sample_str == '11-6')
     {
         // Takes a while to eat a chocodile
-        var sstr = '<img src="images/caution.png" height="28" /><b>This sample takes a while to run.</b>';
+        var sstr = '<img src="https://oreilly-qc.github.io/images/caution.png" height="28" /><b>This sample takes a while to run.</b>';
         sstr += '<br/>For a video demo of quantum supersampling, <a href="https://vimeo.com/180284417" target="_blank">chick here</a>.';
         console.log(sstr);
         sample_info_span.innerHTML = sstr;
@@ -1141,7 +1241,7 @@ function show_sim_disabled(do_reset)
     {
         var num_qubits = qc.qReg.numQubits;
         var size_gb = (Math.pow(2, num_qubits + 3) / (1024 * 1024 * 1024)).toFixed(1);
-        var sstr = '<img src="images/caution.png" height="28" />';
+        var sstr = '<img src="https://oreilly-qc.github.io/images/caution.png" height="28" />';
         sstr += '<b>The sim is disabled.</b> ('+num_qubits+' qubits would require '+size_gb+' GB of memory.)';
         span.innerHTML = sstr;
         span.style.display = 'block';
@@ -1209,7 +1309,7 @@ function show_bug(enable, err)
     {
         sstr += '<br/>';
         sstr += '<span style="color:darkred;">';
-        sstr += '<img src="images/icon_bug.png" height="20" /> '
+        sstr += '<img src="https://oreilly-qc.github.io/images/icon_bug.png" height="20" /> '
         sstr += '<b>Error:</b> ' + err.message;
         sstr += '</span>';
     }
@@ -1227,6 +1327,7 @@ function show_info(message)
     }
     span.innerHTML = sstr;
 }
+
 
 function run_script()
 {

@@ -4,34 +4,31 @@
 ##
 ## More samples like this can be found at http://oreilly-qc.github.io
 
-## This sample demonstrates root-of-not.
-
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, execute, Aer, IBMQ, BasicAer
 import math
 %matplotlib inline
 
-## Example 2-3: Root-of-not
+## Example 3-4: Swap Test
 # Set up the program
-reg = QuantumRegister(1, name='reg')
-reg_c = ClassicalRegister(1, name='regc')
-qc = QuantumCircuit(reg, reg_c)
+input1 = QuantumRegister(1, name='input1')
+input2 = QuantumRegister(1, name='input2')
+output = QuantumRegister(1, name='output')
+output_c = ClassicalRegister(1, name='outputc')
+qc = QuantumCircuit(input1, input2, output, output_c)
 
-qc.reset(reg)          # write the value 0
-
-# One root-of-not gate
-qc.h(reg)
-qc.rz(math.radians(-90), reg)
-qc.h(reg)
-qc.barrier()
-# One root-of-not gate
-qc.h(reg)
-qc.rz(math.radians(-90), reg)
-qc.h(reg)
-qc.barrier()
+qc.h(output)
+qc.cswap(output, input1, input2)
+qc.h(output)
+qc.x(output)
+qc.measure(output, output_c)
 
 backend = BasicAer.get_backend('statevector_simulator')
 job = execute(qc, backend)
 result = job.result()
+
+counts = result.get_counts(qc)
+print('counts:',counts)
+
 outputstate = result.get_statevector(qc, decimals=3)
 print(outputstate)
 qc.draw()        # draw the circuit

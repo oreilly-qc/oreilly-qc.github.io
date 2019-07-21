@@ -3,7 +3,7 @@
 #   O'Reilly Media
 
 # To run this sample, download Qiskit from https://qiskit.org/terra
-# To run the JS version in a browser, go to http://oreilly-qc.github.io?p=4-1
+# To run the JS version in a browser, go to http://oreilly-qc.github.io?p=4-1&e=qcengine
 
 import qiskit
 import math
