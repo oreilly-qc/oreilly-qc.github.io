@@ -18,7 +18,7 @@ The code window
 ^^^^^^^^^^^^^^^
 This is used to enter and run code. JavaScript entered in the text-box will be syntax-highlighted. The window can be resized using the handle on the bottom right. Code entered into this window describes a simulation to be run with QCEngine. Typically this code will setup and initialize a group of qubits, perform some operations on them, and then read the out. The simulation specified by the code is only actually run (using the CPU of your local machine) after the **Run Program** button is clicked (see below). 
 
-.. image:: _static/ui_codewindow.png
+.. image:: static/ui_codewindow.png
 
 * The **Run Program** button executes the code currently in the code window and consequently generates visualizations in the other UI windows described shortly.
 * The **Examples dropdown menu** (set to `Ex 2-1: Random qubit` in the above image) can be used to populate the code window with existing code samples from book, referred to by their Example number.
@@ -29,7 +29,7 @@ The circuit window
 ^^^^^^^^^^^^^^^^^^
 After the **Run Program** button has been clicked in the code window, the *circuit window* will display a circuit diagram for the code (assuming that the code is free from syntax errors).
 
-.. image:: _static/ui_circuitwindow.png
+.. image:: static/ui_circuitwindow.png
 
 * The **magnifier** buttons can be used to resize the circuit diagram within the circuit window. Using **ctrl-scroll** (holding `ctrl` whilst using a mouse/trackpad scroll gesture) also zooms in/out of the circuit diagram. 
 
@@ -40,7 +40,7 @@ The circle notation window
 
 This shows a visualization of the state of the QPU at a given point within the code. How to interpret circle notation visualizations is explained in detail in Chapter 2 of `Programming Quantum Computers <https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683>`_.
 
-.. image:: _static/ui_circwindow.png
+.. image:: static/ui_circwindow.png
 
 * The **magnifier** buttons can be used to resize the circle notation shown within the circle notation window. Using **ctrl-scroll** (holding `ctrl` whilst using a mouse/trackpad scroll gesture) also zooms in/out of the circle notation. 
 
@@ -54,7 +54,7 @@ The output window
 
 The output window displays output printed from a QCEngine program using the :code:`qc.print()` function. JavaScript output (for example, printed using :code:`console.log()`) will still appear in your web-browser's developer JavaScript console as normal.
 
-.. image:: _static/ui_outputwindow.png
+.. image:: static/ui_outputwindow.png
 
 * The **magnifier** buttons can be used to resize the text-size used in the output window. 
 
@@ -104,7 +104,7 @@ For example, the following code applies a :code:`HAD` (Hadamard) operation to ea
 
 This results in the following circuit:
 
-.. image:: _static/quickstart_allhads.png
+.. image:: static/quickstart_allhads.png
 
 We can similarly :code:`READ` all 8 qubits in the QPU using the :code:`qc.read()` method, and again passing no argument to stipulate that the single-qubit :code:`READ` operation should act on all qubits in the QPU:
 
@@ -118,7 +118,7 @@ We can similarly :code:`READ` all 8 qubits in the QPU using the :code:`qc.read()
 
 Producing the following circuit:
 
-.. image:: _static/quickstart_allhadreads.png
+.. image:: static/quickstart_allhadreads.png
 
 So far we've dealt only with single-qubit operations that act on *all* qubits in the QPU. What if we wanted to act a :code:`HAD` on only one specific qubit? Or what if we wanted to perform a multi-qubit operation on some specific subset of qubits? To do this we need a method for referencing qubits in the QPU.
 
@@ -142,7 +142,7 @@ Note that we employ these addressing methods using JavaScript's binary and hexad
 
 The above code-snippet corresponds to the following circuit:
 
-.. image:: _static/quickstart_hadreferencing.png
+.. image:: static/quickstart_hadreferencing.png
 
 We can also easily operate single-qubit operations on a select *subset* of qubits in a single method call using the JavaScript *binary or* operator :code:`|` in our referencing. For example, we can act :code:`qc.had()` on the first two lowest weight qubits in an 8 qubit QPU as follows:
 
@@ -160,7 +160,7 @@ We can also easily operate single-qubit operations on a select *subset* of qubit
 
 We can see the equivalent effects of these approaches in the circuit diagram produced by this code-snippet:
 
-.. image:: _static/quickstart_hadreferencing2qubits.png
+.. image:: static/quickstart_hadreferencing2qubits.png
 
 Note that as well as an argument referencing the qubits to act on, some single-qubit operations also take additional parameters. For example, :code:`qc.phase()` accepts an angle to rotate the relative phase of a qubit through (first argument) as well as a specification of what qubits to act on (second argument). This code performs a relative phase rotation of 45 degrees on the middle two qubits in a 4-qubit QPU:
 
@@ -173,7 +173,7 @@ Note that as well as an argument referencing the qubits to act on, some single-q
 
 This produces the following circuit:
 
-.. image:: _static/quickstart_phasereferencing.png
+.. image:: static/quickstart_phasereferencing.png
 
 Multi-qubit operations
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -189,7 +189,7 @@ The :code:`qc` object also has methods for performing multi-qubit operations. Th
 
 Which results in the following circuit:
 
-.. image:: _static/quickstart_cnotreferencing.png
+.. image:: static/quickstart_cnotreferencing.png
 
 We can easily specify more target or control qubits for a multi-qubit operation, using the referencing system we introduced above. For example, consider the following code-snippet employing a CNOT with two target and two control qubits and its associated circuit:
 
@@ -200,7 +200,7 @@ We can easily specify more target or control qubits for a multi-qubit operation,
     qc.write(5); 
     qc.cnot(0b1100, 0b0011); // Here we opt to reference our qubits using binary literals
 
-.. image:: _static/quickstart_cnotreferencingmulti.png
+.. image:: static/quickstart_cnotreferencingmulti.png
 
 Grouping qubits using :code:`qint`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -218,7 +218,7 @@ Sometimes we may wish to logically associate small subsets of a full QPU's set o
 
 We can see that the :code:`qint` object is created with two arguments. The first specifies a number of qubits to associate with the :code:`qint`.  Note that this number of qubits is *drawn from the stack available in the QPU, starting from the lowest weight first*. We can see this in the circuit diagram generated by this code-snippet:
 
-.. image:: _static/quickstart_qintsdefn.png
+.. image:: static/quickstart_qintsdefn.png
 
 This circuit diagram also shows that the second argument to the :code:`qint` object is a label, which is shown on circuit diagrams in the *circuit window* to help us identify different :code:`qint`'s that we have defined. You'll notice that we've also assigned our new :code:`qint` objects to JavaScript variables. This is crucial, as these new objects implement many single- and multi-qubit methods, allowing us to act on qubits in reference to these smaller :code:`qint` collections.
 
@@ -240,7 +240,7 @@ For example we can act a :code:`HAD` operation on the lowest weight qubit in eac
 
 Giving the following circuit:
 
-.. image:: _static/quickstart_qintshads.png
+.. image:: static/quickstart_qintshads.png
 
 :code:`qint` objects are especially useful because they allow us (as their name suggests), to allocate a set of qubits to represent an integer (or other datatype), which we can then use in arithmetic, like we would in conventional CPU code. For example, the :code:`qint` object implements a :code:`qint.add()` method, which takes another :code:`qint` object as an argument, and produces the circuit required to perform quantum addition (i.e. addition that respects superpositions of values) between the integer values encoded in the two :code:`qint` objects:
 
@@ -264,4 +264,4 @@ Giving the following circuit:
     myqint2.read() // Gives answer 17
 
 
-.. image:: _static/quickstart_qintsadd.png
+.. image:: static/quickstart_qintsadd.png
