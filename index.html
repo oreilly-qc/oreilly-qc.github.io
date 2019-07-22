@@ -456,6 +456,9 @@
             simulations as well as physical quantum computers.</li>
           <li><b><a href="https://www.microsoft.com/en-us/quantum/development-kit" target="_default">Microsoft QDK</a></b> - 
             A complete software development system for developing and running programs for quantum computers.</li>
+          <li><b><a href="https://www.dwavesys.com/take-leap" target="_default">D-Wave</a></b> - 
+            A physical QPU using a quantum annealing model. See Example 10-2 ("Kitten and Tiger") for a good example
+            of use. The D-Wave website provides a rich set of libraries and educational materials.</li>
           <li><b><a href="http://www.quantumplayground.net" target="_default">Google QC Playground</a></b> - 
             An approachable online environment for discovering quantum computing.</li>
         </ul>
@@ -562,6 +565,32 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-success" onclick="window.open('https://qiskit.org', '_blank');">Go to Qiskit.org</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="DWave_runModal" tabindex="-1" role="dialog" aria-labelledby="DWave_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="DWave_runModalLabel">Running DWave Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The D-Wave versions of examples in this book are written in Python, designed to run either in simulation or on
+        actual D-Wave hardware, using the D-Wave libraries at <a href="https://www.dwavesys.com/take-leap" target="_blank">https://www.dwavesys.com/take-leap</a>.
+        <br/><br/>
+        DWave provides a complete software development kit for working with their simulators and hardware.
+        <br/><br/>
+        To run this sample, go to the DWave site and create an account, and follow the installation instructions,
+        and run this Python script.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://www.dwavesys.com/take-leap', '_blank');">Go to the D-Wave website</button>
       </div>
     </div>
   </div>
@@ -969,6 +998,10 @@ function set_current_engine(engine)
     {
         editor.session.setMode("ace/mode/python");
     }
+    else if (current_engine.name == 'DWave')
+    {
+        editor.session.setMode("ace/mode/python");
+    }
     else if (current_engine.name == 'OpenQASM')
     {
         editor.session.setMode("ace/mode/plain_text");
@@ -1067,16 +1100,18 @@ function make_github_source_links()
             var sample_ok = engine.dir_list.includes(sample.sample_file);
             if (sample_ok)
             {
-                var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/blob/master/samples/';
-                link += engine.name + '/' + sample.sample_file + engine.suffix;
+                var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/blob/master/samples/' + engine.name;
+                link +=  '/' + sample.sample_file + engine.suffix;
                 str += '<b><a href="'+link+'" target="_blank">'+engine.link_name+'</a></b>';
                 if (i > 0)
                   valid_engine_list.push(i);
             }
             else
             {
-                str += '<span style="color:#aaa" title="This version is not implemented yet, but if you\'d like to add it, please contact us at octopus@qcengine.com">' + engine.link_name + '</span>';
-            }
+                var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/tree/master/samples/' + engine.name;
+                str += '<span style="color:#aaa" title="This version is not implemented yet, but if you\'d like to add it, please contact us at octopus@qcengine.com">';
+                str += '<b><a href="'+link+'" target="_blank">'+engine.link_name+'</a></b></span>';
+           }
         }
     }
 
