@@ -1,6 +1,7 @@
 ## Programming Quantum Computers
 ##   by Eric Johnston, Nic Harrigan and Mercedes Gimeno-Segovia
 ##   O'Reilly Media
+## Book info: http://shop.oreilly.com/product/0636920167433.do
 
 ## To run this using a D-Wave system, go to https://www.dwavesys.com/take-leap
 ## To run this online in QCEngine, go to http://oreilly-qc.github.io?p=10-2
@@ -33,6 +34,7 @@ bqm = dwavebinarycsp.stitch(csp)
 sampler = ExactSolver()
 response = sampler.sample(bqm)
 
+## Interpret the results
 lowest_energy = None
 boxA_contains = None
 boxB_contains = None
