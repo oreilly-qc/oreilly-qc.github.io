@@ -4,17 +4,10 @@
   <title>Programming Quantum Computers</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
-  <link rel="stylesheet" href="static/css/custom.css">
-  <link rel="stylesheet" href="static/css/fontawesome-all.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script src="./external/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 
 <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_bitfield.js"></script>
@@ -28,34 +21,107 @@
 
 <script type="text/javascript" src="./sample_shortcuts.js"></script>
 
+    <style>
+        .panel-resizable {
+            resize: vertical;
+          overflow: auto;
+        }
+
+        .ej-no-margin {
+          margin: 0px !important;
+/*          margin-bottom:50px !important;
+*/           padding: 0px !important;
+          padding-bottom:10px !important;
+        }
+
+        .xxxpad-left-only {
+          margin: 0px !important;
+/*           padding: 8px !important;
+           padding-left: 10px !important;
+           padding-right: 0px !important;
+           margin: 0px !important;
+           margin-left: 10px;
+*/        }
+        .xxxpad-right-only {
+           padding: 8px !important;
+/*           padding-left: 0px !important;
+           padding-right: 10px !important;
+           margin: 0px !important;
+           margin-right: 10px;
+*/        }
+        .less-padding {
+           padding: 0px !important;
+           margin: 0px !important;
+        }
+        .ej-btn-cstyle {
+           padding: 4px !important;
+        }
+
+        .editor {
+/*          background-color:#e5e5e5;
+          padding:0px;
+          margin-top:1%;
+          margin-left:1%;
+          margin-right:1%;
+          margin-bottom:1%;
+          float:bottom;
+          width:98%;
+*/          
+/*          resize:vertical;
+          overflow:auto;
+*/
+          overflow: hidden;
+          width:100%;
+          height:400px;
+        }
+
+         .info-button {
+         background-color: #1c87c9;
+         border: none;
+         color: white;
+         padding: 5px 8px;
+         text-align: center;
+         text-decoration: none;
+         display: inline-block;
+         font-size: 16px;
+         margin: 4px 2px;
+         cursor: pointer;
+         }
+    </style>
 
 </head>
-
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">Navbar</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link" href="docs/build/index.html">Docs</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="http://shop.oreilly.com/product/0636920167433.do">O'Reilly</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683">Buy Book</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+ <div id="info-buttons-div" style="position:absolute; left:0px; top:0px;">
+  <table cellpadding="10">
+    <tr>
+      <td colspan="3">
+        <img src="images/cs-title-bar-spacer.png" style="width:100%;" />
+      </td>
+    </tr>
+    <tr>
+      <td style="width:60%;">
+      </td>
+      <td>
+    <a href="https://shop.oreilly.com/product/0636920167433.do" class="info-button" target="_blank">Book Info</a>
+  </td>
+      <td>
+    <a href="https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683" class="info-button" target="_blank">Buy on Amazon</a>
+  </td>
+</tr>
+</table>
+</div>
+<div id="title-div">
+        <img src="images/cs-title-bar.jpg" width="100%" />
+</div>
+
+<br/>
 
 <div class="row">
   <div class="col-sm-6">
-      <div class="card">
-        <div class="card-header">
+    <div class="container-fluid pad-left-only">
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
 
           <div class="btn-group">
             <button type="button" class="btn btn-success" onclick="handle_run_button();">
@@ -70,27 +136,29 @@
                 </ul>
               </span>
             </div>
-            <div class="btn-group" id="engine_choice_span">
-                <button type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">
+            <div class="btn-group">
+              <span id="engine_choice_span">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 QCEngine <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
                 </ul>
+              </span>
             </div>
           </div>
 
 
           <div class="btn-group">
-            <button type="button" class="btn btn-small btn-outline-dark" onclick="click_editor_zoom(-2);">
-                <i class="fas fa-search-minus"></i>
+            <button type="button" class="btn btn-default" onclick="click_editor_zoom(-2);">
+              <span class="glyphicon glyphicon-zoom-out"></span>
             </button>
-            <button type="button" class="btn btn-small btn-outline-dark" onclick="click_editor_zoom(2);">
-                <i class="fas fa-search-plus"></i>
+            <button type="button" class="btn btn-default" onclick="click_editor_zoom(2);">
+              <span class="glyphicon glyphicon-zoom-in"></span>
             </button>
           </div>
 
-          <!-- <img src="images/icon_question.png" title="About QCEngine" height=20 onclick="do_aboutqce_modal();" /> -->
-          <!-- <img src="images/icon_cheatsheet.png" title="Command cheat sheet" height=20 onclick="do_cheatsheet_modal();" /> -->
+          <img src="images/icon_question.png" title="About Sim Engines" height=20 onclick="do_aboutqce_modal();" />
+          <img src="images/icon_docs.png" title="QCEngine Docs" height=20 onclick="do_cheatsheet_modal();" />
 
           <span id="bug_span">
           </span>
@@ -111,8 +179,10 @@
           <div id="editor_div" class="editor"></div>
         </div>
       </div>
-  </div>
 
+
+    </div>
+  </div>
   <div class="col-sm-6">
     <div class="container-fluid pad-right-only">
       <div class="row">
@@ -371,7 +441,7 @@
         It will let you run JavaScript code, simulating the quantum computing as
         though you had a real QC, up to about 25 qubits (depending on your browser).
         The best way to get familiar with QCEngine is to run the book samples on
-        this page.
+        this page, along with the <b><a href="./docs/build/index.html" target="_blank">QCEngine Docs</a></b>.
         <br/>
         <br/>
         For more serious development tasks, there are many other simulation engines available:
@@ -976,8 +1046,9 @@ function do_aboutqce_modal()
 
 function do_cheatsheet_modal()
 {
-    var options = null;
-    var val = $('#CheatSheet_runModal').modal(options);
+    // var options = null;
+    // var val = $('#CheatSheet_runModal').modal(options);
+    window.open('./docs/build/index.html', '_blank');
 }
 
 function make_github_source_links()
