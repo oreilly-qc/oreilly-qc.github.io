@@ -157,8 +157,8 @@
             </button>
           </div>
 
-          <img src="images/icon_question.png" title="About QCEngine" height=20 onclick="do_aboutqce_modal();" />
-          <img src="images/icon_cheatsheet.png" title="Command cheat sheet" height=20 onclick="do_cheatsheet_modal();" />
+          <img src="images/icon_question.png" title="About Sim Engines" height=20 onclick="do_aboutqce_modal();" />
+          <img src="images/icon_docs.png" title="QCEngine Docs" height=20 onclick="do_cheatsheet_modal();" />
 
           <span id="bug_span">
           </span>
@@ -441,7 +441,7 @@
         It will let you run JavaScript code, simulating the quantum computing as
         though you had a real QC, up to about 25 qubits (depending on your browser).
         The best way to get familiar with QCEngine is to run the book samples on
-        this page.
+        this page, along with the <b><a href="./docs/build/index.html" target="_blank">QCEngine Docs</a></b>.
         <br/>
         <br/>
         For more serious development tasks, there are many other simulation engines available:
@@ -1046,8 +1046,9 @@ function do_aboutqce_modal()
 
 function do_cheatsheet_modal()
 {
-    var options = null;
-    var val = $('#CheatSheet_runModal').modal(options);
+    // var options = null;
+    // var val = $('#CheatSheet_runModal').modal(options);
+    window.open('./docs/build/index.html', '_blank');
 }
 
 function make_github_source_links()
