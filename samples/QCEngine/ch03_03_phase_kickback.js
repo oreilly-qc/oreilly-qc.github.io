@@ -6,8 +6,8 @@
 
 qc.reset(3);
 // Create two registers
-reg1 = qint.new(2, 'Register 1');
-reg2 = qint.new(1, 'Register 2');
+var reg1 = qint.new(2, 'Register 1');
+var reg2 = qint.new(1, 'Register 2');
 reg1.write(0);
 reg2.write(1);
 // Place the first register in superposition

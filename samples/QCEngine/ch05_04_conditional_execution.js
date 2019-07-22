@@ -8,10 +8,10 @@
 // for terms where a is less than 3
 
 // Initialize
-num_qubits = 6;
+var num_qubits = 6;
 qc.reset(num_qubits);
-a = qint.new(3, 'a');
-b = qint.new(3, 'b');
+var a = qint.new(3, 'a');
+var b = qint.new(3, 'b');
 
 // prepare
 qc.label('a = (1, 5)');

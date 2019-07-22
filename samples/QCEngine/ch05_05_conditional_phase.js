@@ -6,10 +6,10 @@
 
 // Initialize
 qc_options.color_by_phase = true;
-num_qubits = 5;
+var num_qubits = 5;
 qc.reset(num_qubits);
-a = qint.new(3, 'a');
-b = qint.new(2, 'b');
+var a = qint.new(3, 'a');
+var b = qint.new(2, 'b');
 // prepare
 qc.label('a = 0,1,2,3');
 a.write(0);

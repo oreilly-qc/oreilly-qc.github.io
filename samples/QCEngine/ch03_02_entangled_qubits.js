@@ -5,8 +5,8 @@
 // To run this online, go to http://oreilly-qc.github.io?p=3-2
 
 qc.reset(2);
-a = qint.new(1, 'a');
-b = qint.new(1, 'b');
+var a = qint.new(1, 'a');
+var b = qint.new(1, 'b');
 qc.write(0);
 qc.nop();
 
@@ -16,7 +16,7 @@ b.cnot(a);         // Entangle
 qc.label();
 
 qc.nop();
-a_result = a.read();  // The two bits will be random,
-b_result = b.read();  // but always the same.
+var a_result = a.read();  // The two bits will be random,
+var b_result = b.read();  // but always the same.
 qc.print(a_result);
 qc.print(b_result);

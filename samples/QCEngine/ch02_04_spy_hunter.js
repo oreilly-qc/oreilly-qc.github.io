@@ -7,9 +7,9 @@
 
 qc.reset(3);
 qc.discard();
-a = qint.new(1, 'alice');
-fiber = qint.new(1, 'fiber');
-b = qint.new(1, 'bob');
+var a = qint.new(1, 'alice');
+var fiber = qint.new(1, 'fiber');
+var b = qint.new(1, 'bob');
 
 function random_bit(q) {
     q.write(0);
@@ -19,8 +19,8 @@ function random_bit(q) {
 
 // Generate two random bits
 qc.label('get two random bits');
-send_had = random_bit(a);
-send_value = random_bit(a);
+var send_had = random_bit(a);
+var send_value = random_bit(a);
 qc.label('');
 
 // Prepare Alice's qubit
@@ -62,7 +62,7 @@ if (spy_is_present)
 }
 
 // Receive the qubit!
-recv_had = random_bit(b);
+var recv_had = random_bit(b);
 fiber.exchange(b);
 qc.label('apply had');
 qc.nop();

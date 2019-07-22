@@ -27,7 +27,7 @@ for (var i = 0; i < number_of_iterations; ++i)
 
     reg.Grover();
 
-    prob = 0;
+    var prob = 0;
     for (var j = 0; j < n2f.length; ++j)
     {
     // Peek at the probability

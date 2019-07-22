@@ -5,10 +5,10 @@
 // To run this online, go to http://oreilly-qc.github.io?p=5-3
 
 // Initialize
-num_qubits = 6;
+var num_qubits = 6;
 qc.reset(num_qubits);
-a = qint.new(4, 'a');
-b = qint.new(2, 'b');
+var a = qint.new(4, 'a');
+var b = qint.new(2, 'b');
 // prepare
 qc.label('prepare');
 a.write(1);

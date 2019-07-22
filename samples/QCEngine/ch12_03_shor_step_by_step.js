@@ -78,7 +78,7 @@ function check_result(N, factor_candidates)
 function ShorLogic(N, repeat_period_candidates, coprime)
 {
     qc.print('Repeat period candidates: '+repeat_period_candidates+'\n');
-    factor_candidates = [];
+    var factor_candidates = [];
     for (var i = 0; i < repeat_period_candidates.length; ++i)
     {
         var repeat_period = repeat_period_candidates[i];
@@ -135,15 +135,15 @@ function ShorQPU_WithoutModulo(N, precision_bits, coprime)
 {
     var N_bits = 1;
     while ((1 << N_bits) < N)
-    N_bits++;
+        N_bits++;
     if (N != 15) // For this implementation, numbers other than 15 need an extra bit
-    N_bits++;
+        N_bits++;
     var total_bits = N_bits + precision_bits;
 
     // Set up the QPU and the working registers
     qc.reset(total_bits);
-    num = qint.new(N_bits, 'work');
-    precision = qint.new(precision_bits, 'precision');
+    var num = qint.new(N_bits, 'work');
+    var precision = qint.new(precision_bits, 'precision');
 
     qc.label('init');
     num.write(1);
@@ -192,9 +192,9 @@ function ShorQPU_WithModulo(N, precision_bits, coprime)
 
     // Set up the QPU and the working registers
     qc.reset(total_bits);
-    num = qint.new(N_bits, 'work');
-    precision = qint.new(precision_bits, 'precision');
-    scratch = qint.new(1, 'scratch');
+    var num = qint.new(N_bits, 'work');
+    var precision = qint.new(precision_bits, 'precision');
+    var scratch = qint.new(1, 'scratch');
 
     qc.label('init');
     num.write(1);
@@ -250,15 +250,17 @@ function estimate_num_spikes(spike, range)
 {
     if (spike < range / 2)
         spike = range - spike;
-    best_error = 1.0;
-    e0 = 0, e1 = 0, e2 = 0;
-    actual = spike / range;
-    candidates = []
+    var best_error = 1.0;
+    var e0 = 0;
+    var e1 = 0;
+    var e2 = 0;
+    var actual = spike / range;
+    var candidates = []
     for (denom = 1.0; denom < spike; ++denom)
     {
-        numerator = Math.round(denom * actual);
-        estimated = numerator / denom;
-        error = Math.abs(estimated - actual);
+        var numerator = Math.round(denom * actual);
+        var estimated = numerator / denom;
+        var error = Math.abs(estimated - actual);
         e0 = e1;
         e1 = e2;
         e2 = error;
@@ -266,7 +268,7 @@ function estimate_num_spikes(spike, range)
         // current best error
         if (e1 <= best_error && e1 < e0 && e1 < e2)
         {
-            repeat_period = denom - 1;
+            var repeat_period = denom - 1;
             candidates.push(repeat_period);
             best_error = e1;
         }
