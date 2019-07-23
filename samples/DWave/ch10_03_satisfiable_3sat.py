@@ -35,8 +35,7 @@ csp.add_constraint(gates.or_gate(['a', 'c', 'a_or_c']))         # OR gate
 csp.add_constraint(gates.and_gate(['a_or_b', 'na_or_c', 'and1'])) # AND gate
 csp.add_constraint(gates.and_gate(['nb_or_nc', 'a_or_c', 'and2'])) # AND gate
 csp.add_constraint(gates.and_gate(['and1', 'and2', 'result'])) # AND gate
-csp.add_constraint(operator.eq, ['result', 'one'])    # Specify that the result should be one
-csp.fix_variable('one', 1)   # We could fix 'result' directly, but this is handy for printing
+csp.fix_variable('result', 1)   # Specify that the result should be one
 bqm = dwavebinarycsp.stitch(csp)
 
 ## Run the solver
@@ -47,15 +46,21 @@ response = sampler.sample(bqm)
 for datum in response.data(['sample', 'energy']):
     print(datum.sample, datum.energy)
 
+def check_result(a, b, c):
+    # Check to make sure a result is valid
+    return (a or b) and (not a or c) and (not b or not c) and (a or c)
+
 ## Interpret the results
 ## Find the lowest-energy sample
 min_energy = min([x.energy for x in response.data(['energy'])])
 winners = [x for x in response.data(['sample', 'energy']) if x.energy == min_energy]
-sat_winners = [x for x in winners if x.sample['result'] == 1]
+sat_winners = [x for x in winners if check_result(x.sample['a'], x.sample['b'], x.sample['c'])]
+
 print('--------------------------------')
 if len(sat_winners) == len(winners):
     print('  Success! Condition satisfied with energy {}. This is satisfiable.'.format(min_energy))
     for w in winners:
         print('      energy {}: {}'.format(w.energy, w.sample))
 else:
-    print('Failure: {} lowest-energy samples did not satisfy result=1. This is not satisfiable.'.format(len(winners) - len(sat_winners)))
+    print('Failure: {} of {} lowest-energy samples did not satisfy result=1. This is not satisfiable.'.format(len(winners) - len(sat_winners), len(winners)))
+
