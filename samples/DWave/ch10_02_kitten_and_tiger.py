@@ -28,27 +28,27 @@ csp.add_constraint(gates.or_gate(['boxA', 'boxB', 'AorB']))         # OR gate
 csp.add_constraint(operator.ne, ['boxA', 'notA'])                   # NOT gate
 csp.add_constraint(gates.xor_gate(['AorB', 'notA', 'notAxorAorB'])) # XOR gate
 csp.add_constraint(operator.ne, ['notAxorAorB', 'result'])          # NOT gate
+csp.add_constraint(operator.eq, ['result', 'one'])    # Specify that the result should be one
+csp.fix_variable('one', 1)   # We could fix 'result' directly, but this is handy for printing
 bqm = dwavebinarycsp.stitch(csp)
 
 ## Run the solver
 sampler = ExactSolver()
 response = sampler.sample(bqm)
 
-## Interpret the results
-lowest_energy = None
-boxA_contains = None
-boxB_contains = None
-print('All results: --------------------------------')
-for datum in response.data(['sample', 'energy']):     
+## Print all of the results
+for datum in response.data(['sample', 'energy']):
     print(datum.sample, datum.energy)
-    success = datum.sample['result']
-    if success:
-        if lowest_energy is None or datum.energy < lowest_energy:
-            lowest_energy = datum.energy
-            boxA_contains = 'kitten' if datum.sample['boxA'] else 'tiger'
-            boxB_contains = 'kitten' if datum.sample['boxB'] else 'tiger'
 
-print('Box A contains a {}!'.format(boxA_contains))
-print('Box B contains a {}!'.format(boxB_contains))
-
+## Interpret the results
+## Find the lowest-energy sample
+print('--------------------------------')
+winner = min([(x.energy, x.sample) for x in response.data(['sample', 'energy'])])
+if winner[1]['result'] == 1:
+    print('  Success! Condition satisfied with energy {}.'.format(winner[0]))
+    print('      energy {}: {}'.format(winner[0], winner[1]))
+    print('    Box A contains a {}!'.format('kitten' if winner[1]['boxA'] == 1 else 'tiger'))
+    print('    Box B contains a {}!'.format('kitten' if winner[1]['boxB'] == 1 else 'tiger'))
+else:
+    print('Failure: Lowest-energy sample did not satisfy result=1')
 

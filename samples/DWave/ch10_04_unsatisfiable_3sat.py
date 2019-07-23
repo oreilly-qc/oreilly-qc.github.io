@@ -41,33 +41,28 @@ csp.add_constraint(gates.and_gate(['a_or_b', 'na_or_c', 'and1'])) # AND gate
 csp.add_constraint(gates.and_gate(['nb_or_nc', 'a_or_c', 'and2'])) # AND gate
 csp.add_constraint(gates.and_gate(['and1', 'and2', 'and12'])) # AND gate
 csp.add_constraint(gates.and_gate(['and12', 'b', 'result'])) # AND gate
+csp.add_constraint(operator.eq, ['result', 'one'])    # Specify that the result should be one
+csp.fix_variable('one', 1)   # We could fix 'result' directly, but this is handy for printing
 bqm = dwavebinarycsp.stitch(csp)
 
 ## Run the solver
 sampler = ExactSolver()
 response = sampler.sample(bqm)
 
-## Interpret the results
-lowest_energy = None
-lowest_success_energy = None
-success_sample = None
-print('All results: --------------------------------')
-for datum in response.data(['sample', 'energy']):     
+## Print all of the results
+for datum in response.data(['sample', 'energy']):
     print(datum.sample, datum.energy)
-    success = datum.sample['result']
-    if lowest_energy is None or datum.energy < lowest_energy:
-        lowest_energy = datum.energy
-    if success:
-        if lowest_success_energy is None or datum.energy < lowest_success_energy:
-            lowest_success_energy = datum.energy
-            success_sample = datum.sample
 
+## Interpret the results
+## Find the lowest-energy sample
+min_energy = min([x.energy for x in response.data(['energy'])])
+winners = [x for x in response.data(['sample', 'energy']) if x.energy == min_energy]
+sat_winners = [x for x in winners if x.sample['result'] == 1]
 print('--------------------------------')
-if lowest_success_energy <= lowest_energy:
-    print('  Success! Solution found at lowest energy. This is satisfiable.')
-    print(success_sample, lowest_success_energy)
+if len(sat_winners) == len(winners):
+    print('  Success! Condition satisfied with energy {}. This is satisfiable.'.format(min_energy))
+    for w in winners:
+        print('      energy {}: {}'.format(w.energy, w.sample))
 else:
-    print('  Faulure. No solutions found at lowest energy. This is not satisfiable.')
-
-
+    print('Failure: {} lowest-energy samples did not satisfy result=1. This is not satisfiable.'.format(len(winners) - len(sat_winners)))
 
