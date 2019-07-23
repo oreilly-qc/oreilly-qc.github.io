@@ -10,17 +10,17 @@ qc.reset(3);
 var alice = qint.new(1, 'alice');
 var ep    = qint.new(1, 'ep');
 var bob   = qint.new(1, 'bob');
+var a1 = 0;
+var a2 = 0;
 
-function main()
-{
-    // This will work with entangle() and alice_prep() in either order.
-    // Try swapping them to verify this.
-    entangle();
-    alice_prep();
-    alice_send();
-    bob_receive();
-    bob_verify();
-}
+// This will work with entangle() and alice_prep() in either order.
+// Try swapping them to verify this.
+entangle();
+alice_prep();
+alice_send();
+bob_receive();
+bob_verify();
+
 
 function entangle()
 {
@@ -101,7 +101,4 @@ function bob_verify()
     qc.label('');
     qc.nop();
 }
-
-// Kick it
-main();
 

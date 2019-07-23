@@ -14,7 +14,7 @@ function phase_est(q_in, q_out, cont_u)
     q_out.had();
 
     // Apply conditional powers of u
-    for (j = 0; j < q_out.numBits; j++)
+    for (var j = 0; j < q_out.numBits; j++)
         cont_u(q_out, q_in, 1 << j);
 
     // Inverse QFT on output register

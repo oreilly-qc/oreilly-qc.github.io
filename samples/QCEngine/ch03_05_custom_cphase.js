@@ -4,7 +4,7 @@
 
 // To run this online, go to http://oreilly-qc.github.io?p=3-5
 
-theta = 90;
+var theta = 90;
 qc.reset(2);
 qc.write(0);
 qc.hadamard();

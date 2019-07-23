@@ -7,9 +7,9 @@
 // This sample demonstrates increment and decrement of
 // integers in superposition.
 
-num_qubits = 4;
+var num_qubits = 4;
 qc.reset(num_qubits);
-a = qint.new(num_qubits, 'a');
+var a = qint.new(num_qubits, 'a');
 
 // prepare
 qc.label('prepare')

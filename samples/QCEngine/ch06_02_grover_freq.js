@@ -26,7 +26,7 @@ for (var i = 0; i < number_of_iterations; ++i)
     reg.Grover();
 
     // Peek at the probability
-    prob = reg.peekProbability(number_to_flip);
+    var prob = reg.peekProbability(number_to_flip);
     qc.print('Iter '+i+': probability = '+prob+'\n');
 
     // just space it out visually

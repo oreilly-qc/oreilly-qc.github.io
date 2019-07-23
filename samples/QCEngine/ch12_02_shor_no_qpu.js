@@ -14,8 +14,8 @@
 
 function ShorNoQPU(N, precision_bits, coprime) {
     // Classical replacement for the quantum part of Shor
-    work = 1;
-    max_loops = Math.pow(2, precision_bits);
+    var work = 1;
+    var max_loops = Math.pow(2, precision_bits);
     for (iter = 0; iter < max_loops; ++iter) {
         work = (work * coprime) % N;
         if (work == 1) // found the repeat
@@ -77,7 +77,7 @@ function check_result(N, factor_candidates)
 function ShorLogic(N, repeat_period_candidates, coprime)
 {
     qc.print('Repeat period candidates: '+repeat_period_candidates+'\n');
-    factor_candidates = [];
+    var factor_candidates = [];
     for (var i = 0; i < repeat_period_candidates.length; ++i)
     {
         var repeat_period = repeat_period_candidates[i];
@@ -94,15 +94,17 @@ function estimate_num_spikes(spike, range)
 {
     if (spike < range / 2)
         spike = range - spike;
-    best_error = 1.0;
-    e0 = 0, e1 = 0, e2 = 0;
-    actual = spike / range;
-    candidates = []
+    var best_error = 1.0;
+    var e0 = 0;
+    var e1 = 0;
+    var e2 = 0;
+    var actual = spike / range;
+    var candidates = []
     for (denom = 1.0; denom < spike; ++denom)
     {
-        numerator = Math.round(denom * actual);
-        estimated = numerator / denom;
-        error = Math.abs(estimated - actual);
+        var numerator = Math.round(denom * actual);
+        var estimated = numerator / denom;
+        var error = Math.abs(estimated - actual);
         e0 = e1;
         e1 = e2;
         e2 = error;
@@ -110,7 +112,7 @@ function estimate_num_spikes(spike, range)
         // current best error
         if (e1 <= best_error && e1 < e0 && e1 < e2)
         {
-            repeat_period = denom - 1;
+            var repeat_period = denom - 1;
             candidates.push(repeat_period);
             best_error = e1;
         }
