@@ -15,15 +15,15 @@ qc = QuantumCircuit(reg)
 
 theta = math.pi / 2
 qc.h(reg)
-qc.u1(theta/2, reg[1])
+qc.rz(theta/2, reg[1])
 qc.cx(reg[0], reg[1])
-qc.u1(-theta/2, reg[1])
+qc.rz(-theta/2, reg[1])
 qc.cx(reg[0], reg[1])
-qc.u1(-theta/2, reg[0])
+qc.rz(-theta/2, reg[0])
 
 qc.barrier()
 
-qc.cu1(theta, reg[0], reg[1])
+qc.crz(theta, reg[0], reg[1])
 
 backend = BasicAer.get_backend('statevector_simulator')
 job = execute(qc, backend)
