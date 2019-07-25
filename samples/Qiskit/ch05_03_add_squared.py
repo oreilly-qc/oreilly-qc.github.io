@@ -11,39 +11,56 @@ from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, execute, 
 import math
 %matplotlib inline
 
-## Example 5-1: Increment and Decrement
+## Example 5-3: Add squared value of one qint to another
 
 ## Note that this looks different from the gates in the book, because
 ## we're building the operations from Toffoli gates
 
 # Set up the program
 a = QuantumRegister(4, name='a')
-scratch = QuantumRegister(1, name='scratch')
-qc = QuantumCircuit(a, scratch)
+b = QuantumRegister(2, name='b')
+scratch = QuantumRegister(2, name='scratch')
+qc = QuantumCircuit(a, b, scratch)
 
 def main():
     ## initialization
     qc.x(a[0])
     qc.h(a[2])
     qc.rz(math.radians(45), a[2])
+    qc.x(b[0])
+    qc.h(b[1])
+    qc.rz(math.radians(90), b[1])
     qc.barrier()
     
     ## Increment
-    add_int(a, 1)
-    qc.barrier()
-    ## Decrement
-    add_int(a, -1)
+    add_squared_qint(a, b)
 
 ###############################################
 ## Some utility functions
 
-def add_int(qdest, rhs):
+def add_squared_qint(qdest, rhs, condition_qubits=None):
+    if condition_qubits is None:
+        condition_qubits = []
+    for bit in range(len(rhs)):
+        slideMask = list(set(condition_qubits + [rhs[bit]]))
+        add_qint(qdest, rhs, slideMask, bit);
+
+def add_qint(qdest, rhs, condition_qubits=None, shiftRHS=0):
+    if condition_qubits is None:
+        condition_qubits = []
+    for bit in range(len(rhs)):
+        add_int(qdest, 1 << bit, list(set([rhs[bit]] + condition_qubits)), shiftRHS)
+
+def add_int(qdest, rhs, condition_qubits=None, shiftRHS=0):
+    if condition_qubits is None:
+        condition_qubits = []
     reverse_to_subtract = False
     if rhs == 0:
         return
     elif rhs < 0:
         rhs = -rhs
         reverse_to_subtract = True
+    rhs <<= shiftRHS
     ops = []
     add_val = int(rhs)
     condition_mask = (1 << len(qdest)) - 1
@@ -62,7 +79,7 @@ def add_int(qdest, rhs):
     if reverse_to_subtract:
         ops.reverse()
     for inst in ops:
-        op_qubits = []
+        op_qubits = [x for x in condition_qubits]
         mask = 1
         for i in range(len(qdest)):
             if inst[1] & (1 << i):

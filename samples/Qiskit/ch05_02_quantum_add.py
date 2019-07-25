@@ -4,7 +4,7 @@
 ##
 ## More samples like this can be found at http://oreilly-qc.github.io
 ##
-## A complete notebook of all Chapter 4 samples (including this one) can be found at
+## A complete notebook of all Chapter 5 samples (including this one) can be found at
 ##  https://github.com/oreilly-qc/oreilly-qc.github.io/tree/master/samples/Qiskit
 
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, execute, Aer, IBMQ, BasicAer
