@@ -5,8 +5,7 @@
 // To run this online, go to http://oreilly-qc.github.io?p=6-3
 
 var n2f = [0,1,2];
-var number_to_flip = 3;
-var number_of_iterations = 50;
+var number_of_iterations = 5;
 
 var num_qubits = 4;
 qc.reset(num_qubits);
