@@ -11,39 +11,50 @@ from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, execute, 
 import math
 %matplotlib inline
 
-## Example 5-2: Adding Two Quantum Integers
+## Example 5-4: Quantum conditional execution
 
 ## Note that this looks different from the gates in the book, because
 ## we're building the operations from Toffoli gates
 
 # Set up the program
-a = QuantumRegister(4, name='a')
-b = QuantumRegister(2, name='b')
-scratch = QuantumRegister(2, name='scratch')
+a = QuantumRegister(3, name='a')
+b = QuantumRegister(3, name='b')
+scratch = QuantumRegister(1, name='scratch')
 qc = QuantumCircuit(a, b, scratch)
 
 def main():
     ## initialization
     qc.x(a[0])
     qc.h(a[2])
-    qc.rz(math.radians(45), a[2])
     qc.x(b[0])
     qc.h(b[1])
     qc.rz(math.radians(90), b[1])
     qc.barrier()
     
     ## Increment
-    add_qint(a, b)
+    add_int(a, -3)
+    qc.barrier()
+    add_int(b, 1, [a[2]])
+    qc.barrier()
+    add_int(a, 3)
 
 ###############################################
 ## Some utility functions
 
-def add_qint(qdest, rhs):
+def add_squared_qint(qdest, rhs, condition_qubits=None):
+    if condition_qubits is None:
+        condition_qubits = []
     for bit in range(len(rhs)):
-        add_int(qdest, 1 << bit, [rhs[bit]])
+        slideMask = list(set(condition_qubits + [rhs[bit]]))
+        add_qint(qdest, rhs, slideMask, bit);
 
+def add_qint(qdest, rhs, condition_qubits=None, shiftRHS=0):
+    if condition_qubits is None:
+        condition_qubits = []
+    for bit in range(len(rhs)):
+        add_int(qdest, 1 << bit, list(set([rhs[bit]] + condition_qubits)), shiftRHS)
 
-def add_int(qdest, rhs, condition_qubits=None):
+def add_int(qdest, rhs, condition_qubits=None, shiftRHS=0):
     if condition_qubits is None:
         condition_qubits = []
     reverse_to_subtract = False
@@ -52,6 +63,7 @@ def add_int(qdest, rhs, condition_qubits=None):
     elif rhs < 0:
         rhs = -rhs
         reverse_to_subtract = True
+    rhs <<= shiftRHS
     ops = []
     add_val = int(rhs)
     condition_mask = (1 << len(qdest)) - 1
@@ -131,4 +143,3 @@ for i,amp in enumerate(outputstate):
     if abs(amp) > 0.000001:
         print('|{}> {}'.format(i, amp))
 qc.draw()        # draw the circuit
-
