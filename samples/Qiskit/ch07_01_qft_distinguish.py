@@ -9,7 +9,7 @@
 
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, execute, Aer, IBMQ, BasicAer
 import math
-%matplotlib inline
+#%matplotlib inline  ## Uncomment this to see diagrams when running in a notebook
 
 ## Example 7-1: QFT to distinguish 3 states
 
