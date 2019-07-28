@@ -16,7 +16,8 @@
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, execute, Aer, IBMQ, BasicAer
 import math
 import time
-#%matplotlib inline  ## Uncomment this to see diagrams when running in a notebook
+## Uncomment the next line to see diagrams when running in a notebook
+#%matplotlib inline
 
 #### CAUTION: This sample is big, and may take several seconds to execute.
 ####          It may even fail on some smaller devices (e-readers, etc.)
@@ -60,16 +61,16 @@ image = image6 if num_fly_qubits == 6 else image8
 ## This is the classic teleport example, but with an interesting
 ## payload, and some controllable error.
 teleport_error = 0.0   ## <--- change this number to 0.1 or more
-do_teleport = False     ## Enables the teleporter
+do_teleport = True     ## Enables the teleporter
 
 # Set up the program
 fly     = QuantumRegister(num_fly_qubits, name='fly')
 epair1  = QuantumRegister(num_fly_qubits, name='epair1')
 epair2  = QuantumRegister(num_fly_qubits, name='epair2')
 scratch = epair1 # We only need scratch qubits during preparation
-send0_c = ClassicalRegister(num_fly_qubits, name='send0c')
-send1_c = ClassicalRegister(num_fly_qubits, name='send1c')
-qc = QuantumCircuit(fly, epair1, epair2, send0_c, send1_c)
+send0_c = [ClassicalRegister(1, name='send0c'+str(i)) for i in range(num_fly_qubits)]
+send1_c = [ClassicalRegister(1, name='send1c'+str(i)) for i in range(num_fly_qubits)]
+qc = QuantumCircuit(fly, epair1, epair2, *send0_c, *send1_c)
 
 last_not = 0
 
@@ -135,8 +136,9 @@ def send_payload(payload, ep, digital_bits):
     ## Entangle the payload with half of the e-pair, and then vaporize it!
     qc.cx(payload, ep)
     qc.h(payload)
-    qc.measure(payload, digital_bits[0])
-    qc.measure(ep, digital_bits[1])
+    for i in range(num_fly_qubits):
+        qc.measure(payload[i], digital_bits[0][i])
+        qc.measure(ep[i], digital_bits[1][i])
     qc.barrier()
 
 def apply_error(qubits, error_severity):
@@ -218,4 +220,5 @@ print('counts:',counts)
 
 outputstate = result.get_statevector(qc, decimals=3)
 print(outputstate)
-qc.draw()        # draw the circuit
+print('drawing...')
+qc.draw(scale=0.5)        # draw the circuit
