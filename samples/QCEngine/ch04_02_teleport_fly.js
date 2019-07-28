@@ -13,39 +13,55 @@
 //// CAUTION: This sample is big, and may take several seconds to execute.
 ////          It may even fail on some smaller devices (e-readers, etc.)
 
+////          To speed it up, you can use the 6-qubit "mini-fly".
+////          Just change num_fly_qubits from 8 to 6.
+var num_fly_qubits = 8; // this can be 6 or 8, for a mini-fly or full-fly.
+
 qc_options.color_by_phase = true;
 
 // This is the left half of the pixels of the fly,
 // encoded as an 8x16 array:
+var image8 = [ '........',
+               '...X....',
+               '....X.XX',
+               '.....XXX',
+               '....XXXX',
+               'XX...XXX',
+               '..XXX.XX',
+               '...X....',
+               '..X...XX',
+               '.X...XXX',
+               'X....XXX',
+               'X..XXXXX',
+               '.XXX.XXX',
+               '...X..XX',
+               '..X.....',
+               '........'];
 
-var image = [ '........',
-              '...X....',
-              '....X.XX',
-              '.....XXX',
-              '....XXXX',
-              'XX...XXX',
-              '..XXX.XX',
-              '...X....',
-              '..X...XX',
-              '.X...XXX',
-              'X....XXX',
-              'X..XXXXX',
-              '.XXX.XXX',
-              '...X..XX',
-              '..X.....',
-              '........'];
+// This is the left half of the pixels of the mini-fly,
+// encoded as an 4x8 array:
+var image6 = [ '..X.',
+               '...X',
+               'X.XX',
+               '.X..',
+               'X..X',
+               'X..X',
+               '.XX.',
+               'X...'];
+
+var image = (num_fly_qubits == 8) ? image8 : image6;
 
 // This is the classic teleport example, but with an interesting
 // payload, and some controllable error.
 function main()
 {
     var teleport_error = 0.0   // <--- change this number to 0.1 or more
-    var do_teleport = true; // Enables the teleporter
+    var do_teleport = false; // Enables the teleporter
 
-    qc.reset(24);
-    var fly = qint.new(8, 'fly');
-    var epair1 = qint.new(8, 'epair1');
-    var epair2 = qint.new(8, 'epair2');
+    qc.reset(3 * num_fly_qubits);
+    var fly = qint.new(num_fly_qubits, 'fly');
+    var epair1 = qint.new(num_fly_qubits, 'epair1');
+    var epair2 = qint.new(num_fly_qubits, 'epair2');
 
     prepare_fly(fly);
     if (do_teleport)
@@ -93,7 +109,7 @@ function prepare_fly(fly)
         }
     }
     fly.not(last_not);
-    qc.cnot(fly.bits(0x7), fly.bits(0x8));
+    qc.cnot(fly.bits((1 << (num_fly_qubits >> 1)) - 1), fly.bits(1 << ((num_fly_qubits - 1) >> 1)));
     fly.Grover();
 
     // At this point, reading the "fly" register would be very likely
@@ -106,10 +122,10 @@ function pixel(obj, x, y)
 {
     // Given x and y, flip the phase of one term
     // Note: last_not is used to avoid redundant NOT gates
-    var val = ~((y << 4) | x);
+    var val = ~((y << (num_fly_qubits >> 1)) | x);
     obj.not(val ^ last_not);
     last_not = val;
-    obj.cphase(180, ~0x8);
+    obj.cphase(180, ~(1 << ((num_fly_qubits - 1) >> 1)));
 }
 
 function send_payload(payload, ep)
