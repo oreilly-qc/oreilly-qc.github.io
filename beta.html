@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Programming Quantum Computers</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script type="text/javascript">
+  window.onerror = function(message, source, lineno, colno, error)
+  { alert('Beta Error: ' + message + ' src:' + source + ' line:' + lineno + ' col:' + colno); }
+</script>
+
+<script type="text/javascript" src="./sample_shortcuts.js"></script>
+
+</head>
+<body>
+
+<iframe id="sandbox_iframe" src="./beta_sandbox.html" width="100%" height="1000" sandbox="allow-scripts"></iframe>
+
+<script>
+
+function load_code_from_url_and_send(sample_url)
+{
+    var frame = document.getElementById('sandbox_iframe');
+    var http_request = new XMLHttpRequest();
+    http_request.open('GET', sample_url, true);
+
+    // If specified, responseType must be empty string or "text"
+    http_request.responseType = 'text';
+
+    http_request.onload = function () {
+            if (http_request.readyState === http_request.DONE)
+            {
+                if (http_request.status === 200)
+                {
+                    frame.contentWindow.postMessage({cmd:'got_sample',sample_url:sample_url,sample_code:http_request.responseText}, '*');
+                }
+                else
+                {
+                    frame.contentWindow.postMessage({cmd:'get_sample_failed',sample_url:sample_url}, '*');
+                }
+            }
+        };
+    http_request.onerror = function ()
+    {
+        frame.contentWindow.postMessage({cmd:'get_sample_failed',sample_url:sample_url}, '*');
+    };
+    try {
+      http_request.send(null);
+    }
+    catch (error) {
+        frame.contentWindow.postMessage({cmd:'get_sample_failed',sample_url:sample_url}, '*');
+    }
+}
+
+window.addEventListener('message', function(event) { 
+    // IMPORTANT: Check the origin of the data! 
+    if (1 || ~event.origin.indexOf('http://yoursite.com')) { 
+        // The data has been sent from your site 
+
+        // The data sent with postMessage is stored in event.data 
+        console.log(event.data);
+        if (event.data.cmd == 'get_sample')
+        {
+            load_code_from_url_and_send(event.data.sample_url);
+        }
+    } else { 
+        // The data hasn't been sent from your site! 
+        // Be careful! Do not use it.
+        return; 
+    } 
+}); 
+
+
+
+
+
+</script>
+</body>
+</html>

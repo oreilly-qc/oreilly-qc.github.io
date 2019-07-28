@@ -1,6 +1,6 @@
 .DS_Store
-notes/
+*.pyc
 venv/
 tags
-
-
+*.swp
+notes/

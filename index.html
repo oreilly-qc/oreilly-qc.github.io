@@ -157,10 +157,12 @@
             </button>
           </div>
 
-          <img src="images/icon_question.png" title="About QCEngine" height=20 onclick="do_aboutqce_modal();" />
-          <img src="images/icon_cheatsheet.png" title="Command cheat sheet" height=20 onclick="do_cheatsheet_modal();" />
+          <img src="images/icon_question.png" title="About Sim Engines" height=20 onclick="do_aboutqce_modal();" />
+          <img src="images/icon_docs.png" title="QCEngine Docs" height=20 onclick="do_cheatsheet_modal();" />
 
           <span id="bug_span">
+          </span>
+          <span id="info_span">
           </span>
           <span id="example_github_span">
           </span>
@@ -168,6 +170,8 @@
           <span id="sample_info_span" style="display:none;">
             <img src="images/caution.png" height="28" />
             <b>This sample takes a while to run.</b>
+          </span>
+          <span id="disable_info_span" style="display:none;">
           </span>
         </div>
 
@@ -345,16 +349,24 @@
                 </div>
                 <div class="btn-group">
                   <button type="button" class="btn btn-default ej-btn-cstyle">
-                    <img src="images/circ_style_00a.png" width="40" onclick="click_circle_style(0);"></span>
+                    <img src="images/circ_style_00a.png" height="18" onclick="click_circle_style(0);"></span>
                   </button>
                   <button type="button" class="btn btn-default ej-btn-cstyle">
-                    <img src="images/circ_style_01a.png" width="40" onclick="click_circle_style(1);"></span>
+                    <img src="images/circ_style_01a.png" height="18" onclick="click_circle_style(1);"></span>
                   </button>
                   <button type="button" class="btn btn-default ej-btn-cstyle">
-                    <img src="images/circ_style_10a.png" width="40" onclick="click_circle_style(2);"></span>
+                    <img src="images/circ_style_10a.png" height="18" onclick="click_circle_style(2);"></span>
                   </button>
                   <button type="button" class="btn btn-default ej-btn-cstyle">
-                    <img src="images/circ_style_11a.png" width="40" onclick="click_circle_style(3);"></span>
+                    <img src="images/circ_style_11a.png" height="18" onclick="click_circle_style(3);"></span>
+                  </button>
+                </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default ej-btn-cstyle">
+                    <img src="images/circ_fill_small.png" height="18" onclick="click_circle_fill(-1);"></span>
+                  </button>
+                  <button type="button" class="btn btn-default ej-btn-cstyle">
+                    <img src="images/circ_fill_big.png" height="18" onclick="click_circle_fill(1);"></span>
                   </button>
                 </div>
 
@@ -429,7 +441,7 @@
         It will let you run JavaScript code, simulating the quantum computing as
         though you had a real QC, up to about 25 qubits (depending on your browser).
         The best way to get familiar with QCEngine is to run the book samples on
-        this page.
+        this page, along with the <b><a href="./docs/build/index.html" target="_blank">QCEngine Docs</a></b>.
         <br/>
         <br/>
         For more serious development tasks, there are many other simulation engines available:
@@ -444,6 +456,9 @@
             simulations as well as physical quantum computers.</li>
           <li><b><a href="https://www.microsoft.com/en-us/quantum/development-kit" target="_default">Microsoft QDK</a></b> - 
             A complete software development system for developing and running programs for quantum computers.</li>
+          <li><b><a href="https://www.dwavesys.com/take-leap" target="_default">D-Wave</a></b> - 
+            A physical QPU using a quantum annealing model. See Example 10-2 ("Kitten and Tiger") for a good example
+            of use. The D-Wave website provides a rich set of libraries and educational materials.</li>
           <li><b><a href="http://www.quantumplayground.net" target="_default">Google QC Playground</a></b> - 
             An approachable online environment for discovering quantum computing.</li>
         </ul>
@@ -480,7 +495,7 @@
 
         <br/>
         <br/>
-        <b>"qc." Commands:</b> Commands such as <code>qc.reset()</code> and <code>qc.cnot(t, c)</code> execute
+        <b>"qc." Commands:</b> Commands such as <code>qc.reset()</code> and <code>qc.cnot(t,c)</code> execute
         using a quantum computation simulator. In most cases, they take a <b>target mask</b> and a <b>condition mask</b>,
         to specify which qubits the instructions act on. Some commands also take a rotation angle.
 
@@ -555,11 +570,37 @@
   </div>
 </div>
 
-<div class="modal fade" id="QASM_runModal" tabindex="-1" role="dialog" aria-labelledby="QASM_runModalLabel" aria-hidden="true">
+<div class="modal fade" id="DWave_runModal" tabindex="-1" role="dialog" aria-labelledby="DWave_runModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="QASM_runModalLabel">Running QASM Sample Code</h5>
+        <h5 class="modal-title" id="DWave_runModalLabel">Running DWave Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The D-Wave versions of examples in this book are written in Python, designed to run either in simulation or on
+        actual D-Wave hardware, using the D-Wave libraries at <a href="https://www.dwavesys.com/take-leap" target="_blank">https://www.dwavesys.com/take-leap</a>.
+        <br/><br/>
+        DWave provides a complete software development kit for working with their simulators and hardware.
+        <br/><br/>
+        To run this sample, go to the DWave site and create an account, and follow the installation instructions,
+        and run this Python script.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://www.dwavesys.com/take-leap', '_blank');">Go to the D-Wave website</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="OpenQASM_runModal" tabindex="-1" role="dialog" aria-labelledby="OpenQASM_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="OpenQASM_runModalLabel">Running QASM Sample Code</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -675,6 +716,23 @@ window.onload = function() {
     fetch_sample_contents();
     make_sample_menu();
 };
+
+function click_circle_fill(up_down)
+{
+    var e = {ctrlKey:false, shiftKey:true, deltaY:-up_down};
+
+    list = qc.panel_chart.widgets;
+    for (var i = 0; i < list.length; ++i)
+    {
+      var widget = list[i];
+      // Boost the reaction a bit
+      if (up_down > 0)
+        list[i].magScale *= 1.5;
+      else
+        list[i].magScale *= 1.0/1.5;
+      list[i].mouseWheel(e);
+    }
+}
 
 function click_circle_style(style)
 {
@@ -940,6 +998,10 @@ function set_current_engine(engine)
     {
         editor.session.setMode("ace/mode/python");
     }
+    else if (current_engine.name == 'DWave')
+    {
+        editor.session.setMode("ace/mode/python");
+    }
     else if (current_engine.name == 'OpenQASM')
     {
         editor.session.setMode("ace/mode/plain_text");
@@ -950,8 +1012,9 @@ function set_current_engine(engine)
     }
 }
 
-function choose_sample_menu(sample, engine=null)
+function choose_sample_menu(sample, engine)
 {
+  show_graphics_output(false);
   do_sample_special_cases(sample.shortcut);
   console.log('Sample menu chosen: ' + sample.sample_file);
   if (engine == null)
@@ -1016,8 +1079,9 @@ function do_aboutqce_modal()
 
 function do_cheatsheet_modal()
 {
-    var options = null;
-    var val = $('#CheatSheet_runModal').modal(options);
+    // var options = null;
+    // var val = $('#CheatSheet_runModal').modal(options);
+    window.open('./docs/build/index.html', '_blank');
 }
 
 function make_github_source_links()
@@ -1036,21 +1100,71 @@ function make_github_source_links()
             var sample_ok = engine.dir_list.includes(sample.sample_file);
             if (sample_ok)
             {
-                var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/blob/master/samples/';
-                link += engine.name + '/' + sample.sample_file + engine.suffix;
+                var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/blob/master/samples/' + engine.name;
+                link +=  '/' + sample.sample_file + engine.suffix;
                 str += '<b><a href="'+link+'" target="_blank">'+engine.link_name+'</a></b>';
                 if (i > 0)
                   valid_engine_list.push(i);
             }
             else
             {
-                str += '<span style="color:#aaa" title="This version is not implemented yet, but if you\'d like to add it, please contact us at octopus@qcengine.com">' + engine.link_name + '</span>';
-            }
+                var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/tree/master/samples/' + engine.name;
+                str += '<span style="color:#aaa" title="This version is not implemented yet, but if you\'d like to add it, please contact us at octopus@qcengine.com">';
+                str += '<b><a href="'+link+'" target="_blank">'+engine.link_name+'</a></b></span>';
+           }
         }
-        str += '<span style="font-size:8pt; color:#77a">';
-        str += '<br/>Developers: Add your engine, or add a sample! <b><a href="#" onclick="do_addengine_modal();">Click here</a></b> for more info.';
-        str += '</span>';
     }
+
+    // If there's a chapter notebook, link to that.
+    if (current_engine.name == 'Qiskit')
+    {
+        var wb_text = null;
+        var wb_name = null;
+        var wb_link = null;
+        if (sample.shortcut.startsWith('2-'))
+        {
+            wb_text = 'Download the complete Chapter2 ';
+            wb_name = 'Qiskit Notebook';
+            wb_link = current_engine.subdir + '/Chapter2-samples.ipynb';
+        }
+        else if (sample.shortcut.startsWith('3-'))
+        {
+            wb_text = 'Download the complete Chapter3 ';
+            wb_name = 'Qiskit Notebook';
+            wb_link = current_engine.subdir + '/Chapter3-samples.ipynb';
+        }
+        else if (sample.shortcut.startsWith('4-'))
+        {
+            wb_text = 'Download the complete Chapter4 ';
+            wb_name = 'Qiskit Notebook';
+            wb_link = current_engine.subdir + '/Chapter4-samples.ipynb';
+        }
+        else if (sample.shortcut.startsWith('5-'))
+        {
+            wb_text = 'Download the complete Chapter5 ';
+            wb_name = 'Qiskit Notebook';
+            wb_link = current_engine.subdir + '/Chapter5-samples.ipynb';
+        }
+        else if (sample.shortcut.startsWith('6-'))
+        {
+            wb_text = 'Download the complete Chapter6 ';
+            wb_name = 'Qiskit Notebook';
+            wb_link = current_engine.subdir + '/Chapter6-samples.ipynb';
+        }
+        if (wb_text)
+        {
+            str += '<br/>';
+            str += '<b>';
+            str += wb_text;
+            str += '<a href="'+wb_link+'" download>'+wb_name+'</a>';
+            str += '</b>';
+        }
+    }
+
+    str += '<span style="font-size:8pt; color:#77a">';
+    str += '<br/>Developers: Add your engine, or add a sample! <b><a href="#" onclick="do_addengine_modal();">Click here</a></b> for more info.';
+    str += '</span>';
+
     example_github_span.innerHTML = str;
 }
 
@@ -1113,8 +1227,6 @@ function try_to_get_program_from_passed_in_url()
       engine = get_engine_from_string('OpenQASM');
     do_sample_special_cases(sample_str);
 
-    show_graphics_output(false);
-
     choose_sample_menu(sample, engine);
 }
 
@@ -1142,6 +1254,24 @@ function do_sample_special_cases(sample_str)
     }
 }
 
+function show_sim_disabled(do_reset)
+{
+    // Sample special cases
+    var span = document.getElementById("disable_info_span");
+    span.style.display = 'none';
+
+    var disabled = qc.qReg.disableSimulation;
+    if (disabled && !do_reset)
+    {
+        var num_qubits = qc.qReg.numQubits;
+        var size_gb = (Math.pow(2, num_qubits + 3) / (1024 * 1024 * 1024)).toFixed(1);
+        var sstr = '<img src="images/caution.png" height="28" />';
+        sstr += '<b>The sim is disabled.</b> ('+num_qubits+' qubits would require '+size_gb+' GB of memory.)';
+        span.innerHTML = sstr;
+        span.style.display = 'block';
+    }
+}
+
 function show_graphics_output(do_show)
 {
     var div = document.getElementById("image_output_div");
@@ -1149,6 +1279,7 @@ function show_graphics_output(do_show)
         div.style.display = 'block';
     else
         div.style.display = 'none';
+    document.getElementById('images_table').style.display = 'block';
 }
 
 function hide_qss_image_panes()
@@ -1156,7 +1287,7 @@ function hide_qss_image_panes()
     document.getElementById('images_table').style.display = 'none';
 }
 
-function load_code_sample(sample_str, engine=null)
+function load_code_sample(sample_str, engine)
 {
     var sample = get_sample_from_string(sample_str);
     current_sample = sample;
@@ -1209,6 +1340,18 @@ function show_bug(enable, err)
     span.innerHTML = sstr;
 }
 
+function show_info(message)
+{
+    var span = document.getElementById('info_span');
+    var sstr = '';
+    if (message)
+    {
+        sstr += '<br/>';
+        sstr += message;
+    }
+    span.innerHTML = sstr;
+}
+
 function run_script()
 {
     qc_options.color_by_phase = false;
@@ -1219,9 +1362,12 @@ function run_script()
 //      qc.enableRecording();
       qc.codeLabel('');
     }
+    show_graphics_output(false);
 
+    qc.enableRecording();
     qc.enableAnimation();
 
+    show_sim_disabled('reset');
     show_state_vector();
     try {
       show_bug(false);
@@ -1230,7 +1376,7 @@ function run_script()
     catch (err) {
       show_bug(true, err);
     }
-
+    show_sim_disabled();
     qc.qReg.changed();
     show_state_vector();
     qc.panel_staff.draw();
@@ -1239,8 +1385,10 @@ function run_script()
     qc.enableAnimation();
 }
 
-function clear_output(show_default_message=true)
+function clear_output(show_default_message)
 {
+  if (show_default_message == null)
+    show_default_message = true;
   if (show_default_message)
     script_output_textarea.value = '(output prints here)\n';
   else
@@ -1303,15 +1451,11 @@ function handle_run_button()
     run_script();
     qc.panel_staff.setVisible(true);
     qc.panel_chart.setVisible(true);
-    qc.panel_staff.staff.fullSnapshot();
+    max_width = 20000;
+    qc.panel_staff.staff.fullSnapshot(max_width);
 }
 
-var default_program = `
-qc.reset(3);
-qc.write(0);
-qc.had(0x1);
-qc.cnot(0x2, 0x1);
-`;
+var default_program = 'qc.reset(3);\nqc.write(0);\nqc.had(0x1);\nqc.cnot(0x2, 0x1);\n';
 
 
 
