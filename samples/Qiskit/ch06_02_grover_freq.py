@@ -9,7 +9,7 @@
 
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, execute, Aer, IBMQ, BasicAer
 import math
-%matplotlib inline
+#%matplotlib inline  ## Uncomment this to see diagrams when running in a notebook
 
 ## Example 6-2: Repeated iterations
 ##  (This code is the same as sample 6-1, and we encourage you to play with
