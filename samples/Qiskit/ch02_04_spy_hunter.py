@@ -6,7 +6,8 @@
 
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, execute, Aer, IBMQ, BasicAer
 import math
-#%matplotlib inline  ## Uncomment this to see diagrams when running in a notebook
+## Uncomment the next line to see diagrams when running in a notebook
+#%matplotlib inline
 
 ## Example 2-4: Quasntum Spy Hunter
 # Set up the program
