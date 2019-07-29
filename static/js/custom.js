@@ -437,7 +437,7 @@ function make_github_source_links()
     valid_engine_list = [0];
     // str = '<br/>';
     // str += 'View source in Github: ';
-    str = 'Other engines <div class="btn-group btn-group-sm float-right" role="group" aria-label="Other simulators">'
+    str = 'Source code on Github <div class="btn-group btn-group-sm float-right" role="group" aria-label="Other simulators">'
     for (i = 0; i < engine_list.length; ++i)
     {
         engine = engine_list[i];
