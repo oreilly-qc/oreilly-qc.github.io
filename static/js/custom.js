@@ -588,7 +588,7 @@ function do_sample_special_cases(sample_str)
     if (sample_str == '4-2')
     {
         // Takes a while to eat a chocodile
-        var sstr = '<img src="images/caution.png" height="28" /><b>This sample takes a while to run.</b>';
+        var sstr = '<i class="fas fa-exclamation-triangle" style="color:red;"></i> This sample takes a while to run.</b>';
         sample_info_span.innerHTML = sstr;
         sample_info_span.style.display = 'block';
     }
