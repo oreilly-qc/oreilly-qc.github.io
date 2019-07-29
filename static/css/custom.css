@@ -1,3 +1,11 @@
+html, body {
+    height: 100%;
+}
+
+h1 {
+    font-family: 'Raleway', sans-serif;
+}
+
 .panel-resizable {
     resize: vertical;
   overflow: auto;
@@ -63,4 +71,3 @@
  margin: 4px 2px;
  cursor: pointer;
  }
-
