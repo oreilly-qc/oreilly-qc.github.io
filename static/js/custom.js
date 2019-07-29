@@ -13,8 +13,8 @@ var editor_boot_panel = document.getElementById('editor_boot_panel');
 var staff_boot_panel = document.getElementById('staff_boot_panel');
 var circle_boot_panel = document.getElementById('circle_boot_panel');
 var editor_frame_div = document.getElementById('editor_frame_div');
-var example_choice_span = document.getElementById('example_choice_span');
-var engine_choice_span = document.getElementById('engine_choice_span');
+// var example_choice_span = document.getElementById('example_choice_span');
+// var engine_choice_span = document.getElementById('engine_choice_span');
 var example_github_span = document.getElementById('example_github_span');
 var github_links_footer = document.getElementById('github_links_footer');
 // var language_choice_span = document.getElementById('language_choice_span');
@@ -323,9 +323,9 @@ function make_sample_menu()
     {
         sample = sample_menu[i];
         str = '';
-        str += '<li><a href="#" onclick="choose_sample_menu(sample_menu['+i+'], null);">';
+        str += '<a class="dropdown-item" href="#" onclick="choose_sample_menu(sample_menu['+i+'], null);">';
         str += sample.menu_title;
-        str += '</a></li>';
+        str += '</a>';
         $('#example_choice_dropdown').append(str)
     }
     try_to_get_program_from_passed_in_url();
@@ -360,19 +360,23 @@ function set_current_engine(engine)
 
 function choose_sample_menu(sample, engine)
 {
-  show_graphics_output(false);
-  do_sample_special_cases(sample.shortcut);
-  console.log('Sample menu chosen: ' + sample.sample_file);
-  if (engine == null)
+    show_graphics_output(false);
+    do_sample_special_cases(sample.shortcut);
+    console.log('Sample menu chosen: ' + sample.sample_file);
+    if (engine == null)
     engine = engine_list[0];
-  set_current_engine(engine);
-  var sample_menu_button = document.getElementById('sample_menu_button');
-  sample_menu_button.innerHTML = sample.menu_title;
-  load_code_sample(sample.sample_file, engine);
-  var engine_menu_button = document.getElementById('engine_menu_button');
-  if (engine_menu_button)
+    set_current_engine(engine);
+    var sample_menu_button = document.getElementById('sample_menu_button');
+    m_title = sample.menu_title
+    if(m_title.length > 20) {
+        m_title = m_title.substring(0,19)+"...";
+    }
+    sample_menu_button.innerHTML = m_title;
+    load_code_sample(sample.sample_file, engine);
+    var engine_menu_button = document.getElementById('engine_menu_button');
+    if (engine_menu_button)
       engine_menu_button.innerHTML = engine.name;
-  clear_output();
+    clear_output();
 }
 
 function choose_engine_menu(engine)
@@ -387,22 +391,19 @@ function choose_engine_menu(engine)
 
 function make_engine_menu()
 {
-    str = '';
-    str += '<button id="engine_menu_button" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
-    str += 'Choose an engine <span class="caret"></span></button>';
-    str += '<ul class="dropdown-menu" role="menu">';
+    $('#engine_choice_dropdown').empty();
     for (i = 0; i < valid_engine_list.length; ++i)
     {
         var engine_index = valid_engine_list[i];
         engine = engine_list[engine_index];
-        str += '<li><a href="#" onclick="choose_engine_menu(engine_list['+engine_index+']);">';
+        str = '';
+        str += '<a class="dropdown-item" href="#" onclick="choose_engine_menu(engine_list['+engine_index+']);">';
         str += engine.name;
-        str += '</a></li>';
+        str += '</a>';
+        $('#engine_choice_dropdown').append(str)
     }
-    str += '</ul>'
-    engine_choice_span.innerHTML = str;
-    var engine_menu_button = document.getElementById('engine_menu_button');
-    engine_menu_button.innerHTML = current_engine.name;
+    // var engine_menu_button = document.getElementById('engine_menu_button');
+    // engine_menu_button.innerHTML = current_engine.name;
 }
 
 function do_engine_modal()

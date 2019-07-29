@@ -81,20 +81,19 @@
                           <span class="glyphicon glyphicon-play"></span>
                           Run Program
                         </button>
-                        <div class="btn-group">
-                          <span id="example_choice_span">
-                            <button id="sample_menu_button" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            Choose a sample <span class="caret"></span></button>
-                            <ul id="example_choice_dropdown" class="dropdown-menu" role="menu">
-                            </ul>
-                          </span>
-                        </div>
-                        <div class="btn-group" id="engine_choice_span">
-                            <button type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">
-                            QCEngine <span class="caret"></span>
+                        <div class="btn-group" role="group">
+                            <button id="sample_menu_button" type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">
+                                Choose a sample <span class="caret"></span>
                             </button>
-                            <ul class="dropdown-menu" role="menu">
-                            </ul>
+                            <div id="example_choice_dropdown" class="dropdown-menu" aria-labelledby="sample_menu_button">
+                            </div>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button id="engine_menu_button" type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">
+                                QCEngine <span class="caret"></span>
+                            </button>
+                            <div id="engine_choice_dropdown" class="dropdown-menu" aria-labelledby="engine_menu_button">
+                            </div>
                         </div>
                     </div>
                     <div class="btn-group">
