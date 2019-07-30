@@ -761,6 +761,7 @@ function show_state_vector()
     {
       // console.log(list[i]);
       list[i].collapsed = false;
+      list[i].barHeight = 0;
     }
     else if (list[i].blochSphere ||
              list[i].densityMatrix || 
