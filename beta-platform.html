@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Programming Quantum Computers</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="static/css/custom.css">
+    <link rel="stylesheet" href="static/css/fontawesome-all.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:600&display=swap" rel="stylesheet"> 
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="./external/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+
+    <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_bitfield.js"></script>
+    <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_reg.js"></script>
+    <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_int.js"></script>
+    <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_basicops.js"></script>
+    <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_widgets.js"></script>
+    <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_staff.js"></script>
+    <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_scriptpanel.js"></script>
+    <script type="text/javascript" src="https://machinelevel.github.io/QCEngine/src/qcengine_panel.js"></script>
+
+    <!-- <script type="text/javascript" src="static/js/custom.js"></script> -->
+    <script type="text/javascript" src="./sample_shortcuts.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">
+          <img src="images/logo_small.png" href="#">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="./docs/build/index.html">Docs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="http://shop.oreilly.com/product/0636920167433.do">O'Reilly</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683">Buy Book</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+<div class="container-fluid d-flex flex-column mt-1 h-100">
+
+    <div class="row ml-1" style="height: 15%; min-height: 150px;">
+        <div class="col-m-3 mt-3 h-100">
+            <a href="https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683">
+                <img class="img-thumbnail" src="images/book_cover.png" style="height:100%;">
+            </a>
+        </div>
+        <div class="col-m-9 mt-4">
+            <div class="row ml-3">
+                <h1 class="display-4">Programming Quantum Computers</h1>
+            </div>
+            <div class="row mt-2 ml-4">
+                <h2>Code Samples</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="row flex-grow-1 mt-4">
+
+        <div class="col-sm-6">
+            <div class="card mb-5">
+                <div class="card-header">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success" onclick="handle_run_button();">
+                          <span class="glyphicon glyphicon-play"></span>
+                          Run Program
+                        </button>
+                        <div class="btn-group" role="group">
+                            <button id="sample_menu_button" type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">
+                                Choose a sample 
+                            </button>
+                            <div id="example_choice_dropdown" class="dropdown-menu" aria-labelledby="sample_menu_button">
+                            </div>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button id="engine_menu_button" type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">
+                                QCEngine 
+                            </button>
+                            <div id="engine_choice_dropdown" class="dropdown-menu" aria-labelledby="engine_menu_button">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-small btn-outline-dark" onclick="click_editor_zoom(-2);">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-small btn-outline-dark" onclick="click_editor_zoom(2);">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="bug_span">
+                    </div>
+                    <div id="example_github_span">
+                    </div>
+                    <div class="mb-2" id="sample_info_span" style="display:none;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <b>This sample takes a while to run.</b>
+                    </div>
+                    <span id="disable_info_span" style="display:none;"></span>
+                    <div id="editor_boot_panel" class="panel-body panel-resizable ej-no-margin">
+                      <div id="editor_div" class="editor"></div>
+                    </div>
+                </div>
+                <div id="github_links_footer" class="card-footer text-muted">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+
+            <div id="progress_panel" style="display:none;">
+                <div class="container-fluid pad-right-only">
+                    <div class="progress">
+                        <div id="progress_bar" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-5" style="display:none;">
+                <div class="card-header">
+                    <b>How to run this sample</b>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-small btn-outline-dark" onclick="click_gate_zoom(-1);">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-small btn-outline-dark" onclick="click_gate_zoom(1);">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div  id="how_to_boot_panel" class="panel-body panel-resizable">
+                        <span id="how-to-span">(text goes here)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="image_output_div" class="card mb-5" style="display:none;">
+                <div class="card-header">
+                    <b>Image output</b>
+                </div>
+                <div class="card-body">
+                    <div  id="image_boot_panel" class="panel-body panel-resizable">
+                        <span id="image_info_span"></span>
+                        <table id="images_table">
+                            <tr>
+                                <td align="center" style="padding: 10px; border: 4px solid #ddd;">
+                                  <canvas id="display_ground_truth"></canvas><br/>
+                                  <span id="display_ground_truth_span"></span>
+                                </td>
+                                <td align="center" style="padding: 10px; border: 4px solid #ddd;">
+                                  <canvas id="display_qfull_res"></canvas><br/>
+                                  <span id="display_qfull_res_span"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="padding: 10px; border: 4px solid #ddd;">
+                                  <canvas id="display_monte_carlo"></canvas><br/>
+                                  <span id="display_monte_carlo_span"></span>
+                                </td>
+                                <td align="center" style="padding: 10px; border: 4px solid #ddd;">
+                                  <canvas id="display_qss"></canvas><br/>
+                                  <span id="display_qss_span"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="padding: 10px; border: 4px solid #ddd;">
+                                  <canvas id="display_confidence"></canvas><br/>
+                                  <span id="display_confidence_span"></span>
+                                </td>
+                            </tr>
+                        </table>
+                        <table>
+                            <tr>
+                                <td colspan="2" align="center" style="padding: 10px; border: 4px solid #ddd;">
+                                  <canvas id="display_cwtable"></canvas><br/>
+                                  <span id="display_cwtable_span"></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-5">
+                <div class="card-header">
+                    <b>Program circuit</b>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-small btn-outline-dark" onclick="click_gate_zoom(-1);">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-small btn-outline-dark" onclick="click_gate_zoom(1);">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div  id="staff_boot_panel" class="panel-resizable">
+                        <div id="staff_popin_div" class="right" style="resize: both; overflow: auto;">
+                            <canvas id="draw_gate_canvas" style="display:block;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-5">
+                <div class="card-header">
+                    <b>Circle notation</b>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-small btn-outline-dark" onclick="click_circle_zoom(-1);">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-small btn-outline-dark" onclick="click_circle_zoom(1);">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default ej-btn-cstyle">
+                            <img src="images/circ_style_00a.png" height="18" onclick="click_circle_style(0);"></span>
+                        </button>
+                        <button type="button" class="btn btn-default ej-btn-cstyle">
+                            <img src="images/circ_style_01a.png" height="18" onclick="click_circle_style(1);"></span>
+                        </button>
+                        <button type="button" class="btn btn-default ej-btn-cstyle">
+                            <img src="images/circ_style_10a.png" height="18" onclick="click_circle_style(2);"></span>
+                        </button>
+                        <button type="button" class="btn btn-default ej-btn-cstyle">
+                            <img src="images/circ_style_11a.png" height="18" onclick="click_circle_style(3);"></span>
+                        </button>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default ej-btn-cstyle">
+                            <img src="images/circ_fill_small.png" height="18" onclick="click_circle_fill(-1);"></span>
+                        </button>
+                        <button type="button" class="btn btn-default ej-btn-cstyle">
+                            <img src="images/circ_fill_big.png" height="18" onclick="click_circle_fill(1);"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div  id="circle_boot_panel" class="panel-body panel-resizable">
+                        <div id="circle_div" class="right" style="resize: both; overflow: auto;">
+                            <canvas id="circle_canvas" style="display:block;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-5">
+                <div class="card-header">
+                    <b>Program output</b>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-small btn-outline-dark" onclick="click_output_zoom(-1);">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-small btn-outline-dark" onclick="click_output_zoom(1);">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" onclick="clear_output(false);" title="Clear output">
+                            <span class="glyphicon glyphicon-erase"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <textarea id="script_output_textarea" style="font-family:monospace; font-size:12pt; width:100%; height:100px; resize:both;">
+                        (program output goes here)
+                    </textarea>
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ======= -->
+<!--  -->
+<!--       <div class="col&#45;sm&#45;6"> -->
+<!--         <div class="container&#45;fluid pad&#45;right&#45;only"> -->
+<!--           <div class="row"> -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--             <div id="progress_panel" class="col&#45;*&#45;*" style="display:none;"> -->
+<!--               <div class="container&#45;fluid pad&#45;right&#45;only"> -->
+<!--                   <div class="progress"> -->
+<!--                     <div id="progress_bar" class="progress&#45;bar" role="progressbar" style="width: 25%;" aria&#45;valuenow="25" aria&#45;valuemin="0" aria&#45;valuemax="100">25%</div> -->
+<!--                   </div> -->
+<!--               </div> -->
+<!--             </div> -->
+<!--  -->
+<!--  -->
+<!--             <div class="col&#45;*&#45;*" style="display:none;"> -->
+<!--               <div class="container&#45;fluid pad&#45;right&#45;only"> -->
+<!--                 <div class="panel panel&#45;default"> -->
+<!--                   <div class="panel&#45;heading"> -->
+<!--                     <b>How to run this sample</b> -->
+<!--                       <div class="btn&#45;group"> -->
+<!--  -->
+<!--     <!&#45;&#45;                     <span id="example_language_span"> -->
+<!--                           <button type="button" class="btn btn&#45;default dropdown&#45;toggle" data&#45;toggle="dropdown"> -->
+<!--                           Choose a Language <span class="caret"></span> -->
+<!--                           </button> -->
+<!--                           <ul class="dropdown&#45;menu" role="menu"> -->
+<!--                           </ul> -->
+<!--                         </span> -->
+<!--      &#45;&#45;> -->
+<!--                       </div> -->
+<!--                     <div class="btn&#45;group"> -->
+<!--                       <button type="button" class="btn btn&#45;default" onclick="click_gate_zoom(&#45;1);"> -->
+<!--                         <span class="glyphicon glyphicon&#45;zoom&#45;out"></span> -->
+<!--                       </button> -->
+<!--                       <button type="button" class="btn btn&#45;default" onclick="click_gate_zoom(1);"> -->
+<!--                         <span class="glyphicon glyphicon&#45;zoom&#45;in"></span> -->
+<!--                       </button> -->
+<!--                     </div> -->
+<!--                   </div> -->
+<!--                   <div  id="how_to_boot_panel" class="panel&#45;body panel&#45;resizable"> -->
+<!--  -->
+<!--                     <span id="how&#45;to&#45;span">(text goes here)</span> -->
+<!--  -->
+<!--  -->
+<!--                   </div> -->
+<!--                 </div> -->
+<!--               </div> -->
+<!--             </div> -->
+<!--  -->
+<!--  -->
+<!--             <div id="image_output_div" class="col&#45;*&#45;*" style="display:none;"> -->
+<!--               <div class="container&#45;fluid pad&#45;right&#45;only"> -->
+<!--                 <div class="panel panel&#45;default"> -->
+<!--                   <div class="panel&#45;heading"> -->
+<!--                     <b>Image output</b> -->
+<!--                       <div class="btn&#45;group"> -->
+<!--  -->
+<!--     <!&#45;&#45;                     <span id="example_language_span"> -->
+<!--                           <button type="button" class="btn btn&#45;default dropdown&#45;toggle" data&#45;toggle="dropdown"> -->
+<!--                           Choose a Language <span class="caret"></span> -->
+<!--                           </button> -->
+<!--                           <ul class="dropdown&#45;menu" role="menu"> -->
+<!--                           </ul> -->
+<!--                         </span> -->
+<!--      &#45;&#45;> -->
+<!--                       </div> -->
+<!--                   </div> -->
+<!--                   <div  id="image_boot_panel" class="panel&#45;body panel&#45;resizable"> -->
+<!--  -->
+<!--                     <span id="image_info_span"></span> -->
+<!--                     <table id="images_table"> -->
+<!--                       <tr> -->
+<!--                         <td align="center" style="padding: 10px; border: 4px solid #ddd;"> -->
+<!--                           <canvas id="display_ground_truth"></canvas><br/> -->
+<!--                           <span id="display_ground_truth_span"></span> -->
+<!--                         </td> -->
+<!--                         <td align="center" style="padding: 10px; border: 4px solid #ddd;"> -->
+<!--                           <canvas id="display_qfull_res"></canvas><br/> -->
+<!--                           <span id="display_qfull_res_span"></span> -->
+<!--                         </td> -->
+<!--                       </tr> -->
+<!--                       <tr> -->
+<!--                         <td align="center" style="padding: 10px; border: 4px solid #ddd;"> -->
+<!--                           <canvas id="display_monte_carlo"></canvas><br/> -->
+<!--                           <span id="display_monte_carlo_span"></span> -->
+<!--                         </td> -->
+<!--                         <td align="center" style="padding: 10px; border: 4px solid #ddd;"> -->
+<!--                           <canvas id="display_qss"></canvas><br/> -->
+<!--                           <span id="display_qss_span"></span> -->
+<!--                         </td> -->
+<!--                       </tr> -->
+<!--                       <tr> -->
+<!--                         <td align="center" style="padding: 10px; border: 4px solid #ddd;"> -->
+<!--                           <canvas id="display_confidence"></canvas><br/> -->
+<!--                           <span id="display_confidence_span"></span> -->
+<!--                         </td> -->
+<!--                       </tr> -->
+<!--                     </table> -->
+<!--                     <table> -->
+<!--                       <tr> -->
+<!--                         <td colspan="2" align="center" style="padding: 10px; border: 4px solid #ddd;"> -->
+<!--                           <canvas id="display_cwtable"></canvas><br/> -->
+<!--                           <span id="display_cwtable_span"></span> -->
+<!--                         </td> -->
+<!--                       </tr> -->
+<!--                     </table> -->
+<!--                   </div> -->
+<!--                 </div> -->
+<!--               </div> -->
+<!--             </div> -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--             <div class="col&#45;*&#45;*"> -->
+<!--               <div class="container&#45;fluid pad&#45;right&#45;only"> -->
+<!--                 <div class="panel panel&#45;default"> -->
+<!--                   <div class="panel&#45;heading"> -->
+<!--                     <b>Program gates</b> -->
+<!--                     <div class="btn&#45;group"> -->
+<!--                       <button type="button" class="btn btn&#45;default" onclick="click_gate_zoom(&#45;1);"> -->
+<!--                         <span class="glyphicon glyphicon&#45;zoom&#45;out"></span> -->
+<!--                       </button> -->
+<!--                       <button type="button" class="btn btn&#45;default" onclick="click_gate_zoom(1);"> -->
+<!--                         <span class="glyphicon glyphicon&#45;zoom&#45;in"></span> -->
+<!--                       </button> -->
+<!--                     </div> -->
+<!--  -->
+<!--     <!&#45;&#45;                 <button type="button" class="btn btn&#45;default"> -->
+<!--                         <span class="glyphicon glyphicon&#45;new&#45;window"></span> -->
+<!--                     </button> -->
+<!--      &#45;&#45;> -->
+<!--                   </div> -->
+<!--                   <div  id="staff_boot_panel" class="panel&#45;body panel&#45;resizable"> -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--                     <div id="staff_popin_div" class="right" style="resize: both; overflow: auto;"> -->
+<!--     <!&#45;&#45;                  <img src="images/click_tag.png" height="32" /><br/> &#45;&#45;> -->
+<!--                       <canvas id="draw_gate_canvas"></canvas> -->
+<!--                     </div> -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--                   </div> -->
+<!--                 </div> -->
+<!--               </div> -->
+<!--             </div> -->
+<!--             <div class="col&#45;*&#45;*"> -->
+<!--               <div class="container&#45;fluid pad&#45;right&#45;only"> -->
+<!--                 <div class="panel panel&#45;default"> -->
+<!--                   <div class="panel&#45;heading"> -->
+<!--                     <b>State vector</b> -->
+<!--                     <div class="btn&#45;group"> -->
+<!--                       <button type="button" class="btn btn&#45;default" onclick="click_circle_zoom(&#45;1);"> -->
+<!--                         <span class="glyphicon glyphicon&#45;zoom&#45;out"></span> -->
+<!--                       </button> -->
+<!--                       <button type="button" class="btn btn&#45;default" onclick="click_circle_zoom(1);"> -->
+<!--                         <span class="glyphicon glyphicon&#45;zoom&#45;in"></span> -->
+<!--                       </button> -->
+<!--                     </div> -->
+<!--                     <div class="btn&#45;group"> -->
+<!--                       <button type="button" class="btn btn&#45;default ej&#45;btn&#45;cstyle"> -->
+<!--                         <img src="images/circ_style_00a.png" height="18" onclick="click_circle_style(0);"></span> -->
+<!--                       </button> -->
+<!--                       <button type="button" class="btn btn&#45;default ej&#45;btn&#45;cstyle"> -->
+<!--                         <img src="images/circ_style_01a.png" height="18" onclick="click_circle_style(1);"></span> -->
+<!--                       </button> -->
+<!--                       <button type="button" class="btn btn&#45;default ej&#45;btn&#45;cstyle"> -->
+<!--                         <img src="images/circ_style_10a.png" height="18" onclick="click_circle_style(2);"></span> -->
+<!--                       </button> -->
+<!--                       <button type="button" class="btn btn&#45;default ej&#45;btn&#45;cstyle"> -->
+<!--                         <img src="images/circ_style_11a.png" height="18" onclick="click_circle_style(3);"></span> -->
+<!--                       </button> -->
+<!--                     </div> -->
+<!--                     <div class="btn&#45;group"> -->
+<!--                       <button type="button" class="btn btn&#45;default ej&#45;btn&#45;cstyle"> -->
+<!--                         <img src="images/circ_fill_small.png" height="18" onclick="click_circle_fill(&#45;1);"></span> -->
+<!--                       </button> -->
+<!--                       <button type="button" class="btn btn&#45;default ej&#45;btn&#45;cstyle"> -->
+<!--                         <img src="images/circ_fill_big.png" height="18" onclick="click_circle_fill(1);"></span> -->
+<!--                       </button> -->
+<!--                     </div> -->
+<!--  -->
+<!--     <!&#45;&#45;                 <button type="button" class="btn btn&#45;default"> -->
+<!--                         <span class="glyphicon glyphicon&#45;new&#45;window"></span> -->
+<!--                     </button> -->
+<!--      &#45;&#45;> -->
+<!--                   </div> -->
+<!--                   <div  id="circle_boot_panel" class="panel&#45;body panel&#45;resizable"> -->
+<!--  -->
+<!--                     <div id="circle_div" class="right" style="resize: both; overflow: auto;"> -->
+<!--                       <canvas id="circle_canvas"></canvas> -->
+<!--                     </div> -->
+<!--  -->
+<!--  -->
+<!--                   </div> -->
+<!--                 </div> -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--           <div class="panel panel&#45;default"> -->
+<!--             <div class="panel&#45;heading"> -->
+<!--                     <b>Program output</b> -->
+<!--  -->
+<!--               <div class="btn&#45;group"> -->
+<!--                 <button type="button" class="btn btn&#45;default" onclick="click_output_zoom(&#45;1);"> -->
+<!--                   <span class="glyphicon glyphicon&#45;zoom&#45;out"></span> -->
+<!--                 </button> -->
+<!--                 <button type="button" class="btn btn&#45;default" onclick="click_output_zoom(1);"> -->
+<!--                   <span class="glyphicon glyphicon&#45;zoom&#45;in"></span> -->
+<!--                 </button> -->
+<!--               </div> -->
+<!--               <div class="btn&#45;group"> -->
+<!--                 <button type="button" class="btn btn&#45;default" onclick="clear_output(false);" title="Clear output"> -->
+<!--                   <span class="glyphicon glyphicon&#45;erase"></span> -->
+<!--                 </button> -->
+<!--               </div> -->
+<!--             </div> -->
+<!--             <div class="panel&#45;body panel&#45;resizable"> -->
+<!--               <textarea id="script_output_textarea" style="font&#45;family:monospace; font&#45;size:12pt; width:100%; height:100px; resize:both;"> -->
+<!--     (program output goes here) -->
+<!--               </textarea> -->
+<!--             </div> -->
+<!--           </div> -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--               </div> -->
+<!--             </div> -->
+<!--           </div> -->
+<!--         </div> -->
+<!--       </div> -->
+<!--     </div> -->
+<!--  -->
+<!--  -->
+<!--     <div class="modal fade" id="AboutQCE_runModal" tabindex="&#45;1" role="dialog" aria&#45;labelledby="AboutQCE_runModalLabel" aria&#45;hidden="true"> -->
+<!--       <div class="modal&#45;dialog" role="document"> -->
+<!--         <div class="modal&#45;content"> -->
+<!--           <div class="modal&#45;header"> -->
+<!--             <h5 class="modal&#45;title" id="AboutQCE_runModalLabel">QCEngine Notes</h5> -->
+<!--             <button type="button" class="close" data&#45;dismiss="modal" aria&#45;label="Close"> -->
+<!--               <span aria&#45;hidden="true">&#38;times;</span> -->
+<!--             </button> -->
+<!--           </div> -->
+<!--           <div class="modal&#45;body"> -->
+<!--             QCEngine is intended to be a lightweight quantum computation simulator, -->
+<!--             useful for quick sketches and demonstrations. -->
+<!--  -->
+<!--             <br/> -->
+<!--             <br/> -->
+<!--             It will let you run JavaScript code, simulating the quantum computing as -->
+<!--             though you had a real QC, up to about 25 qubits (depending on your browser). -->
+<!--             The best way to get familiar with QCEngine is to run the book samples on -->
+<!--             this page, along with the <b><a href="./docs/build/index.html" target="_blank">QCEngine Docs</a></b>. -->
+<!--             <br/> -->
+<!--             <br/> -->
+<!--             For more serious development tasks, there are many other simulation engines available: -->
+<!--             <br/> -->
+<!--             <ul> -->
+<!--               <li><b><a href="qiskit.org" target="_default">Qiskit</a></b> &#45;  -->
+<!--                 An open&#45;source software development kit (SDK) for working with OpenQASM and the -->
+<!--                 IBM Q quantum processors. Create quantum computing programs, compile, and execute them online -->
+<!--                 in a real quantum processors.</li> -->
+<!--               <li><b><a href="https://quantum&#45;computing.ibm.com" target="_default">IBM Q Experience</a></b> &#45;  -->
+<!--                 A complete online environment, containing tools and information for programming quantum -->
+<!--                 simulations as well as physical quantum computers.</li> -->
+<!--               <li><b><a href="https://www.microsoft.com/en&#45;us/quantum/development&#45;kit" target="_default">Microsoft QDK</a></b> &#45;  -->
+<!--                 A complete software development system for developing and running programs for quantum computers.</li> -->
+<!--               <li><b><a href="https://www.dwavesys.com/take&#45;leap" target="_default">D&#45;Wave</a></b> &#45;  -->
+<!--                 A physical QPU using a quantum annealing model. See Example 10&#45;2 ("Kitten and Tiger") for a good example -->
+<!--                 of use. The D&#45;Wave website provides a rich set of libraries and educational materials.</li> -->
+<!--               <li><b><a href="http://www.quantumplayground.net" target="_default">Google QC Playground</a></b> &#45;  -->
+<!--                 An approachable online environment for discovering quantum computing.</li> -->
+<!--             </ul> -->
+<!--  -->
+<!--             ...just to name a few. -->
+<!--             <br/> -->
+<!--             <br/> -->
+<!--             If you have questions or comments -->
+<!--             about running these book samples, the authors would love to hear from you -->
+<!--             at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>. -->
+<!--                   </div> -->
+<!--           <div class="modal&#45;footer"> -->
+<!--             <button type="button" class="btn btn&#45;secondary" data&#45;dismiss="modal">Close</button> -->
+<!--           </div> -->
+<!--         </div> -->
+<!--       </div> -->
+<!--     </div> -->
+<!--  -->
+<!--     <div class="modal fade" id="CheatSheet_runModal" tabindex="&#45;1" role="dialog" aria&#45;labelledby="CheatSheet_runModalLabel" aria&#45;hidden="true"> -->
+<!--       <div class="modal&#45;dialog" role="document"> -->
+<!--         <div class="modal&#45;content"> -->
+<!--           <div class="modal&#45;header"> -->
+<!--             <h5 class="modal&#45;title" id="CheatSheet_runModalLabel">QCEngine Command Cheat Sheet</h5> -->
+<!--             <button type="button" class="close" data&#45;dismiss="modal" aria&#45;label="Close"> -->
+<!--               <span aria&#45;hidden="true">&#38;times;</span> -->
+<!--             </button> -->
+<!--           </div> -->
+<!--           <div class="modal&#45;body"> -->
+<!--             This sheet provides a quick&#45;reference for most common QCEngine commands. -->
+<!--             The best way to become familiar with QCEngine commands is to try running the book -->
+<!--             samples in this page. -->
+<!--             If you find things missing or unclear, the authors would love to hear from you -->
+<!--             at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>. -->
+<!--  -->
+<!--             <br/> -->
+<!--             <br/> -->
+<!--             <b>"qc." Commands:</b> Commands such as <code>qc.reset()</code> and <code>qc.cnot(t,c)</code> execute -->
+<!--             using a quantum computation simulator. In most cases, they take a <b>target mask</b> and a <b>condition mask</b>, -->
+<!--             to specify which qubits the instructions act on. Some commands also take a rotation angle. -->
+<!--  -->
+<!--             <br/> -->
+<!--             <br/> -->
+<!--             <b>Qubit Masks:</b> Qubits are be specified using an integer, where each bit corresponds to one of the -->
+<!--             qubits in the quantum computer. -->
+<!--  -->
+<!--             <br/> -->
+<!--             <br/> -->
+<!--             (...this is under sonstruction) -->
+<!--  -->
+<!--           </div> -->
+<!--           <div class="modal&#45;footer"> -->
+<!--             <button type="button" class="btn btn&#45;secondary" data&#45;dismiss="modal">Close</button> -->
+<!--           </div> -->
+<!--         </div> -->
+<!--       </div> -->
+<!--     </div> -->
+<!--  -->
+<!--  -->
+<!--     <div class="modal fade" id="AddEngine_runModal" tabindex="&#45;1" role="dialog" aria&#45;labelledby="AddEngine_runModalLabel" aria&#45;hidden="true"> -->
+<!--       <div class="modal&#45;dialog" role="document"> -->
+<!--         <div class="modal&#45;content"> -->
+<!--           <div class="modal&#45;header"> -->
+<!--             <h5 class="modal&#45;title" id="AddEngine_runModalLabel">Add new engines and samples!</h5> -->
+<!--             <button type="button" class="close" data&#45;dismiss="modal" aria&#45;label="Close"> -->
+<!--               <span aria&#45;hidden="true">&#38;times;</span> -->
+<!--             </button> -->
+<!--           </div> -->
+<!--           <div class="modal&#45;body"> -->
+<!--             <b>Have a favorite quantum simulator, or even a real QPU?</b> -->
+<!--             <br/> -->
+<!--             We'd love to add your sample code here. -->
+<!--             <br/> -->
+<!--             <br/> -->
+<!--             Providing these samples for as many systems as possible helps our readers, so please contact us -->
+<!--             at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>. -->
+<!--           </div> -->
+<!--           <div class="modal&#45;footer"> -->
+<!--             <button type="button" class="btn btn&#45;secondary" data&#45;dismiss="modal">Close</button> -->
+<!--           </div> -->
+<!--         </div> -->
+<!--       </div> -->
+<!--     </div> -->
+<!--  -->
+<!--     <div class="modal fade" id="Qiskit_runModal" tabindex="&#45;1" role="dialog" aria&#45;labelledby="Qiskit_runModalLabel" aria&#45;hidden="true"> -->
+<!--       <div class="modal&#45;dialog" role="document"> -->
+<!--         <div class="modal&#45;content"> -->
+<!--           <div class="modal&#45;header"> -->
+<!--             <h5 class="modal&#45;title" id="Qiskit_runModalLabel">Running Qiskit Sample Code</h5> -->
+<!--             <button type="button" class="close" data&#45;dismiss="modal" aria&#45;label="Close"> -->
+<!--               <span aria&#45;hidden="true">&#38;times;</span> -->
+<!--             </button> -->
+<!--           </div> -->
+<!--           <div class="modal&#45;body"> -->
+<!--             The Qiskit versions of examples in this book are written in Python, designed to run -->
+<!--             as Qiskit notebooks, at <a href="https://qiskit.org" target="_blank">https://qiskit.org</a>. -->
+<!--             <br/><br/> -->
+<!--             Qiskit is an open&#45;source software development kit (SDK) for working with OpenQASM and the -->
+<!--             IBM Q quantum processors. Create quantum computing programs, compile, and execute them online -->
+<!--             in a real quantum processors. -->
+<!--             <br/><br/> -->
+<!--             To run this sample, go to the Qiskit site and create a new notebook, and then paste this -->
+<!--             sample code into it. -->
+<!--           </div> -->
+<!--           <div class="modal&#45;footer"> -->
+<!--             <button type="button" class="btn btn&#45;secondary" data&#45;dismiss="modal">Close</button> -->
+<!--             <button type="button" class="btn btn&#45;success" onclick="window.open('https://qiskit.org', '_blank');">Go to Qiskit.org</button> -->
+<!--           </div> -->
+<!--         </div> -->
+<!--       </div> -->
+<!--     </div> -->
+<!--  -->
+<!--     <div class="modal fade" id="DWave_runModal" tabindex="&#45;1" role="dialog" aria&#45;labelledby="DWave_runModalLabel" aria&#45;hidden="true"> -->
+<!--       <div class="modal&#45;dialog" role="document"> -->
+<!--         <div class="modal&#45;content"> -->
+<!--           <div class="modal&#45;header"> -->
+<!--             <h5 class="modal&#45;title" id="DWave_runModalLabel">Running DWave Sample Code</h5> -->
+<!--             <button type="button" class="close" data&#45;dismiss="modal" aria&#45;label="Close"> -->
+<!--               <span aria&#45;hidden="true">&#38;times;</span> -->
+<!--             </button> -->
+<!--           </div> -->
+<!--           <div class="modal&#45;body"> -->
+<!--             The D&#45;Wave versions of examples in this book are written in Python, designed to run either in simulation or on -->
+<!--             actual D&#45;Wave hardware, using the D&#45;Wave libraries at <a href="https://www.dwavesys.com/take&#45;leap" target="_blank">https://www.dwavesys.com/take&#45;leap</a>. -->
+<!--             <br/><br/> -->
+<!--             DWave provides a complete software development kit for working with their simulators and hardware. -->
+<!--             <br/><br/> -->
+<!--             To run this sample, go to the DWave site and create an account, and follow the installation instructions, -->
+<!--             and run this Python script. -->
+<!--           </div> -->
+<!--           <div class="modal&#45;footer"> -->
+<!--             <button type="button" class="btn btn&#45;secondary" data&#45;dismiss="modal">Close</button> -->
+<!--             <button type="button" class="btn btn&#45;success" onclick="window.open('https://www.dwavesys.com/take&#45;leap', '_blank');">Go to the D&#45;Wave website</button> -->
+<!--           </div> -->
+<!--         </div> -->
+<!--       </div> -->
+<!--     </div> -->
+<!--  -->
+<!--     <div class="modal fade" id="OpenQASM_runModal" tabindex="&#45;1" role="dialog" aria&#45;labelledby="OpenQASM_runModalLabel" aria&#45;hidden="true"> -->
+<!--       <div class="modal&#45;dialog" role="document"> -->
+<!--         <div class="modal&#45;content"> -->
+<!--           <div class="modal&#45;header"> -->
+<!--             <h5 class="modal&#45;title" id="OpenQASM_runModalLabel">Running QASM Sample Code</h5> -->
+<!--             <button type="button" class="close" data&#45;dismiss="modal" aria&#45;label="Close"> -->
+<!--               <span aria&#45;hidden="true">&#38;times;</span> -->
+<!--             </button> -->
+<!--           </div> -->
+<!--           <div class="modal&#45;body"> -->
+<!--             The OpenQASM versions of examples in this book are designed to run -->
+<!--             using the <b>IBM Q Experience Quantum Composer</b>, at <a href="https://quantum&#45;computing.ibm.com" target="_blank">https://quantum&#45;computing.ibm.com</a>. -->
+<!--             <br/><br/> -->
+<!--             The <b>Quantum Composer</b> is a graphical user interface for programming a quantum processor. -->
+<!--             <br/><br/> -->
+<!--             To run this sample, go to the Q Experience site and create new circuit using the Circuit Composer, -->
+<!--             then paste the code into the Circuit Editor. -->
+<!--           </div> -->
+<!--           <div class="modal&#45;footer"> -->
+<!--             <button type="button" class="btn btn&#45;secondary" data&#45;dismiss="modal">Close</button> -->
+<!--             <button type="button" class="btn btn&#45;success" onclick="window.open('https://quantum&#45;computing.ibm.com', '_blank');">Go to IBM Q Experience</button> -->
+<!--           </div> -->
+<!--         </div> -->
+<!--       </div> -->
+<!--     </div> -->
+<!--  -->
+<!--     <div class="modal fade" id="QSharp_runModal" tabindex="&#45;1" role="dialog" aria&#45;labelledby="QSharp_runModalLabel" aria&#45;hidden="true"> -->
+<!--       <div class="modal&#45;dialog" role="document"> -->
+<!--         <div class="modal&#45;content"> -->
+<!--           <div class="modal&#45;header"> -->
+<!--             <h5 class="modal&#45;title" id="QSharp_runModalLabel">Running Q# Sample Code</h5> -->
+<!--             <button type="button" class="close" data&#45;dismiss="modal" aria&#45;label="Close"> -->
+<!--               <span aria&#45;hidden="true">&#38;times;</span> -->
+<!--             </button> -->
+<!--           </div> -->
+<!--           <div class="modal&#45;body"> -->
+<!--             The Q# (pronounced "Q Sharp") versions of examples in this book are designed to run -->
+<!--             using the <b>Microsoft QDK</b>, at <a href="https://www.microsoft.com/en&#45;us/quantum/development&#45;kit" target="_blank">https://www.microsoft.com/en&#45;us/quantum/development&#45;kit</a>. -->
+<!--             <br/><br/> -->
+<!--               Q# is a quantum&#45;focused programming language with native type, operators, and other abstraction. -->
+<!--             <br/><br/> -->
+<!--             To run this sample, go to the QDK site and create a new IQ# Notebook, and then paste this -->
+<!--             sample code into it. -->
+<!--           </div> -->
+<!--           <div class="modal&#45;footer"> -->
+<!--             <button type="button" class="btn btn&#45;secondary" data&#45;dismiss="modal">Close</button> -->
+<!--             <button type="button" class="btn btn&#45;success" onclick="window.open('https://www.microsoft.com/en&#45;us/quantum/development&#45;kit', '_blank');">Go to QDK Website</button> -->
+<!--           </div> -->
+<!--         </div> -->
+<!--       </div> -->
+<!--     </div> -->
+<!--  -->
+
+<script src="./static/js/custom.js" type="text/javascript" charset="utf-8"></script>
+
+
+</body>
+</html>
