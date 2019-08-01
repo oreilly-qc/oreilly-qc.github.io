@@ -766,18 +766,8 @@
 <!--     </div> -->
 <!--  -->
 
-    <script> 
-        // Load custom JS after page load so DOM defined
-        function onloads() {
-            check_for_editor_resize();
-            fetch_sample_contents();
-            make_sample_menu();
-        }
-        $(function() {
-            $.getScript("static/js/custom.js");
+<script src="./static/js/custom.js" type="text/javascript" charset="utf-8"></script>
 
-        });
-    </script>
 
 </body>
 </html>
