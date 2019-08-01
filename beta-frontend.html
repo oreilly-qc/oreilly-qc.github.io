@@ -49,6 +49,22 @@
           <li class="nav-item">
             <a class="nav-link" href="https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683">Buy Book</a>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Engines
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#" onclick="do_aboutqce_modal();">QCEngine</a>
+              <a class="dropdown-item" href="#" onclick="do_engine_modal('Qiskit');">Qiskit</a>
+              <a class="dropdown-item" href="#" onclick="do_engine_modal('OpenQASM');">OpenQASM</a>
+              <a class="dropdown-item" href="#" onclick="do_engine_modal('QSharp');">Q#</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#" onclick="do_addengine_modal();">Add your engine here!</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" onclick="do_contact_modal();">Contact</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -603,6 +619,29 @@
   </div>
 </div>
 
+<div class="modal fade" id="Contact_runModal" tabindex="-1" role="dialog" aria-labelledby="Contact_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Contact_runModalLabel">Contacting us</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        If you have questions or comments
+        about running these book samples, the authors would love to hear from you.
+        They can be reached through the Github code samples
+        <b><a href="https://github.com/oreilly-qc/oreilly-qc.github.io/graphs/contributors" target="_blank">contributors page</a></b>,
+        or else at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>.
+              </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="CheatSheet_runModal" tabindex="-1" role="dialog" aria-labelledby="CheatSheet_runModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -726,7 +765,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="OpenQASM_runModalLabel">Running QASM Sample Code</h5>
+        <h5 class="modal-title" id="OpenQASM_runModalLabel">Running OpenQASM Sample Code</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
