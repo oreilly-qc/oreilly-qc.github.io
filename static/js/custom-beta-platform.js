@@ -1,11 +1,11 @@
 var editor = ace.edit("editor_div");
 editor.session.setMode("ace/mode/javascript");
 editor.commands.addCommand({
-        name: "run",
-        bindKey: {win: "Shift-Enter", mac: "Shift-Enter"},
-        exec: function(editor) {
-            handle_run_button();
-        }
+    name: "run",
+    bindKey: {win: "Shift-Enter", mac: "Shift-Enter"},
+    exec: function(editor) {
+        handle_run_button();
+    }
 });
 
 var editor_div = document.getElementById('editor_div');
@@ -13,9 +13,10 @@ var editor_boot_panel = document.getElementById('editor_boot_panel');
 var staff_boot_panel = document.getElementById('staff_boot_panel');
 var circle_boot_panel = document.getElementById('circle_boot_panel');
 var editor_frame_div = document.getElementById('editor_frame_div');
-var example_choice_span = document.getElementById('example_choice_span');
-var engine_choice_span = document.getElementById('engine_choice_span');
+// var example_choice_span = document.getElementById('example_choice_span');
+// var engine_choice_span = document.getElementById('engine_choice_span');
 var example_github_span = document.getElementById('example_github_span');
+var github_links_footer = document.getElementById('github_links_footer');
 // var language_choice_span = document.getElementById('language_choice_span');
 var script_output_textarea = document.getElementById('script_output_textarea');
 var staff_popin_div = document.getElementById('staff_popin_div');
@@ -58,6 +59,12 @@ function check_for_editor_resize()
     window.setTimeout(check_for_editor_resize,
                       1000 * seconds_per_check_for_editor_resize);
 }
+
+// window.onload = function() {
+//     check_for_editor_resize();
+//     fetch_sample_contents();
+//     make_sample_menu();
+// };
 
 function click_circle_fill(up_down)
 {
@@ -311,19 +318,16 @@ function fetch_sample_contents()
 
 function make_sample_menu()
 {
-    str = '';
-    str += '<button id="sample_menu_button" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
-    str += 'Choose a sample <span class="caret"></span></button>';
-    str += '<ul class="dropdown-menu" role="menu">';
+    // Populate the sample-code dropdown
     for (i = 0; i < sample_menu.length; ++i)
     {
         sample = sample_menu[i];
-        str += '<li><a href="#" onclick="choose_sample_menu(sample_menu['+i+'], null);">';
+        str = '';
+        str += '<a class="dropdown-item" href="#" onclick="choose_sample_menu(sample_menu['+i+'], null);">';
         str += sample.menu_title;
-        str += '</a></li>';
+        str += '</a>';
+        $('#example_choice_dropdown').append(str)
     }
-    str += '</ul>'
-    example_choice_span.innerHTML = str;
     try_to_get_program_from_passed_in_url();
 }
 
@@ -356,19 +360,23 @@ function set_current_engine(engine)
 
 function choose_sample_menu(sample, engine)
 {
-  show_graphics_output(false);
-  do_sample_special_cases(sample.shortcut);
-  console.log('Sample menu chosen: ' + sample.sample_file);
-  if (engine == null)
+    show_graphics_output(false);
+    do_sample_special_cases(sample.shortcut);
+    console.log('Sample menu chosen: ' + sample.sample_file);
+    if (engine == null)
     engine = engine_list[0];
-  set_current_engine(engine);
-  var sample_menu_button = document.getElementById('sample_menu_button');
-  sample_menu_button.innerHTML = sample.menu_title;
-  load_code_sample(sample.sample_file, engine);
-  var engine_menu_button = document.getElementById('engine_menu_button');
-  if (engine_menu_button)
+    set_current_engine(engine);
+    var sample_menu_button = document.getElementById('sample_menu_button');
+    m_title = sample.menu_title
+    if(m_title.length > 20) {
+        m_title = m_title.substring(0,19)+"...";
+    }
+    sample_menu_button.innerHTML = m_title;
+    load_code_sample(sample.sample_file, engine);
+    var engine_menu_button = document.getElementById('engine_menu_button');
+    if (engine_menu_button)
       engine_menu_button.innerHTML = engine.name;
-  clear_output();
+    clear_output();
 }
 
 function choose_engine_menu(engine)
@@ -383,22 +391,19 @@ function choose_engine_menu(engine)
 
 function make_engine_menu()
 {
-    str = '';
-    str += '<button id="engine_menu_button" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
-    str += 'Choose an engine <span class="caret"></span></button>';
-    str += '<ul class="dropdown-menu" role="menu">';
+    $('#engine_choice_dropdown').empty();
     for (i = 0; i < valid_engine_list.length; ++i)
     {
         var engine_index = valid_engine_list[i];
         engine = engine_list[engine_index];
-        str += '<li><a href="#" onclick="choose_engine_menu(engine_list['+engine_index+']);">';
+        str = '';
+        str += '<a class="dropdown-item" href="#" onclick="choose_engine_menu(engine_list['+engine_index+']);">';
         str += engine.name;
-        str += '</a></li>';
+        str += '</a>';
+        $('#engine_choice_dropdown').append(str)
     }
-    str += '</ul>'
-    engine_choice_span.innerHTML = str;
-    var engine_menu_button = document.getElementById('engine_menu_button');
-    engine_menu_button.innerHTML = current_engine.name;
+    // var engine_menu_button = document.getElementById('engine_menu_button');
+    // engine_menu_button.innerHTML = current_engine.name;
 }
 
 function do_engine_modal()
@@ -430,33 +435,35 @@ function make_github_source_links()
 {
     var sample = current_sample;
     valid_engine_list = [0];
-    str = '<br/>';
-//    if (sample != null)
+    // str = '<br/>';
+    // str += 'View source in Github: ';
+    str = 'Source code on Github <div class="btn-group btn-group-sm float-right" role="group" aria-label="Other simulators">'
+    for (i = 0; i < engine_list.length; ++i)
     {
-        str += 'View source in Github: ';
-        for (i = 0; i < engine_list.length; ++i)
+        engine = engine_list[i];
+        // if (i > 0)
+        //     str += ' / ';
+        var sample_ok = engine.dir_list.includes(sample.sample_file);
+        if (sample_ok)
         {
-            engine = engine_list[i];
+            var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/blob/master/samples/' + engine.name;
+            link +=  '/' + sample.sample_file + engine.suffix;
+            str += '<a href="'+link+'" class="btn btn-secondary">'+engine.link_name+'</a>';
             if (i > 0)
-                str += ' / ';
-            var sample_ok = engine.dir_list.includes(sample.sample_file);
-            if (sample_ok)
-            {
-                var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/blob/master/samples/' + engine.name;
-                link +=  '/' + sample.sample_file + engine.suffix;
-                str += '<b><a href="'+link+'" target="_blank">'+engine.link_name+'</a></b>';
-                if (i > 0)
-                  valid_engine_list.push(i);
-            }
-            else
-            {
-                var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/tree/master/samples/' + engine.name;
-                str += '<span style="color:#aaa" title="This version is not implemented yet, but if you\'d like to add it, please contact us at octopus@qcengine.com">';
-                str += '<b><a href="'+link+'" target="_blank">'+engine.link_name+'</a></b></span>';
-           }
+              valid_engine_list.push(i);
         }
+        else
+        {
+            var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/tree/master/samples/' + engine.name;
+            str += '<a href="'+link+'" class="btn btn-secondary disabled">'+engine.link_name+'</a>';
+            // str += '<span style="color:#aaa" title="This version is not implemented yet, but if you\'d like to add it, please contact us at octopus@qcengine.com">';
+            // str += '<b><a href="'+link+'" target="_blank">'+engine.link_name+'</a></b></span>';
+       }
     }
 
+    str += '</div>'
+    github_links_footer.innerHTML = str;
+    //
     // If there's a chapter notebook, link to that.
     if (current_engine.name == 'Qiskit')
     {
@@ -503,11 +510,11 @@ function make_github_source_links()
         }
     }
 
-    str += '<span style="font-size:8pt; color:#77a">';
-    str += '<br/>Developers: Add your engine, or add a sample! <b><a href="#" onclick="do_addengine_modal();">Click here</a></b> for more info.';
-    str += '</span>';
+    // str += '<span style="font-size:8pt; color:#77a">';
+    // str += '<br/>Developers: Add your engine, or add a sample! <b><a href="#" onclick="do_addengine_modal();">Click here</a></b> for more info.';
+    // str += '</span>';
 
-    example_github_span.innerHTML = str;
+    // example_github_span.innerHTML = str;
 }
 
 // get_url_param() is adapted from JeffreyCrofte's work here: https://www.creativejuiz.fr/blog/en/javascript-en/read-url-get-parameters-with-javascript
@@ -581,7 +588,7 @@ function do_sample_special_cases(sample_str)
     if (sample_str == '4-2')
     {
         // Takes a while to eat a chocodile
-        var sstr = '<img src="images/caution.png" height="28" /><b>This sample takes a while to run.</b>';
+        var sstr = '<i class="fas fa-exclamation-triangle" style="color:red;"></i> This sample takes a while to run.</b>';
         sample_info_span.innerHTML = sstr;
         sample_info_span.style.display = 'block';
     }
@@ -799,6 +806,7 @@ function handle_run_button()
 }
 
 var default_program = 'qc.reset(3);\nqc.write(0);\nqc.had(0x1);\nqc.cnot(0x2, 0x1);\n';
+
 
 window.onload = function() {
     check_for_editor_resize();
