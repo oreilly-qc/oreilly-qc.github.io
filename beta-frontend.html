@@ -49,6 +49,22 @@
           <li class="nav-item">
             <a class="nav-link" href="https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683">Buy Book</a>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Engines
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#" onclick="do_aboutqce_modal();">QCEngine</a>
+              <a class="dropdown-item" href="#" onclick="do_engine_modal('Qiskit');">Qiskit</a>
+              <a class="dropdown-item" href="#" onclick="do_engine_modal('OpenQASM');">OpenQASM</a>
+              <a class="dropdown-item" href="#" onclick="do_engine_modal('QSharp');">Q#</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#" onclick="do_addengine_modal();">Add your engine here!</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" onclick="do_contact_modal();">Contact</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -538,233 +554,264 @@
 <!--         </div> -->
 <!--       </div> -->
 <!--     </div> -->
-<!--  -->
-<!--  -->
-<!--     <div class="modal fade" id="AboutQCE_runModal" tabindex="&#45;1" role="dialog" aria&#45;labelledby="AboutQCE_runModalLabel" aria&#45;hidden="true"> -->
-<!--       <div class="modal&#45;dialog" role="document"> -->
-<!--         <div class="modal&#45;content"> -->
-<!--           <div class="modal&#45;header"> -->
-<!--             <h5 class="modal&#45;title" id="AboutQCE_runModalLabel">QCEngine Notes</h5> -->
-<!--             <button type="button" class="close" data&#45;dismiss="modal" aria&#45;label="Close"> -->
-<!--               <span aria&#45;hidden="true">&#38;times;</span> -->
-<!--             </button> -->
-<!--           </div> -->
-<!--           <div class="modal&#45;body"> -->
-<!--             QCEngine is intended to be a lightweight quantum computation simulator, -->
-<!--             useful for quick sketches and demonstrations. -->
-<!--  -->
-<!--             <br/> -->
-<!--             <br/> -->
-<!--             It will let you run JavaScript code, simulating the quantum computing as -->
-<!--             though you had a real QC, up to about 25 qubits (depending on your browser). -->
-<!--             The best way to get familiar with QCEngine is to run the book samples on -->
-<!--             this page, along with the <b><a href="./docs/build/index.html" target="_blank">QCEngine Docs</a></b>. -->
-<!--             <br/> -->
-<!--             <br/> -->
-<!--             For more serious development tasks, there are many other simulation engines available: -->
-<!--             <br/> -->
-<!--             <ul> -->
-<!--               <li><b><a href="qiskit.org" target="_default">Qiskit</a></b> &#45;  -->
-<!--                 An open&#45;source software development kit (SDK) for working with OpenQASM and the -->
-<!--                 IBM Q quantum processors. Create quantum computing programs, compile, and execute them online -->
-<!--                 in a real quantum processors.</li> -->
-<!--               <li><b><a href="https://quantum&#45;computing.ibm.com" target="_default">IBM Q Experience</a></b> &#45;  -->
-<!--                 A complete online environment, containing tools and information for programming quantum -->
-<!--                 simulations as well as physical quantum computers.</li> -->
-<!--               <li><b><a href="https://www.microsoft.com/en&#45;us/quantum/development&#45;kit" target="_default">Microsoft QDK</a></b> &#45;  -->
-<!--                 A complete software development system for developing and running programs for quantum computers.</li> -->
-<!--               <li><b><a href="https://www.dwavesys.com/take&#45;leap" target="_default">D&#45;Wave</a></b> &#45;  -->
-<!--                 A physical QPU using a quantum annealing model. See Example 10&#45;2 ("Kitten and Tiger") for a good example -->
-<!--                 of use. The D&#45;Wave website provides a rich set of libraries and educational materials.</li> -->
-<!--               <li><b><a href="http://www.quantumplayground.net" target="_default">Google QC Playground</a></b> &#45;  -->
-<!--                 An approachable online environment for discovering quantum computing.</li> -->
-<!--             </ul> -->
-<!--  -->
-<!--             ...just to name a few. -->
-<!--             <br/> -->
-<!--             <br/> -->
-<!--             If you have questions or comments -->
-<!--             about running these book samples, the authors would love to hear from you -->
-<!--             at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>. -->
-<!--                   </div> -->
-<!--           <div class="modal&#45;footer"> -->
-<!--             <button type="button" class="btn btn&#45;secondary" data&#45;dismiss="modal">Close</button> -->
-<!--           </div> -->
-<!--         </div> -->
-<!--       </div> -->
-<!--     </div> -->
-<!--  -->
-<!--     <div class="modal fade" id="CheatSheet_runModal" tabindex="&#45;1" role="dialog" aria&#45;labelledby="CheatSheet_runModalLabel" aria&#45;hidden="true"> -->
-<!--       <div class="modal&#45;dialog" role="document"> -->
-<!--         <div class="modal&#45;content"> -->
-<!--           <div class="modal&#45;header"> -->
-<!--             <h5 class="modal&#45;title" id="CheatSheet_runModalLabel">QCEngine Command Cheat Sheet</h5> -->
-<!--             <button type="button" class="close" data&#45;dismiss="modal" aria&#45;label="Close"> -->
-<!--               <span aria&#45;hidden="true">&#38;times;</span> -->
-<!--             </button> -->
-<!--           </div> -->
-<!--           <div class="modal&#45;body"> -->
-<!--             This sheet provides a quick&#45;reference for most common QCEngine commands. -->
-<!--             The best way to become familiar with QCEngine commands is to try running the book -->
-<!--             samples in this page. -->
-<!--             If you find things missing or unclear, the authors would love to hear from you -->
-<!--             at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>. -->
-<!--  -->
-<!--             <br/> -->
-<!--             <br/> -->
-<!--             <b>"qc." Commands:</b> Commands such as <code>qc.reset()</code> and <code>qc.cnot(t,c)</code> execute -->
-<!--             using a quantum computation simulator. In most cases, they take a <b>target mask</b> and a <b>condition mask</b>, -->
-<!--             to specify which qubits the instructions act on. Some commands also take a rotation angle. -->
-<!--  -->
-<!--             <br/> -->
-<!--             <br/> -->
-<!--             <b>Qubit Masks:</b> Qubits are be specified using an integer, where each bit corresponds to one of the -->
-<!--             qubits in the quantum computer. -->
-<!--  -->
-<!--             <br/> -->
-<!--             <br/> -->
-<!--             (...this is under sonstruction) -->
-<!--  -->
-<!--           </div> -->
-<!--           <div class="modal&#45;footer"> -->
-<!--             <button type="button" class="btn btn&#45;secondary" data&#45;dismiss="modal">Close</button> -->
-<!--           </div> -->
-<!--         </div> -->
-<!--       </div> -->
-<!--     </div> -->
-<!--  -->
-<!--  -->
-<!--     <div class="modal fade" id="AddEngine_runModal" tabindex="&#45;1" role="dialog" aria&#45;labelledby="AddEngine_runModalLabel" aria&#45;hidden="true"> -->
-<!--       <div class="modal&#45;dialog" role="document"> -->
-<!--         <div class="modal&#45;content"> -->
-<!--           <div class="modal&#45;header"> -->
-<!--             <h5 class="modal&#45;title" id="AddEngine_runModalLabel">Add new engines and samples!</h5> -->
-<!--             <button type="button" class="close" data&#45;dismiss="modal" aria&#45;label="Close"> -->
-<!--               <span aria&#45;hidden="true">&#38;times;</span> -->
-<!--             </button> -->
-<!--           </div> -->
-<!--           <div class="modal&#45;body"> -->
-<!--             <b>Have a favorite quantum simulator, or even a real QPU?</b> -->
-<!--             <br/> -->
-<!--             We'd love to add your sample code here. -->
-<!--             <br/> -->
-<!--             <br/> -->
-<!--             Providing these samples for as many systems as possible helps our readers, so please contact us -->
-<!--             at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>. -->
-<!--           </div> -->
-<!--           <div class="modal&#45;footer"> -->
-<!--             <button type="button" class="btn btn&#45;secondary" data&#45;dismiss="modal">Close</button> -->
-<!--           </div> -->
-<!--         </div> -->
-<!--       </div> -->
-<!--     </div> -->
-<!--  -->
-<!--     <div class="modal fade" id="Qiskit_runModal" tabindex="&#45;1" role="dialog" aria&#45;labelledby="Qiskit_runModalLabel" aria&#45;hidden="true"> -->
-<!--       <div class="modal&#45;dialog" role="document"> -->
-<!--         <div class="modal&#45;content"> -->
-<!--           <div class="modal&#45;header"> -->
-<!--             <h5 class="modal&#45;title" id="Qiskit_runModalLabel">Running Qiskit Sample Code</h5> -->
-<!--             <button type="button" class="close" data&#45;dismiss="modal" aria&#45;label="Close"> -->
-<!--               <span aria&#45;hidden="true">&#38;times;</span> -->
-<!--             </button> -->
-<!--           </div> -->
-<!--           <div class="modal&#45;body"> -->
-<!--             The Qiskit versions of examples in this book are written in Python, designed to run -->
-<!--             as Qiskit notebooks, at <a href="https://qiskit.org" target="_blank">https://qiskit.org</a>. -->
-<!--             <br/><br/> -->
-<!--             Qiskit is an open&#45;source software development kit (SDK) for working with OpenQASM and the -->
-<!--             IBM Q quantum processors. Create quantum computing programs, compile, and execute them online -->
-<!--             in a real quantum processors. -->
-<!--             <br/><br/> -->
-<!--             To run this sample, go to the Qiskit site and create a new notebook, and then paste this -->
-<!--             sample code into it. -->
-<!--           </div> -->
-<!--           <div class="modal&#45;footer"> -->
-<!--             <button type="button" class="btn btn&#45;secondary" data&#45;dismiss="modal">Close</button> -->
-<!--             <button type="button" class="btn btn&#45;success" onclick="window.open('https://qiskit.org', '_blank');">Go to Qiskit.org</button> -->
-<!--           </div> -->
-<!--         </div> -->
-<!--       </div> -->
-<!--     </div> -->
-<!--  -->
-<!--     <div class="modal fade" id="DWave_runModal" tabindex="&#45;1" role="dialog" aria&#45;labelledby="DWave_runModalLabel" aria&#45;hidden="true"> -->
-<!--       <div class="modal&#45;dialog" role="document"> -->
-<!--         <div class="modal&#45;content"> -->
-<!--           <div class="modal&#45;header"> -->
-<!--             <h5 class="modal&#45;title" id="DWave_runModalLabel">Running DWave Sample Code</h5> -->
-<!--             <button type="button" class="close" data&#45;dismiss="modal" aria&#45;label="Close"> -->
-<!--               <span aria&#45;hidden="true">&#38;times;</span> -->
-<!--             </button> -->
-<!--           </div> -->
-<!--           <div class="modal&#45;body"> -->
-<!--             The D&#45;Wave versions of examples in this book are written in Python, designed to run either in simulation or on -->
-<!--             actual D&#45;Wave hardware, using the D&#45;Wave libraries at <a href="https://www.dwavesys.com/take&#45;leap" target="_blank">https://www.dwavesys.com/take&#45;leap</a>. -->
-<!--             <br/><br/> -->
-<!--             DWave provides a complete software development kit for working with their simulators and hardware. -->
-<!--             <br/><br/> -->
-<!--             To run this sample, go to the DWave site and create an account, and follow the installation instructions, -->
-<!--             and run this Python script. -->
-<!--           </div> -->
-<!--           <div class="modal&#45;footer"> -->
-<!--             <button type="button" class="btn btn&#45;secondary" data&#45;dismiss="modal">Close</button> -->
-<!--             <button type="button" class="btn btn&#45;success" onclick="window.open('https://www.dwavesys.com/take&#45;leap', '_blank');">Go to the D&#45;Wave website</button> -->
-<!--           </div> -->
-<!--         </div> -->
-<!--       </div> -->
-<!--     </div> -->
-<!--  -->
-<!--     <div class="modal fade" id="OpenQASM_runModal" tabindex="&#45;1" role="dialog" aria&#45;labelledby="OpenQASM_runModalLabel" aria&#45;hidden="true"> -->
-<!--       <div class="modal&#45;dialog" role="document"> -->
-<!--         <div class="modal&#45;content"> -->
-<!--           <div class="modal&#45;header"> -->
-<!--             <h5 class="modal&#45;title" id="OpenQASM_runModalLabel">Running QASM Sample Code</h5> -->
-<!--             <button type="button" class="close" data&#45;dismiss="modal" aria&#45;label="Close"> -->
-<!--               <span aria&#45;hidden="true">&#38;times;</span> -->
-<!--             </button> -->
-<!--           </div> -->
-<!--           <div class="modal&#45;body"> -->
-<!--             The OpenQASM versions of examples in this book are designed to run -->
-<!--             using the <b>IBM Q Experience Quantum Composer</b>, at <a href="https://quantum&#45;computing.ibm.com" target="_blank">https://quantum&#45;computing.ibm.com</a>. -->
-<!--             <br/><br/> -->
-<!--             The <b>Quantum Composer</b> is a graphical user interface for programming a quantum processor. -->
-<!--             <br/><br/> -->
-<!--             To run this sample, go to the Q Experience site and create new circuit using the Circuit Composer, -->
-<!--             then paste the code into the Circuit Editor. -->
-<!--           </div> -->
-<!--           <div class="modal&#45;footer"> -->
-<!--             <button type="button" class="btn btn&#45;secondary" data&#45;dismiss="modal">Close</button> -->
-<!--             <button type="button" class="btn btn&#45;success" onclick="window.open('https://quantum&#45;computing.ibm.com', '_blank');">Go to IBM Q Experience</button> -->
-<!--           </div> -->
-<!--         </div> -->
-<!--       </div> -->
-<!--     </div> -->
-<!--  -->
-<!--     <div class="modal fade" id="QSharp_runModal" tabindex="&#45;1" role="dialog" aria&#45;labelledby="QSharp_runModalLabel" aria&#45;hidden="true"> -->
-<!--       <div class="modal&#45;dialog" role="document"> -->
-<!--         <div class="modal&#45;content"> -->
-<!--           <div class="modal&#45;header"> -->
-<!--             <h5 class="modal&#45;title" id="QSharp_runModalLabel">Running Q# Sample Code</h5> -->
-<!--             <button type="button" class="close" data&#45;dismiss="modal" aria&#45;label="Close"> -->
-<!--               <span aria&#45;hidden="true">&#38;times;</span> -->
-<!--             </button> -->
-<!--           </div> -->
-<!--           <div class="modal&#45;body"> -->
-<!--             The Q# (pronounced "Q Sharp") versions of examples in this book are designed to run -->
-<!--             using the <b>Microsoft QDK</b>, at <a href="https://www.microsoft.com/en&#45;us/quantum/development&#45;kit" target="_blank">https://www.microsoft.com/en&#45;us/quantum/development&#45;kit</a>. -->
-<!--             <br/><br/> -->
-<!--               Q# is a quantum&#45;focused programming language with native type, operators, and other abstraction. -->
-<!--             <br/><br/> -->
-<!--             To run this sample, go to the QDK site and create a new IQ# Notebook, and then paste this -->
-<!--             sample code into it. -->
-<!--           </div> -->
-<!--           <div class="modal&#45;footer"> -->
-<!--             <button type="button" class="btn btn&#45;secondary" data&#45;dismiss="modal">Close</button> -->
-<!--             <button type="button" class="btn btn&#45;success" onclick="window.open('https://www.microsoft.com/en&#45;us/quantum/development&#45;kit', '_blank');">Go to QDK Website</button> -->
-<!--           </div> -->
-<!--         </div> -->
-<!--       </div> -->
-<!--     </div> -->
-<!--  -->
+
+
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    Engine-specific info dialogs are below. These are provided separately, so that we have the flexibility
+    to customize each one as required.
+    Modal dialogs are not elegant, and I'm open to suggestions for a better way to do this.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ -->
+<div class="modal fade" id="AboutQCE_runModal" tabindex="-1" role="dialog" aria-labelledby="AboutQCE_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AboutQCE_runModalLabel">QCEngine Notes</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        QCEngine is intended to be a lightweight quantum computation simulator,
+        useful for quick sketches and demonstrations.
+
+        <br/>
+        <br/>
+        It will let you run JavaScript code, simulating the quantum computing as
+        though you had a real QC, up to about 25 qubits (depending on your browser).
+        The best way to get familiar with QCEngine is to run the book samples on
+        this page, along with the <b><a href="./docs/build/index.html" target="_blank">QCEngine Docs</a></b>.
+        <br/>
+        <br/>
+        For more serious development tasks, there are many other simulation engines available:
+        <br/>
+        <ul>
+          <li><b><a href="qiskit.org" target="_default">Qiskit</a></b> - 
+            An open-source software development kit (SDK) for working with OpenQASM and the
+            IBM Q quantum processors. Create quantum computing programs, compile, and execute them online
+            in a real quantum processors.</li>
+          <li><b><a href="https://quantum-computing.ibm.com" target="_default">IBM Q Experience</a></b> - 
+            A complete online environment, containing tools and information for programming quantum
+            simulations as well as physical quantum computers.</li>
+          <li><b><a href="https://www.microsoft.com/en-us/quantum/development-kit" target="_default">Microsoft QDK</a></b> - 
+            A complete software development system for developing and running programs for quantum computers.</li>
+          <li><b><a href="https://www.dwavesys.com/take-leap" target="_default">D-Wave</a></b> - 
+            A physical QPU using a quantum annealing model. See Example 10-2 ("Kitten and Tiger") for a good example
+            of use. The D-Wave website provides a rich set of libraries and educational materials.</li>
+          <li><b><a href="http://www.quantumplayground.net" target="_default">Google QC Playground</a></b> - 
+            An approachable online environment for discovering quantum computing.</li>
+        </ul>
+
+        ...just to name a few.
+        <br/>
+        <br/>
+        If you have questions or comments
+        about running these book samples, the authors would love to hear from you
+        at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>.
+              </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="Contact_runModal" tabindex="-1" role="dialog" aria-labelledby="Contact_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Contact_runModalLabel">Contacting us</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        If you have questions or comments
+        about running these book samples, the authors would love to hear from you.
+        They can be reached through the Github code samples
+        <b><a href="https://github.com/oreilly-qc/oreilly-qc.github.io/graphs/contributors" target="_blank">contributors page</a></b>,
+        or else at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>.
+              </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="CheatSheet_runModal" tabindex="-1" role="dialog" aria-labelledby="CheatSheet_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="CheatSheet_runModalLabel">QCEngine Command Cheat Sheet</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This sheet provides a quick-reference for most common QCEngine commands.
+        The best way to become familiar with QCEngine commands is to try running the book
+        samples in this page.
+        If you find things missing or unclear, the authors would love to hear from you
+        at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>.
+
+        <br/>
+        <br/>
+        <b>"qc." Commands:</b> Commands such as <code>qc.reset()</code> and <code>qc.cnot(t,c)</code> execute
+        using a quantum computation simulator. In most cases, they take a <b>target mask</b> and a <b>condition mask</b>,
+        to specify which qubits the instructions act on. Some commands also take a rotation angle.
+
+        <br/>
+        <br/>
+        <b>Qubit Masks:</b> Qubits are be specified using an integer, where each bit corresponds to one of the
+        qubits in the quantum computer.
+
+        <br/>
+        <br/>
+        (...this is under sonstruction)
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="AddEngine_runModal" tabindex="-1" role="dialog" aria-labelledby="AddEngine_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AddEngine_runModalLabel">Add new engines and samples!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <b>Have a favorite quantum simulator, or even a real QPU?</b>
+        <br/>
+        We'd love to add your sample code here.
+        <br/>
+        <br/>
+        Providing these samples for as many systems as possible helps our readers, so please contact us
+        at <b><a href="mailto:octopus@qcengine.com">octopus@qcengine.com</a></b>.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="Qiskit_runModal" tabindex="-1" role="dialog" aria-labelledby="Qiskit_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Qiskit_runModalLabel">Running Qiskit Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The Qiskit versions of examples in this book are written in Python, designed to run
+        as Qiskit notebooks, at <a href="https://qiskit.org" target="_blank">https://qiskit.org</a>.
+        <br/><br/>
+        Qiskit is an open-source software development kit (SDK) for working with OpenQASM and the
+        IBM Q quantum processors. Create quantum computing programs, compile, and execute them online
+        in a real quantum processors.
+        <br/><br/>
+        To run this sample, go to the Qiskit site and create a new notebook, and then paste this
+        sample code into it.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://qiskit.org', '_blank');">Go to Qiskit.org</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="DWave_runModal" tabindex="-1" role="dialog" aria-labelledby="DWave_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="DWave_runModalLabel">Running DWave Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The D-Wave versions of examples in this book are written in Python, designed to run either in simulation or on
+        actual D-Wave hardware, using the D-Wave libraries at <a href="https://www.dwavesys.com/take-leap" target="_blank">https://www.dwavesys.com/take-leap</a>.
+        <br/><br/>
+        DWave provides a complete software development kit for working with their simulators and hardware.
+        <br/><br/>
+        To run this sample, go to the DWave site and create an account, and follow the installation instructions,
+        and run this Python script.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://www.dwavesys.com/take-leap', '_blank');">Go to the D-Wave website</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="OpenQASM_runModal" tabindex="-1" role="dialog" aria-labelledby="OpenQASM_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="OpenQASM_runModalLabel">Running OpenQASM Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The OpenQASM versions of examples in this book are designed to run
+        using the <b>IBM Q Experience Quantum Composer</b>, at <a href="https://quantum-computing.ibm.com" target="_blank">https://quantum-computing.ibm.com</a>.
+        <br/><br/>
+        The <b>Quantum Composer</b> is a graphical user interface for programming a quantum processor.
+        <br/><br/>
+        To run this sample, go to the Q Experience site and create new circuit using the Circuit Composer,
+        then paste the code into the Circuit Editor.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://quantum-computing.ibm.com', '_blank');">Go to IBM Q Experience</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="QSharp_runModal" tabindex="-1" role="dialog" aria-labelledby="QSharp_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="QSharp_runModalLabel">Running Q# Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The Q# (pronounced "Q Sharp") versions of examples in this book are designed to run
+        using the <b>Microsoft QDK</b>, at <a href="https://www.microsoft.com/en-us/quantum/development-kit" target="_blank">https://www.microsoft.com/en-us/quantum/development-kit</a>.
+        <br/><br/>
+          Q# is a quantum-focused programming language with native type, operators, and other abstraction.
+        <br/><br/>
+        To run this sample, go to the QDK site and create a new IQ# Notebook, and then paste this
+        sample code into it.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://www.microsoft.com/en-us/quantum/development-kit', '_blank');">Go to QDK Website</button>
+      </div>
+    </div>
+  </div>
+</div>
 
     <script> 
         // Load custom JS after page load so DOM defined

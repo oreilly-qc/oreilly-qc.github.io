@@ -406,10 +406,10 @@ function make_engine_menu()
     // engine_menu_button.innerHTML = current_engine.name;
 }
 
-function do_engine_modal()
+function do_engine_modal(engine_name)
 {
     var options = null;
-    var val = $('#'+current_engine.name+'_runModal').modal(options);
+    var val = $('#'+engine_name+'_runModal').modal(options);
 }
 
 function do_addengine_modal()
@@ -422,6 +422,12 @@ function do_aboutqce_modal()
 {
     var options = null;
     var val = $('#AboutQCE_runModal').modal(options);
+}
+
+function do_contact_modal()
+{
+    var options = null;
+    var val = $('#Contact_runModal').modal(options);
 }
 
 function do_cheatsheet_modal()
@@ -794,7 +800,7 @@ function handle_run_button()
 {
     if (current_engine.name != 'QCEngine')
     {
-        do_engine_modal();
+        do_engine_modal(current_engine.name);
         return;
     }
     // set_progress(50, '');
