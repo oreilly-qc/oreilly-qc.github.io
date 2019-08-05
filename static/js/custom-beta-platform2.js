@@ -362,7 +362,7 @@ str += '  <ul>';
     str += '</div>'
 //    console.log(str);
     example_choice_span.innerHTML = str;
-//    try_to_get_program_from_passed_in_url();
+    try_to_get_program_from_passed_in_url();
 }
 
 function broken_make_sample_menu()
@@ -416,7 +416,7 @@ function choose_sample_menu(sample, engine)
     do_sample_special_cases(sample.shortcut);
     console.log('Sample menu chosen: ' + sample.sample_file);
     if (engine == null)
-    engine = engine_list[0];
+        engine = engine_list[0];
     set_current_engine(engine);
     var sample_menu_button = document.getElementById('sample_menu_button');
     m_title = sample.menu_title
@@ -443,7 +443,8 @@ function choose_engine_menu(engine)
 
 function make_engine_menu()
 {
-    $('#engine_choice_dropdown').empty();
+// @@@@@@ ej this menu populator has the same problem as the main one.
+//    $('#engine_choice_dropdown').empty();
     for (i = 0; i < valid_engine_list.length; ++i)
     {
         var engine_index = valid_engine_list[i];
@@ -452,7 +453,7 @@ function make_engine_menu()
         str += '<a class="dropdown-item" href="#" onclick="choose_engine_menu(engine_list['+engine_index+']);">';
         str += engine.name;
         str += '</a>';
-        $('#engine_choice_dropdown').append(str)
+//        $('#engine_choice_dropdown').append(str)
     }
     // var engine_menu_button = document.getElementById('engine_menu_button');
     // engine_menu_button.innerHTML = current_engine.name;
@@ -695,6 +696,8 @@ function hide_qss_image_panes()
 function load_code_sample(sample_str, engine)
 {
     var sample = get_sample_from_string(sample_str);
+    if (sample == null)
+        return false;
     current_sample = sample;
 
     var qce = engine_list[0];
