@@ -441,6 +441,8 @@ function do_cheatsheet_modal()
 function make_github_source_links()
 {
     var sample = current_sample;
+    if (sample == null)
+        return;
     valid_engine_list = [0];
     // str = '<br/>';
     // str += 'View source in Github: ';
