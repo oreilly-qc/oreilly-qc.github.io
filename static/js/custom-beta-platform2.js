@@ -325,38 +325,16 @@ function make_sample_menu()
 {
     str = '';
 
-str += '<button id="sample_menu_button" type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">';
-str += '    Choose a sample';
-str += '</button>';
-str += '<div id="example_choice_dropdown" class="dropdown-menu" aria-labelledby="sample_menu_button">';
-str += '  <ul>';
-// str += '    <li>';
-// str += '      Howdy 3';
-// str += '    </li>';
-// str += '    <li>';
-// str += '      Howdy 2';
-// str += '    </li>';
-
-
-
-
-    // str += '<button id="sample_menu_button" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
-    // str += 'Choose a sample <span class="caret"></span></button>';
-
-    // str += '<button id="sample_menu_button" type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">Choose a sample</button>';
-    // str += '<div id="example_choice_dropdown" class="dropdown-menu" aria-labelledby="sample_menu_button">';
-
-//    str += '<button id="sample_menu_button" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
-//    str += 'Choose a sample <span class="caret"></span></button>';
-    // str += '<ul class="dropdown-menu" role="menu">';
-    // str += '<li>HowdyA</li>';
-    // str += '<li>HowdyB</li>';
+    str += '<button id="sample_menu_button" type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">';
+    str += '    Choose a sample';
+    str += '</button>';
+    str += '<div id="example_choice_dropdown" class="dropdown-menu" aria-labelledby="sample_menu_button">';
     for (i = 0; i < sample_menu.length; ++i)
     {
         sample = sample_menu[i];
-        str += '<li><a href="#" onclick="choose_sample_menu(sample_menu['+i+'], null);">';
+        str += '<a class="dropdown-item" href="#" onclick="choose_sample_menu(sample_menu['+i+'], null);">';
         str += sample.menu_title;
-        str += '</a></li>';
+        str += '</a>';
     }
     str += '</ul>'
     str += '</div>'
