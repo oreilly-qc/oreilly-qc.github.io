@@ -290,7 +290,8 @@ function fetch_one_sample_dir(engine)
         {
             if (http_request.status === 200)
             {
-                engine.dir_list = http_request.responseText;
+                if (http_request.responseText)
+                    engine.dir_list = http_request.responseText;
                 make_github_source_links();
                 make_engine_menu();
             }
@@ -431,7 +432,7 @@ function make_github_source_links()
     var sample = current_sample;
     valid_engine_list = [0];
     str = '<br/>';
-//    if (sample != null)
+    if (sample != null)
     {
         str += 'View source in Github: ';
         for (i = 0; i < engine_list.length; ++i)
@@ -439,7 +440,9 @@ function make_github_source_links()
             engine = engine_list[i];
             if (i > 0)
                 str += ' / ';
-            var sample_ok = engine.dir_list.includes(sample.sample_file);
+            var sample_ok = false;
+            if (engine && engine.dir_list)
+                sample_ok = engine.dir_list.includes(sample.sample_file);
             if (sample_ok)
             {
                 var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/blob/master/samples/' + engine.name;
