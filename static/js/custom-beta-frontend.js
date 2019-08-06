@@ -312,6 +312,7 @@ function fetch_sample_contents()
 
 function make_sample_menu()
 {
+    // Populate the sample-code dropdown
     var str = '';
     str += '<button id="sample_menu_button" type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">';
     str += '    Choose a sample';
