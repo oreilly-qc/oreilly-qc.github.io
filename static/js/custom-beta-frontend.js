@@ -298,9 +298,11 @@ function fetch_one_sample_dir(engine)
             if (http_request.status === 200)
             {
                 if (http_request.responseText)
+                {
                     engine.dir_list = http_request.responseText;
-                make_github_source_links();
-                make_engine_menu();
+                    make_github_source_links();
+                    make_engine_menu();
+                }
             }
             else
             {
@@ -318,6 +320,26 @@ function fetch_sample_contents()
 }
 
 function make_sample_menu()
+{
+    var str = '';
+    str += '<button id="sample_menu_button" type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">';
+    str += '    Choose a sample';
+    str += '</button>';
+    str += '<div id="example_choice_dropdown" class="dropdown-menu" aria-labelledby="sample_menu_button">';
+    for (i = 0; i < sample_menu.length; ++i)
+    {
+        sample = sample_menu[i];
+        str += '<a class="dropdown-item" href="#" onclick="choose_sample_menu(sample_menu['+i+'], null);">';
+        str += sample.menu_title;
+        str += '</a>';
+    }
+    str += '</ul>'
+    str += '</div>'
+    document.getElementById('example_choice_span').innerHTML = str;
+    try_to_get_program_from_passed_in_url();
+}
+
+function broken_make_sample_menu()
 {
     // Populate the sample-code dropdown
     for (i = 0; i < sample_menu.length; ++i)
@@ -391,6 +413,29 @@ function choose_engine_menu(engine)
 }
 
 function make_engine_menu()
+{
+    str = '';
+    str += '<button id="engine_menu_button" type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">';
+    str += current_engine.name;
+    str += '</button>';
+    str += '<div id="engine_choice_dropdown" class="dropdown-menu" aria-labelledby="engine_menu_button">';
+    // str += '<button id="engine_menu_button" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
+    // str += 'Choose an engine <span class="caret"></span></button>';
+    for (i = 0; i < valid_engine_list.length; ++i)
+    {
+        var engine_index = valid_engine_list[i];
+        engine = engine_list[engine_index];
+        str += '<a href="#" class="dropdown-item" onclick="choose_engine_menu(engine_list['+engine_index+']);">';
+        str += engine.name;
+        str += '</a>';
+    }
+    str += '</div>';
+    document.getElementById('engine_choice_span').innerHTML = str;
+    // var engine_menu_button = document.getElementById('engine_menu_button');
+    // engine_menu_button.innerHTML = current_engine.name;
+}
+
+function broken_make_engine_menu()
 {
     $('#engine_choice_dropdown').empty();
     for (i = 0; i < valid_engine_list.length; ++i)
@@ -650,6 +695,8 @@ function hide_qss_image_panes()
 function load_code_sample(sample_str, engine)
 {
     var sample = get_sample_from_string(sample_str);
+    if (sample == null)
+        return false;
     current_sample = sample;
 
     var qce = engine_list[0];
@@ -819,7 +866,10 @@ function handle_run_button()
 var default_program = 'qc.reset(3);\nqc.write(0);\nqc.had(0x1);\nqc.cnot(0x2, 0x1);\n';
 
 
-check_for_editor_resize();
-fetch_sample_contents();
-make_sample_menu();
+window.onload = function() {
+    check_for_editor_resize();
+    fetch_sample_contents();
+    make_sample_menu();
+};
+
 
