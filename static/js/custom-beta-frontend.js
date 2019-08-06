@@ -13,11 +13,8 @@ var editor_boot_panel = document.getElementById('editor_boot_panel');
 var staff_boot_panel = document.getElementById('staff_boot_panel');
 var circle_boot_panel = document.getElementById('circle_boot_panel');
 var editor_frame_div = document.getElementById('editor_frame_div');
-// var example_choice_span = document.getElementById('example_choice_span');
-// var engine_choice_span = document.getElementById('engine_choice_span');
 var example_github_span = document.getElementById('example_github_span');
 var github_links_footer = document.getElementById('github_links_footer');
-// var language_choice_span = document.getElementById('language_choice_span');
 var script_output_textarea = document.getElementById('script_output_textarea');
 var staff_popin_div = document.getElementById('staff_popin_div');
 
@@ -59,12 +56,6 @@ function check_for_editor_resize()
     window.setTimeout(check_for_editor_resize,
                       1000 * seconds_per_check_for_editor_resize);
 }
-
-// window.onload = function() {
-//     check_for_editor_resize();
-//     fetch_sample_contents();
-//     make_sample_menu();
-// };
 
 function click_circle_fill(up_down)
 {
@@ -297,9 +288,12 @@ function fetch_one_sample_dir(engine)
         {
             if (http_request.status === 200)
             {
-                engine.dir_list = http_request.responseText;
-                make_github_source_links();
-                make_engine_menu();
+                if (http_request.responseText)
+                {
+                    engine.dir_list = http_request.responseText;
+                    make_github_source_links();
+                    make_engine_menu();
+                }
             }
             else
             {
@@ -319,15 +313,23 @@ function fetch_sample_contents()
 function make_sample_menu()
 {
     // Populate the sample-code dropdown
+    var str = '';
+    str += '<button id="sample_menu_button" type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">';
+    str += '    Choose a sample';
+    str += '</button>';
+    str += '<div id="example_choice_dropdown" class="dropdown-menu" aria-labelledby="sample_menu_button">';
     for (i = 0; i < sample_menu.length; ++i)
     {
         sample = sample_menu[i];
-        str = '';
         str += '<a class="dropdown-item" href="#" onclick="choose_sample_menu(sample_menu['+i+'], null);">';
         str += sample.menu_title;
         str += '</a>';
-        $('#example_choice_dropdown').append(str)
     }
+    str += '</ul>'
+    str += '</div>'
+    document.getElementById('example_choice_span').innerHTML = str;
+    // Note: Using jquery $('#example_choice_dropdown').append(str) to build the menu
+    //       breakds the Kindle version
     try_to_get_program_from_passed_in_url();
 }
 
@@ -391,19 +393,23 @@ function choose_engine_menu(engine)
 
 function make_engine_menu()
 {
-    $('#engine_choice_dropdown').empty();
+    str = '';
+    str += '<button id="engine_menu_button" type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">';
+    str += current_engine.name;
+    str += '</button>';
+    str += '<div id="engine_choice_dropdown" class="dropdown-menu" aria-labelledby="engine_menu_button">';
     for (i = 0; i < valid_engine_list.length; ++i)
     {
         var engine_index = valid_engine_list[i];
         engine = engine_list[engine_index];
-        str = '';
-        str += '<a class="dropdown-item" href="#" onclick="choose_engine_menu(engine_list['+engine_index+']);">';
+        str += '<a href="#" class="dropdown-item" onclick="choose_engine_menu(engine_list['+engine_index+']);">';
         str += engine.name;
         str += '</a>';
-        $('#engine_choice_dropdown').append(str)
     }
-    // var engine_menu_button = document.getElementById('engine_menu_button');
-    // engine_menu_button.innerHTML = current_engine.name;
+    str += '</div>';
+    // Note: Using jquery $('#engine_choice_dropdown').append(str) to build the menu
+    //       breakds the Kindle version
+    document.getElementById('engine_choice_span').innerHTML = str;
 }
 
 function do_engine_modal(engine_name)
@@ -440,6 +446,8 @@ function do_cheatsheet_modal()
 function make_github_source_links()
 {
     var sample = current_sample;
+    if (sample == null)
+        return;
     valid_engine_list = [0];
     // str = '<br/>';
     // str += 'View source in Github: ';
@@ -449,7 +457,9 @@ function make_github_source_links()
         engine = engine_list[i];
         // if (i > 0)
         //     str += ' / ';
-        var sample_ok = engine.dir_list.includes(sample.sample_file);
+        var sample_ok = false;
+        if (engine && engine.dir_list)
+            sample_ok = engine.dir_list.includes(sample.sample_file);
         if (sample_ok)
         {
             var link = 'https://github.com/oreilly-qc/oreilly-qc.github.io/blob/master/samples/' + engine.name;
@@ -645,6 +655,8 @@ function hide_qss_image_panes()
 function load_code_sample(sample_str, engine)
 {
     var sample = get_sample_from_string(sample_str);
+    if (sample == null)
+        return false;
     current_sample = sample;
 
     var qce = engine_list[0];
@@ -814,7 +826,10 @@ function handle_run_button()
 var default_program = 'qc.reset(3);\nqc.write(0);\nqc.had(0x1);\nqc.cnot(0x2, 0x1);\n';
 
 
-check_for_editor_resize();
-fetch_sample_contents();
-make_sample_menu();
+window.onload = function() {
+    check_for_editor_resize();
+    fetch_sample_contents();
+    make_sample_menu();
+};
+
 
