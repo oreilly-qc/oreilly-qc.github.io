@@ -13,8 +13,11 @@ var editor_boot_panel = document.getElementById('editor_boot_panel');
 var staff_boot_panel = document.getElementById('staff_boot_panel');
 var circle_boot_panel = document.getElementById('circle_boot_panel');
 var editor_frame_div = document.getElementById('editor_frame_div');
+var example_choice_span = document.getElementById('example_choice_span');
+// var engine_choice_span = document.getElementById('engine_choice_span');
 var example_github_span = document.getElementById('example_github_span');
 var github_links_footer = document.getElementById('github_links_footer');
+// var language_choice_span = document.getElementById('language_choice_span');
 var script_output_textarea = document.getElementById('script_output_textarea');
 var staff_popin_div = document.getElementById('staff_popin_div');
 
@@ -56,6 +59,12 @@ function check_for_editor_resize()
     window.setTimeout(check_for_editor_resize,
                       1000 * seconds_per_check_for_editor_resize);
 }
+
+// window.onload = function() {
+//     check_for_editor_resize();
+//     fetch_sample_contents();
+//     make_sample_menu();
+// };
 
 function click_circle_fill(up_down)
 {
@@ -292,7 +301,7 @@ function fetch_one_sample_dir(engine)
                 {
                     engine.dir_list = http_request.responseText;
                     make_github_source_links();
-                    make_engine_menu();
+//                    make_engine_menu();
                 }
             }
             else
@@ -310,10 +319,12 @@ function fetch_sample_contents()
         fetch_one_sample_dir(engine_list[i]);
 }
 
+// class="dropdown-menu" aria-labelledby="sample_menu_button"
+
 function make_sample_menu()
 {
-    // Populate the sample-code dropdown
-    var str = '';
+    str = '';
+
     str += '<button id="sample_menu_button" type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">';
     str += '    Choose a sample';
     str += '</button>';
@@ -327,10 +338,27 @@ function make_sample_menu()
     }
     str += '</ul>'
     str += '</div>'
-    document.getElementById('example_choice_span').innerHTML = str;
-    // Note: Using jquery $('#example_choice_dropdown').append(str) to build the menu
-    //       breakds the Kindle version
+//    console.log(str);
+    example_choice_span.innerHTML = str;
     try_to_get_program_from_passed_in_url();
+}
+
+function broken_make_sample_menu()
+{
+    // Populate the sample-code dropdown
+    for (i = 0; i < sample_menu.length; ++i)
+    {
+        sample = sample_menu[i];
+        str = '';
+        str += '<a class="dropdown-item" href="#" onclick="choose_sample_menu(sample_menu['+i+'], null);">';
+        str += sample.menu_title;
+        str += '</a>';
+        // @@@@@@@@@ ej note: This line breaks the kindle
+       // $('#example_choice_dropdown').append(str)
+//        document.getElementById('example_choice_dropdown').append(str);
+    }
+        // @@@@@@@@@ ej note: and something here doesn't work also
+//    try_to_get_program_from_passed_in_url();
 }
 
 function set_current_engine(engine)
@@ -366,7 +394,7 @@ function choose_sample_menu(sample, engine)
     do_sample_special_cases(sample.shortcut);
     console.log('Sample menu chosen: ' + sample.sample_file);
     if (engine == null)
-    engine = engine_list[0];
+        engine = engine_list[0];
     set_current_engine(engine);
     var sample_menu_button = document.getElementById('sample_menu_button');
     m_title = sample.menu_title
@@ -393,29 +421,26 @@ function choose_engine_menu(engine)
 
 function make_engine_menu()
 {
-    str = '';
-    str += '<button id="engine_menu_button" type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">';
-    str += current_engine.name;
-    str += '</button>';
-    str += '<div id="engine_choice_dropdown" class="dropdown-menu" aria-labelledby="engine_menu_button">';
+// @@@@@@ ej this menu populator has the same problem as the main one.
+//    $('#engine_choice_dropdown').empty();
     for (i = 0; i < valid_engine_list.length; ++i)
     {
         var engine_index = valid_engine_list[i];
         engine = engine_list[engine_index];
-        str += '<a href="#" class="dropdown-item" onclick="choose_engine_menu(engine_list['+engine_index+']);">';
+        str = '';
+        str += '<a class="dropdown-item" href="#" onclick="choose_engine_menu(engine_list['+engine_index+']);">';
         str += engine.name;
         str += '</a>';
+//        $('#engine_choice_dropdown').append(str)
     }
-    str += '</div>';
-    // Note: Using jquery $('#engine_choice_dropdown').append(str) to build the menu
-    //       breakds the Kindle version
-    document.getElementById('engine_choice_span').innerHTML = str;
+    // var engine_menu_button = document.getElementById('engine_menu_button');
+    // engine_menu_button.innerHTML = current_engine.name;
 }
 
-function do_engine_modal(engine_name)
+function do_engine_modal()
 {
     var options = null;
-    var val = $('#'+engine_name+'_runModal').modal(options);
+    var val = $('#'+current_engine.name+'_runModal').modal(options);
 }
 
 function do_addengine_modal()
@@ -428,12 +453,6 @@ function do_aboutqce_modal()
 {
     var options = null;
     var val = $('#AboutQCE_runModal').modal(options);
-}
-
-function do_contact_modal()
-{
-    var options = null;
-    var val = $('#Contact_runModal').modal(options);
 }
 
 function do_cheatsheet_modal()
@@ -812,7 +831,7 @@ function handle_run_button()
 {
     if (current_engine.name != 'QCEngine')
     {
-        do_engine_modal(current_engine.name);
+        do_engine_modal();
         return;
     }
     // set_progress(50, '');
@@ -831,5 +850,4 @@ window.onload = function() {
     fetch_sample_contents();
     make_sample_menu();
 };
-
 
