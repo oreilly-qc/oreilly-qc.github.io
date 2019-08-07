@@ -3,19 +3,21 @@
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;
 
-    operation QRNG () : Result {
+    // Example 2-1: Random bit
+
+    operation RandomBit () : Unit {
         // allocate one qubit
-        using(q = Qubit()){
-            // place it into superposition of 0 and 1
+        using (q = Qubit()) {
+            // put it into superposition of 0 and 1
             H(q);
 
-            // read the qubit and return the result
-            let result = M(q);
-            
-            // Make sure the qubit is back to the 0 state
+            // measure the qubit and store the result
+            let bit = M(q);
+        
+            // make sure the qubit is back to the 0 state
             Reset(q);
-            
-            return result;
+        
+            Message($"{bit}");
         }
     }
 }
