@@ -479,6 +479,8 @@ function make_github_source_links()
 
     str += '</div>'
     github_links_footer.innerHTML = str;
+
+    str = '';
     //
     // If there's a chapter notebook, link to that.
     if (current_engine.name == 'Qiskit')
@@ -518,19 +520,26 @@ function make_github_source_links()
         }
         if (wb_text)
         {
-            str += '<br/>';
-            str += '<b>';
+//            str += '<br/>';
             str += wb_text;
+            str += '<b>';
             str += '<a href="'+wb_link+'" download>'+wb_name+'</a>';
             str += '</b>';
         }
+    }
+    else if (current_engine.name == 'QSharp')
+    {
+//        str += '<br/>';
+        str += 'Download the Q# sample notebooks <b><a href="https://github.com/oreilly-qc/oreilly-qc.github.io/tree/master/samples/QSharp" target="_blank">here</a></b>, ';
+//        str += '<br/>';
+        str += 'or run them online <b><a href="https://mybinder.org/v2/gh/oreilly-qc/oreilly-qc.github.io/qsharp" target="_blank">here</a></b>.';
     }
 
     // str += '<span style="font-size:8pt; color:#77a">';
     // str += '<br/>Developers: Add your engine, or add a sample! <b><a href="#" onclick="do_addengine_modal();">Click here</a></b> for more info.';
     // str += '</span>';
 
-    // example_github_span.innerHTML = str;
+    example_github_span.innerHTML = str;
 }
 
 // get_url_param() is adapted from JeffreyCrofte's work here: https://www.creativejuiz.fr/blog/en/javascript-en/read-url-get-parameters-with-javascript
