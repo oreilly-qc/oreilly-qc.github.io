@@ -356,7 +356,7 @@ function set_current_engine(engine)
     }
     else if (current_engine.name == 'QSharp')
     {
-        editor.session.setMode("ace/mode/plain_text");
+        editor.session.setMode("ace/mode/csharp");
     }
 }
 
