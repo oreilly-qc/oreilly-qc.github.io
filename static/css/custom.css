@@ -18,6 +18,11 @@ h1 {
   padding-bottom:10px !important;
 }
 
+.card-no-margin {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
 .xxxpad-left-only {
   margin: 0px !important;
 /*           padding: 8px !important;
