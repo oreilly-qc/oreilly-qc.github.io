@@ -117,11 +117,11 @@
                             <i class="fas fa-search-plus"></i>
                         </button>
                     </div>
+                    <div id="example_github_span">
+                    </div>
                 </div>
                 <div class="card-body">
                     <div id="bug_span">
-                    </div>
-                    <div id="example_github_span">
                     </div>
                     <div class="mb-2" id="sample_info_span" style="display:none;">
                         <i class="fas fa-exclamation-triangle"></i>
@@ -554,17 +554,14 @@
         </button>
       </div>
       <div class="modal-body">
-        The Q# (pronounced "Q Sharp") versions of examples in this book are designed to run
-        using the <b>Microsoft QDK</b>, at <a href="https://www.microsoft.com/en-us/quantum/development-kit" target="_blank">https://www.microsoft.com/en-us/quantum/development-kit</a>.
+        The Q# versions of examples in this book are designed to be executed as Q# Notebooks in the Microsoft Quantum Development Kit (QDK).
         <br/><br/>
-          Q# is a quantum-focused programming language with native type, operators, and other abstraction.
-        <br/><br/>
-        To run this sample, go to the QDK site and create a new IQ# Notebook, and then paste this
-        sample code into it.
+        You can run them online <b><a href="https://mybinder.org/v2/gh/oreilly-qc/oreilly-qc.github.io/qsharp" target="_blank">here</a></b>, or you can <b><a href="https://docs.microsoft.com/quantum/install-guide/jupyter" target="_blank">download and install</a></b> Microsoft Quantum Development Kit to run them locally.
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success" onclick="window.open('https://www.microsoft.com/en-us/quantum/development-kit', '_blank');">Go to QDK Website</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://mybinder.org/v2/gh/oreilly-qc/oreilly-qc.github.io/qsharp', '_blank');">Go to Online Q# Notebooks</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://docs.microsoft.com/quantum/install-guide/jupyter', '_blank');">Go to QDK Website</button>
       </div>
     </div>
   </div>
