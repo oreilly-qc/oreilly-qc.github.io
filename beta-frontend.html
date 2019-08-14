@@ -36,7 +36,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
       <a class="navbar-brand" href="#">
           <img src="images/logo_small.png" href="#">
       </a>
@@ -74,8 +74,23 @@
       </div>
     </nav>
 
-<div class="container-fluid d-flex flex-column mt-1 h-100">
+<!-- Note: This old-style title banner is a placeholder, until we get the real banner (commented out below) to wrap nicely. -->
+<div id="title-div">
+    <table>
+        <tr>
+            <td valign="middle" style="width:13%;">
+                <a href="https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683">
+                    <img class="img-thumbnail" src="images/book_cover.png" style="">
+                </a>
+            </td>
+            <td valign="middle">
+                <img src="images/title_text2.png" style="width:95%;"/>
+            </td>
+        </tr>
+    </table>
+</div>
 
+<!--
     <div class="row ml-1" style="height: 15%; min-height: 150px;">
         <div class="col-m-3 mt-3 h-100">
             <a href="https://www.amazon.com/Programming-Quantum-Computers-Essential-Algorithms/dp/1492039683">
@@ -88,10 +103,10 @@
             </div>
             <div class="row mt-2 ml-4">
                 <h2>Code Samples</h2>
-            </div>
         </div>
+     </div>
     </div>
-
+-->
     <div class="row flex-grow-1 mt-4">
 
         <div class="col-sm-6">
@@ -102,9 +117,13 @@
                           <span class="glyphicon glyphicon-play"></span>
                           Run Program
                         </button>
+                    </div>
+                    <div class="btn-group">
                         <div class="btn-group" role="group">
                             <span id="example_choice_span"></span>
                         </div>
+                    </div>
+                    <div class="btn-group">
                         <div class="btn-group" role="group">
                             <span id="engine_choice_span"></span>
                         </div>
