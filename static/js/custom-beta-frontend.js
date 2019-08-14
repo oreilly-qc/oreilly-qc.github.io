@@ -625,7 +625,7 @@ function do_sample_special_cases(sample_str)
     {
         // Takes a while to eat a chocodile
         var sstr = '<img src="images/caution.png" height="28" /><b>This sample takes a while to run.</b>';
-        sstr += '<br/>For a video demo of quantum supersampling, <a href="https://vimeo.com/180284417" target="_blank">chick here</a>.';
+        sstr += '<br/>For a video demo of quantum supersampling, <a href="https://vimeo.com/180284417" target="_blank">click here</a>.';
         console.log(sstr);
         sample_info_span.innerHTML = sstr;
         sample_info_span.style.display = 'block';
