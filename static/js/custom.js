@@ -392,13 +392,13 @@ function make_engine_menu()
         var engine_index = valid_engine_list[i];
         engine = engine_list[engine_index];
         str += '<li><a href="#" onclick="choose_engine_menu(engine_list['+engine_index+']);">';
-        str += engine.name;
+        str += engine.link_name;
         str += '</a></li>';
     }
     str += '</ul>'
     engine_choice_span.innerHTML = str;
     var engine_menu_button = document.getElementById('engine_menu_button');
-    engine_menu_button.innerHTML = current_engine.name;
+    engine_menu_button.innerHTML = current_engine.link_name;
 }
 
 function do_engine_modal()
