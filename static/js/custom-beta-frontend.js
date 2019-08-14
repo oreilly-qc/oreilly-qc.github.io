@@ -395,7 +395,7 @@ function make_engine_menu()
 {
     str = '';
     str += '<button id="engine_menu_button" type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">';
-    str += current_engine.name;
+    str += current_engine.link_name;
     str += '</button>';
     str += '<div id="engine_choice_dropdown" class="dropdown-menu" aria-labelledby="engine_menu_button">';
     for (i = 0; i < valid_engine_list.length; ++i)
@@ -403,7 +403,7 @@ function make_engine_menu()
         var engine_index = valid_engine_list[i];
         engine = engine_list[engine_index];
         str += '<a href="#" class="dropdown-item" onclick="choose_engine_menu(engine_list['+engine_index+']);">';
-        str += engine.name;
+        str += engine.link_name;
         str += '</a>';
     }
     str += '</div>';
