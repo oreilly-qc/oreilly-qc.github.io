@@ -1,3 +1,11 @@
+html, body {
+    height: 100%;
+}
+
+h1 {
+    font-family: 'Raleway', sans-serif;
+}
+
 .panel-resizable {
     resize: vertical;
   overflow: auto;
@@ -8,6 +16,11 @@
 /*          margin-bottom:50px !important;
 */           padding: 0px !important;
   padding-bottom:10px !important;
+}
+
+.card-no-margin {
+    margin: 0px !important;
+    padding: 0px !important;
 }
 
 .xxxpad-left-only {
@@ -63,4 +76,3 @@
  margin: 4px 2px;
  cursor: pointer;
  }
-
