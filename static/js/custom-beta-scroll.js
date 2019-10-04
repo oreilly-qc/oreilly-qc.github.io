@@ -12,6 +12,7 @@ var editor_div = document.getElementById('editor_div');
 var editor_boot_panel = document.getElementById('editor_boot_panel');
 var staff_boot_panel = document.getElementById('staff_boot_panel');
 var circle_boot_panel = document.getElementById('circle_boot_panel');
+var circle_boot_panel_parent = document.getElementById('circle_boot_panel_parent');
 var editor_frame_div = document.getElementById('editor_frame_div');
 var example_github_span = document.getElementById('example_github_span');
 var github_links_footer = document.getElementById('github_links_footer');
@@ -41,17 +42,17 @@ function check_for_editor_resize()
     }
 
     // Circle chart
-    var w = circle_boot_panel.offsetWidth;
-    var h = circle_boot_panel.offsetHeight;
+    var w = circle_boot_panel_parent.offsetWidth;
+    var h = circle_boot_panel_parent.offsetHeight;
     if (w != last_circle_div_width || h != last_circle_div_height)
     {
-        qc_options.circle_div.width = w;
-        qc_options.circle_div.height = h;
-        qc.panel_chart.draw();
+        show_state_vector();
         last_circle_div_width = w;
         last_circle_div_height = h;
     }
 
+    // This needs to be periodically reset because of a bootstrap issue.
+    circle_boot_panel.style.width = '100%';
     var seconds_per_check_for_editor_resize = 0.5;
     window.setTimeout(check_for_editor_resize,
                       1000 * seconds_per_check_for_editor_resize);
@@ -72,6 +73,7 @@ function click_circle_fill(up_down)
         list[i].magScale *= 1.0/1.5;
       list[i].mouseWheel(e);
     }
+    show_state_vector();
 }
 
 function click_circle_style(style)
@@ -261,7 +263,7 @@ function do_failed_load_sample(file_url)
 qc_options.staff_canvas = document.getElementById('draw_gate_canvas');
 qc_options.staff_div = document.getElementById('staff_popin_div');
 qc_options.circle_canvas = document.getElementById('circle_canvas');
-qc_options.circle_div = document.getElementById('circle_div');
+qc_options.circle_div = document.getElementById('circle_boot_panel');
 var valid_engine_list = [];
 //qc_options.draw_scale = 3.0;
 var qc = QPU();
@@ -809,6 +811,65 @@ function show_state_vector()
         list[i].in_use = false;
     }
   }
+  override_circle_canvas_size();
+}
+
+function override_circle_canvas_size()
+{
+    // This function exists to handle some of the subtleties in setting
+    // the canvas size.
+    var prev_width = circle_canvas.width;
+    var prev_height = circle_canvas.height;
+    var div_width = circle_boot_panel_parent.offsetWidth;
+    var div_height = circle_boot_panel_parent.offsetHeight;
+    var widget = get_state_vector_widget();
+    var new_width = div_width;
+    var new_height = div_height;
+
+    circle_canvas.width = new_width; // needed for calculateDimensions
+    widget.calculateDimensions();
+
+    var num_cols = widget.numCols;
+    var num_rows = widget.numValues / widget.numCols;
+    // console.log('div dimensions: '+div_width+'x?');
+    // console.log('complete cols,rows: '+num_cols+'x'+num_rows);
+    // console.log('canvas initial dimensions:  '+circle_canvas.width+'x'+circle_canvas.height);
+    var adjusted_width = widget.margin.x * widget.wheelScale + widget.columnWidth * num_cols * widget.scale;
+    var adjusted_height = widget.margin.y * widget.wheelScale + widget.columnHeight * num_rows * widget.scale;
+    var max_adjusted_height = 1000;
+    // First, if the circles flow off the right side, widen the canvas to show them all, so the user
+    // can easily scroll over without re-rendering.
+    if (adjusted_width > new_width)
+        new_width = adjusted_width;
+
+    // State vectors can be huge, so limit how much we draw.
+    if (adjusted_height > max_adjusted_height)
+        adjusted_height = max_adjusted_height;
+    // However, if the user has expanded the div to be huge, make the canvas fill it.
+    if (adjusted_height < div_height)
+        adjusted_height = div_height;
+    if (adjusted_height > new_height)
+        new_height = adjusted_height;
+    new_width = 0|new_width;
+    new_height = 0|new_height;
+    // console.log('canvas adjusted dimensions: '+new_width+'x'+new_height);
+    if (new_width != prev_width || new_height != prev_height)
+    {
+        circle_canvas.width = new_width;
+        circle_canvas.height = new_height;
+    }
+    widget.draw();
+}
+
+function get_state_vector_widget()
+{
+    list = qc.panel_chart.widgets;
+    for (var i = 0; i < list.length; ++i)
+    {
+        if (list[i].stateVector)
+            return list[i];
+    }
+    return null;
 }
 
 function set_progress(percent, message)
