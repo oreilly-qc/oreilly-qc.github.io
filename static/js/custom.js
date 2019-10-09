@@ -542,6 +542,8 @@ function make_github_source_links()
             notebook_link = 'Run the Q# Chapter 3 notebook online <b><a href="https://mybinder.org/v2/gh/oreilly-qc/oreilly-qc.github.io/master?filepath=Chapter3-samples.ipynb" target="_blank">here</a></b>';
         else if (sample.shortcut.startsWith('5-'))
             notebook_link = 'Run the Q# Chapter 5 notebook online <b><a href="https://mybinder.org/v2/gh/oreilly-qc/oreilly-qc.github.io/master?filepath=Chapter5-samples.ipynb" target="_blank">here</a></b>';
+        else if (sample.shortcut.startsWith('6-'))
+            notebook_link = 'Run the Q# Chapter 6 notebook online <b><a href="https://mybinder.org/v2/gh/oreilly-qc/oreilly-qc.github.io/master?filepath=Chapter6-samples.ipynb" target="_blank">here</a></b>';
 
         str += notebook_link;
         str += ', or download <b><a href="https://github.com/oreilly-qc/oreilly-qc.github.io/tree/master/samples/QSharp" target="_blank">here</a></b> to run locally.';
