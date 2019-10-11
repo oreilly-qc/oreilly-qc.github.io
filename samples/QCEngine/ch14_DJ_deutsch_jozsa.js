@@ -15,7 +15,7 @@ function oracle_constant(reg,scratch) {
 // Example of balanced function
 function oracle_balanced(reg, scratch) {
     // Oracle returns f(x) = 1 if qubit 0x1 in register register is equal to 1.
-    scratch.cz(reg('0x1'));
+    scratch.cz(reg, 0x1);
 }
 
 
