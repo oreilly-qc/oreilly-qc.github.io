@@ -43,4 +43,4 @@ qc.nop();
 qc.label('');
 
 // Apply function
-oracle_contant(register, scratch);
+oracle_constant(reg, scratch);
