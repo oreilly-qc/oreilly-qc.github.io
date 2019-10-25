@@ -4,31 +4,70 @@
 ##
 ## More samples like this can be found at http://oreilly-qc.github.io
 
-## This sample demonstrates root-of-not.
-
 import cirq
 import math
 
-## Example 2-3: Root-of-not
+## Example 2-4: Quasntum Spy Hunter
 # Set up the program
+
 def main():
     qc = QPU()
-    qc.reset(1)
+    qc.reset(3)
+    a = 0x1
+    fiber = 0x2
+    b = 0x4
 
-    qc.had();
-    qc.phase(-90);
-    qc.had();
-    qc.had();
-    qc.phase(-90);
-    qc.had();
+    # Generate two random bits
+    send_had = random_bit()
+    send_value = random_bit()
 
-    qc.rootnot();
-    qc.rootnot();
+    # Prepare Alice's qubit
+    if send_value:
+        qc.x(a)
+    if send_had:
+        qc.had(a)
+
+    # Send the qubit!
+    qc.exchange(fiber, a)
+
+    # Activate the spy
+    spy_is_present = True
+    if (spy_is_present):
+        spy_had = 1
+        if spy_had:
+            qc.had(fiber)
+        qc.read(fiber, 'stolen_data')
+
+    # Receive the qubit!
+    recv_had = random_bit()
+    qc.exchange(fiber, b)
+    if recv_had:
+        qc.had(b)
+    qc.read(b, 'recv_val')
 
     qc.draw() # draw the circuit
     result = qc.run() # run the circuit
 
     print(result)
+    recv_val = 1 if result.measurements['recv_val'][0][0] else 0
+
+    # Now Alice emails Bob to tell
+    # him her had setting and value.
+    # If the had setting matches and the
+    # value does not, there's a spy!
+    if (send_had == recv_had):
+        if (send_value != recv_val):
+            print('Caught a spy!\n')
+
+# Use a QPU to generate a random bit
+def random_bit():
+    rng = QPU()
+    rng.reset(1)
+    rng.had()
+    rng.read()
+    result = rng.run()
+    bit = 1 if result.measurements['result'][0][0] else 0
+    return bit
 
 
 ######################################################################
@@ -49,6 +88,20 @@ class QPU:
     def had(self, target_mask=~0):
         target = self.mask_to_list(target_mask)
         self.circuit.append(cirq.H.on_each(*target))
+
+    def x(self, target_mask=~0):
+        target = self.mask_to_list(target_mask)
+        self.circuit.append(cirq.X.on_each(*target))
+
+    def cnot(self, target_mask, control_mask):
+        target = self.mask_to_list(target_mask)
+        control = self.mask_to_list(control_mask)
+        self.circuit.append(cirq.CNOT.on(target[0], control[0]))
+
+    def exchange(self, q0_mask, q1_mask):
+        self.cnot(q0_mask, q1_mask)
+        self.cnot(q1_mask, q0_mask)
+        self.cnot(q0_mask, q1_mask)
 
     def phase(self, theta_degrees, target_mask=~0):
         target = self.mask_to_list(target_mask)
