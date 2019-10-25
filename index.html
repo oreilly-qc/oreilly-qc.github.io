@@ -64,6 +64,7 @@
               <a class="dropdown-item" href="#" onclick="do_engine_modal('OpenQASM');">OpenQASM</a>
               <a class="dropdown-item" href="#" onclick="do_engine_modal('QSharp');">Q#</a>
               <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#" onclick="do_engine_modal('Cirq');">Cirq</a>
               <a class="dropdown-item" href="#" onclick="do_addengine_modal();">Add your engine here!</a>
             </div>
           </li>
@@ -377,6 +378,8 @@
           <li><b><a href="https://www.dwavesys.com/take-leap" target="_default">D-Wave</a></b> - 
             A physical QPU using a quantum annealing model. See Example 10-2 ("Kitten and Tiger") for a good example
             of use. The D-Wave website provides a rich set of libraries and educational materials.</li>
+          <li><b><a href="https://github.com/quantumlib/Cirq" target="_default">Cirq</a></b> - 
+            Google's Cirq is a software library for writing, manipulating, and optimizing quantum circuits and then running them against quantum computers and simulators.</li>
           <li><b><a href="http://www.quantumplayground.net" target="_default">Google QC Playground</a></b> - 
             An approachable online environment for discovering quantum computing.</li>
         </ul>
@@ -506,6 +509,31 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-success" onclick="window.open('https://qiskit.org', '_blank');">Go to Qiskit.org</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="Cirq_runModal" tabindex="-1" role="dialog" aria-labelledby="Cirq_runModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Cirq_runModalLabel">Running Cirq Sample Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The Cirq versions of examples in this book are written in Python, designed to run
+        using Cirq from Google.
+        <br/><br/>
+        Cirq is a software library for writing, manipulating, and optimizing quantum circuits and then running them against quantum computers and simulators. Cirq attempts to expose the details of hardware, instead of abstracting them away.
+        <br/><br/>
+        To run this sample, <a href="https://cirq.readthedocs.io/en/stable/install.html" target="_blank">install Cirq using these instructions</a> and then run the scripts using Python.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="window.open('https://github.com/quantumlib/Cirq', '_blank');">Go to Cirq in Github</button>
       </div>
     </div>
   </div>

@@ -346,6 +346,10 @@ function set_current_engine(engine)
     {
         editor.session.setMode("ace/mode/python");
     }
+    else if (current_engine.name == 'Cirq')
+    {
+        editor.session.setMode("ace/mode/python");
+    }
     else if (current_engine.name == 'DWave')
     {
         editor.session.setMode("ace/mode/python");
