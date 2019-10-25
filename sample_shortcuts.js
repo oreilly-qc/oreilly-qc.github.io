@@ -9,6 +9,7 @@ var engine_list = [
     {name : 'Qiskit',   link_name: 'Qiskit',   suffix : '.py',   subdir : 'samples/Qiskit/',   dir_list : ''},
     {name : 'OpenQASM', link_name: 'OpenQASM', suffix : '.qasm', subdir : 'samples/OpenQASM/', dir_list : ''},
     {name : 'QSharp',   link_name: 'Q#',       suffix : '.qs',   subdir : 'samples/QSharp/',   dir_list : ''},
+    {name : 'Cirq',     link_name: 'Cirq',     suffix : '.py',   subdir : 'samples/Cirq/',     dir_list : ''},
 ];
 
 var sample_menu = [
