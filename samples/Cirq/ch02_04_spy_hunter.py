@@ -49,7 +49,7 @@ def main():
     result = qc.run() # run the circuit
 
     print(result)
-    recv_val = 1 if result.measurements['recv_val'][0][0] else 0
+    recv_val = 1 if result.measurements['recv_val'][0] else 0
 
     # Now Alice emails Bob to tell
     # him her had setting and value.
@@ -66,7 +66,7 @@ def random_bit():
     rng.had()
     rng.read()
     result = rng.run()
-    bit = 1 if result.measurements['result'][0][0] else 0
+    bit = 1 if result.measurements['result'][0] else 0
     return bit
 
 
@@ -122,8 +122,8 @@ class QPU:
     def draw(self):
         print('Circuit:\n{}'.format(self.circuit))
 
-    def run(self, repetitions=1):
-        return self.simulator.run(self.circuit, repetitions=repetitions)
+    def run(self):
+        return self.simulator.simulate(self.circuit)
 
 
 if __name__ == '__main__':

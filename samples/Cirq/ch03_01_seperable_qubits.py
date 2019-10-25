@@ -4,31 +4,25 @@
 ##
 ## More samples like this can be found at http://oreilly-qc.github.io
 
-## This sample demonstrates root-of-not.
-
 import cirq
 import math
 
-## Example 2-3: Root-of-not
+## Example 3-1: Seperable Qubits
 # Set up the program
 def main():
     qc = QPU()
-    qc.reset(1)
-
-    qc.had();
-    qc.phase(-90);
-    qc.had();
-    qc.had();
-    qc.phase(-90);
-    qc.had();
-
-    qc.rootnot();
-    qc.rootnot();
+    qc.reset(3)
+    qubit1 = 0x1
+    qubit2 = 0x2
+    qubit3 = 0x4
+    qc.had(qubit2);
+    qc.had(qubit3);
 
     qc.draw() # draw the circuit
     result = qc.run() # run the circuit
-
     print(result)
+
+
 
 
 ######################################################################
@@ -69,7 +63,7 @@ class QPU:
     def draw(self):
         print('Circuit:\n{}'.format(self.circuit))
 
-    def run(self):
+    def run(self, repetitions=1):
         return self.simulator.simulate(self.circuit)
 
 

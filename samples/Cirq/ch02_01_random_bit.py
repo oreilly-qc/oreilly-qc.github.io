@@ -18,7 +18,6 @@ def main():
 
     qc.draw() # draw the circuit
     result = qc.run() # run the circuit
-
     print(result)
 
 
@@ -50,8 +49,8 @@ class QPU:
     def draw(self):
         print('Circuit:\n{}'.format(self.circuit))
 
-    def run(self, repetitions=1):
-        return self.simulator.run(self.circuit, repetitions=repetitions)
+    def run(self):
+        return self.simulator.simulate(self.circuit)
 
 
 if __name__ == '__main__':
