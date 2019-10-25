@@ -7,67 +7,32 @@
 import cirq
 import math
 
-## Example 2-4: Quasntum Spy Hunter
+## Example 3-4: Swap Test
 # Set up the program
-
 def main():
     qc = QPU()
     qc.reset(3)
-    a = 0x1
-    fiber = 0x2
-    b = 0x4
+    input1 = 0x1
+    input2 = 0x2
+    output = 0x4
+    # Initialize the output register
+    # Initialize input registers that we want to compare
+    # In this example the swap test should reveal their equality
 
-    # Generate two random bits
-    send_had = random_bit()
-    send_value = random_bit()
-
-    # Prepare Alice's qubit
-    if send_value:
-        qc.x(a)
-    if send_had:
-        qc.had(a)
-
-    # Send the qubit!
-    qc.exchange(fiber, a)
-
-    # Activate the spy
-    spy_is_present = True
-    if (spy_is_present):
-        spy_had = 1
-        if spy_had:
-            qc.had(fiber)
-        qc.read(fiber, 'stolen_data')
-
-    # Receive the qubit!
-    recv_had = random_bit()
-    qc.exchange(fiber, b)
-    if recv_had:
-        qc.had(b)
-    qc.read(b, 'recv_val')
+    # The swap test itself
+    qc.had(output)
+    # Now exchange the two inputs conditional on the output qubits.
+    qc.exchange(input1, input2, output)
+    qc.had(output)
+    qc.x(output)
+    # The output register is 1 only if inputs are equal
+    qc.read(output)
 
     qc.draw() # draw the circuit
     result = qc.run() # run the circuit
-
     print(result)
-    recv_val = 1 if result.measurements['recv_val'][0] else 0
 
-    # Now Alice emails Bob to tell
-    # him her had setting and value.
-    # If the had setting matches and the
-    # value does not, there's a spy!
-    if (send_had == recv_had):
-        if (send_value != recv_val):
-            print('Caught a spy!\n')
 
-# Use a QPU to generate a random bit
-def random_bit():
-    rng = QPU()
-    rng.reset(1)
-    rng.had()
-    rng.read()
-    result = rng.run()
-    bit = 1 if result.measurements['result'][0] else 0
-    return bit
 
 
 ######################################################################
@@ -98,16 +63,35 @@ class QPU:
         control = self.mask_to_list(control_mask)
         self.circuit.append(cirq.CNOT.on(control[0], target[0]))
 
-    def exchange(self, q0_mask, q1_mask):
-        # Construct SWAP per Figure 3-21 in the book
-        self.cnot(q0_mask, q1_mask)
-        self.cnot(q1_mask, q0_mask)
-        self.cnot(q0_mask, q1_mask)
-
-    def phase(self, theta_degrees, target_mask=~0):
+    def ccnot(self, target_mask, control_mask):
         target = self.mask_to_list(target_mask)
-        theta_radians = theta_degrees * math.pi / 180.0
-        self.circuit.append(cirq.Rz(theta_radians).on_each(*target))
+        control = self.mask_to_list(control_mask)
+        self.circuit.append(cirq.CCX.on(control[0], control[1], target[0]))
+
+    def exchange(self, q0_mask, q1_mask, control_mask):
+        if control_mask:
+            # Construct CSWAP per Figure 3-22 in the book
+            self.cnot(q0_mask, q1_mask)
+            self.ccnot(q1_mask, q0_mask|control_mask)
+            self.cnot(q0_mask, q1_mask)
+        else:
+            # Construct SWAP per Figure 3-21 in the book
+            self.cnot(q0_mask, q1_mask)
+            self.cnot(q1_mask, q0_mask)
+            self.cnot(q0_mask, q1_mask)
+
+    def phase(self, theta_degrees, target_mask=~0, control_mask=0):
+        if control_mask:
+            # Construct CRZ per Figure 3-27 in the book
+            self.phase(theta_degrees / 2, target_mask)
+            self.cnot(target_mask, control_mask)
+            self.phase(-theta_degrees / 2, target_mask)
+            self.cnot(target_mask, control_mask)
+            self.phase(theta_degrees / 2, control_mask)
+        else:
+            target = self.mask_to_list(target_mask)
+            theta_radians = theta_degrees * math.pi / 180.0
+            self.circuit.append(cirq.Rz(theta_radians).on_each(*target))
 
     def rootnot(self, target_mask=~0):
         sqrt_x = cirq.X**0.5
