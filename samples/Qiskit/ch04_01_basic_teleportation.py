@@ -43,8 +43,8 @@ qc.measure(ep, ep_c)
 qc.barrier()
 
 # receive
-qc.z(bob).c_if(alice_c, 1)
 qc.x(bob).c_if(ep_c, 1)
+qc.z(bob).c_if(alice_c, 1)
 
 # verify
 qc.h(bob)
