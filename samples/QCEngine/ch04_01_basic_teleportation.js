@@ -66,8 +66,8 @@ function bob_receive()
     // Option 1: Bob is asleep (can't respond to Alice's data), so he just does whatever.
     if (bob_is_asleep)
     {
-        bob.phase(180);
         bob.not();
+        bob.phase(180);
     }
     // Option 2: Bob is responsive, and we use conditional-ops for visual clarity
     else if (use_conditonals)
@@ -81,10 +81,10 @@ function bob_receive()
     // Option 3: Bob is responsive, and we use straightforward "if" in the code.
     else
     {
-        if (a1)
-            bob.phase(180);
         if (a2)
             bob.not();
+        if (a1)
+            bob.phase(180);
     }
     qc.label('');
     qc.nop();
