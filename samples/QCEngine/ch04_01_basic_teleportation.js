@@ -75,8 +75,8 @@ function bob_receive()
         // Here, we use conditional gates, just for visual clarity.
         // The "conditions" are on qubits which have already been read and
         // turned into classical bits.
-        bob.cz(alice);
         bob.cnot(ep);
+        bob.cz(alice);
     }
     // Option 3: Bob is responsive, and we use straightforward "if" in the code.
     else
