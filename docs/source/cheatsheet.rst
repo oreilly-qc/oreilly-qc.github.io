@@ -83,8 +83,8 @@ Multi-qubit operations
 
 Many single-qubit operations can be used as multi-qubit operations simply by passing an additional argument specifying an additional condition qubit, whose value determines whether or not the operation is applied to the previously specified target qubit. In many cases, when called as methods on a :code:`qint` object, single qubit operations can also be conditioned by passing a qubit argument. The :code:`qint` that the operation is called on will then be the target qubit for the operation, whilst the other qubit(s) passed as the argument to this method will be the condition qubit(s). For example, :code:`qc.phase(angle, qubit)` is a single-qubit operation, but :code:`qc.phase(angle, target_qubit, condition_qubit)` and :code:`myqint.phase(angle, condition_qubit)` are both multi-qubit operations performing a conditional phase.
 
-:code:`qc.cnot(condition_qubit, target_qubit)`
-    Applies the :code:`CNOT` operation between two qubits. Takes two arguments :code:`condition_qubit` and :code:`target_qubit`. The first argument (:code:`condition_qubit`) specifies the qubit whose value will determine whether or not a :code:`NOT` operation is applied to the :code:`target_qubit` specified in the second argument. 
+:code:`qc.cnot(target_qubit, condition_qubit)`
+    Applies the :code:`CNOT` operation between two qubits. Takes two arguments :code:`target_qubit` and :code:`condition_qubit`. The second argument (:code:`condition_qubit`) specifies the qubit whose value will determine whether or not a :code:`NOT` operation is applied to the :code:`target_qubit` specified in the first argument. 
     **Example:** :code:`qc.cnot(0x4, 0x2)`
 
 :code:`qc.exchange(qubits)`
