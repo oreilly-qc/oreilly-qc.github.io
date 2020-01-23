@@ -56,21 +56,21 @@ function cont_u(qcontrol, qtarget, control_count) {
     var q2 = qtarget;
     if (single_op)
     {
-        qc.phase(-theta / 2 * control_count, q2);
+        qc.phase(-theta / 2 * control_count, q2, q1);
         qc.cnot(q2,q1);
-        qc.phase(theta * control_count, q2);
+        qc.phase(-theta * control_count, q2, q1);
         qc.cnot(q2,q1);
-        qc.phase(-theta / 2 * control_count, q2);
+        qc.phase(-theta / 2 * control_count, q2, q1);
     }
     else
     {
         for (var i = 0; i < control_count; ++i)
         {
-            qc.phase(-theta / 2, q2);
+            qc.phase(-theta / 2, q2, q1);
             qc.cnot(q2,q1);
-            qc.phase(theta, q2);
+            qc.phase(-theta, q2, q1);
             qc.cnot(q2,q1);
-            qc.phase(-theta / 2, q2);
+            qc.phase(-theta / 2, q2, q1);
         }
     }
 }
