@@ -19,6 +19,18 @@ This document contains information about errors we've identified in the book's f
 > **Corrected**:
 <img src="Figure3-16-corrected.png">
 
+### Figure 7-6
+*Thanks to Cláudio Gomes for pointing out this one in Github issue [#15](https://github.com/oreilly-qc/oreilly-qc.github.io/issues/15)*!
+
+In Figure 7-6, the final column was accidentally cropped out, so there were only 15 columns instead of 16.
+
+> **Incorrect**:
+<img src="Figure7-6-incorrect.png">
+
+> **Corrected**:
+<img src="Figure7-6-corrected.png">
+
+
 <hr/>
 **(Unconfirmed error reports are below)**
 <hr/>
