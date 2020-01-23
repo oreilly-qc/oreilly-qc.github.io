@@ -46,13 +46,35 @@ qin.roty(-135);
 function cont_u(qcontrol, qtarget, control_count) {
     // In this example, the unitary chosen is a simple one which
     // should have an eigenphase of 150 degrees for all inputs.
-    // For this unitary, we can perform multiple applications simply
+    // By enabling single_op, we can perform multiple applications simply
     // by rotating the phase farther.
-    qc.phase(-150 * control_count, qtarget, qcontrol.bits(control_count));
-    qc.cnot(qtarget, qcontrol.bits(control_count));
-    qc.phase(-150 * control_count, qtarget, qcontrol.bits(control_count));
-    qc.cnot(qtarget, qcontrol.bits(control_count));
+
+    // Perform the controlled unitary between q1 and q2 iter times
+    var theta = 150;
+    var single_op = true;
+    var q1 = qcontrol.bits(control_count);
+    var q2 = qtarget;
+    if (single_op)
+    {
+        qc.phase(-theta / 2 * control_count, q2);
+        qc.cnot(q2,q1);
+        qc.phase(theta * control_count, q2);
+        qc.cnot(q2,q1);
+        qc.phase(-theta / 2 * control_count, q2);
+    }
+    else
+    {
+        for (var i = 0; i < control_count; ++i)
+        {
+            qc.phase(-theta / 2, q2);
+            qc.cnot(q2,q1);
+            qc.phase(theta, q2);
+            qc.cnot(q2,q1);
+            qc.phase(-theta / 2, q2);
+        }
+    }
 }
+
 // Operate phase estimation primitive on registers
 qc.label('phase estimation');
 phase_est(qin, qout, cont_u);
