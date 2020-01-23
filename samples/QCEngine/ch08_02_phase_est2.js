@@ -6,6 +6,7 @@
 // Note: This sample may vary slightly from the text in the book,
 // due to revisions or aesthetic tweaks.
 
+// The fine print: Phasae estimation with only 3 output qubits
 
 function phase_est(q_in, q_out, cont_u)
 {
@@ -24,7 +25,7 @@ function phase_est(q_in, q_out, cont_u)
 
 //Specify the size of output register - determines precision
 // of our answer
-var m = 4;
+var m = 3;
 // Specify the size of input register that will specify
 // our eigenstate
 var n = 1;
@@ -38,16 +39,19 @@ qout.write(0);
 qc.label('init');
 qin.write(0);
 qin.roty(-135);
-// This state will have an eigenphase of 180.
-// For eigenphase 0, we would instead use qin.roty(45);
+// In this example, the starting state is not important because
+// out U has been chosen to have an eigenphase of 150 for all inputs.
 
 // Define our conditional unitary
 function cont_u(qcontrol, qtarget, control_count) {
-    // For Hadamard, we only need to know if control_count
-    // is even or odd, as applying HAD an even number of
-    // times does nothing.
-    if (control_count & 1)
-        qtarget.chadamard(null, ~0, qcontrol.bits(control_count));
+    // In this example, the unitary chosen is a simple one which
+    // should have an eigenphase of 150 degrees for all inputs.
+    // For this unitary, we can perform multiple applications simply
+    // by rotating the phase farther.
+    qc.phase(-150 * control_count, qtarget, qcontrol.bits(control_count));
+    qc.cnot(qtarget, qcontrol.bits(control_count));
+    qc.phase(-150 * control_count, qtarget, qcontrol.bits(control_count));
+    qc.cnot(qtarget, qcontrol.bits(control_count));
 }
 // Operate phase estimation primitive on registers
 qc.label('phase estimation');
