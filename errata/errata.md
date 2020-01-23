@@ -10,6 +10,14 @@ This document contains information about errors we've identified in the book's f
 
 > **Corrected**: "Any spy who tries to read one of these qubits has a <mark>12.5%</mark> chance of getting caught. So even if Alice and Bob only use 100 of them in the whole transfer, the spy’s chances of getting away are close to one in a million."
 
+### Page 157: Eigenphases Teach Us Something Useful
+
+> **Incorrect**:
+Take careful of note how HAD acts on these states.
+
+> **Corrected**:
+Take careful note of how HAD acts on these states.
+
 ### Figure 3-16
 *Thanks to [Nomad on Amazon](https://www.amazon.com/gp/customer-reviews/RH7J6KC7VZHGS/ref=cm_cr_dp_d_rvw_ttl?ie=UTF8&ASIN=1492039683) for pointing out this one*.
 
