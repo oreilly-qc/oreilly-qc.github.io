@@ -20,24 +20,25 @@ operation QPE (powerUnitary : ((Int, Qubit[]) => Unit is Adj+Ctl),
     QFTLE(LittleEndian(phaseRegister));
 }
 
-// Helper operation to define powers of H gate
-operation HPower (power : Int, register : Qubit[]) : Unit is Adj + Ctl {
-    // We know that H² = I, so we just need to apply H if power is odd
-    if (power % 2 == 1) {
-        H(register[0]);
-    }
+// Helper operation to define powers of the rotation gate
+operation RotatePower (power : Int, register : Qubit[]) : Unit is Adj + Ctl {
+    // To apply higher powers of the rotation gate, we can rotate by multiples of the angle
+    R1(-PI() * 5.0/6.0 * IntAsDouble(power), register[0]);
 }
 
 operation ImplementingQPE () : Unit {
-    let precision = 4;
+    let precision = 3;
     // Allocate qubits to hold the eigenstate of H and the phase (in a big endian register)
     using ((eigenstate, phaseRegister) = (Qubit[1], Qubit[precision])) {
-        // Prepare the eigenstate of H gate corresponding to eigenphase of 180°
-        // (for 0° we'd use 0.25 * PI() as rotation angle)
-        Ry(-0.75 * PI(), eigenstate[0]);
+        // Prepare the eigenstate of the rotation gate corresponding to eigenphase of 150°;
+        // for R1 gate, that is simply a |1⟩
+        X(eigenstate[0]);
         
         // Call our implementation of quantum phase estimation
-        QPE(HPower, eigenstate, phaseRegister);
+        QPE(RotatePower, eigenstate, phaseRegister);
+        
+        // Inspect the state we obtain after applying QPE
+        DumpRegister((), phaseRegister);
         
         // Read out the phase
         let phase = IntAsDouble(MeasureInteger(LittleEndian(phaseRegister))) / IntAsDouble(1 <<< precision);
