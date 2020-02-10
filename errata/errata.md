@@ -38,6 +38,16 @@ In Figure 7-6, the final column was accidentally cropped out, so there were only
 > **Corrected**:
 <img src="Figure7-6-corrected.png">
 
+### Figure 9-2
+*Thanks to Mariia at Microsoft for pointing out this one!*
+
+The address lines in the image are drawn MSB-at-top instead of LSB-at-top, which is inconsistent with the data lines, and with Figure 9-4.
+
+> **Incorrect**:
+<img src="Figure9-2-incorrect.png">
+
+> **Corrected**:
+<img src="Figure9-2-corrected.png">
 
 <hr/>
 **(Unconfirmed error reports are below)**
