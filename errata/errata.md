@@ -4,7 +4,7 @@ This document contains information about errors we've identified in the book's f
 
 
 ### Page 32: Spy Hunter
-*Thanks to Mariia at Microsoft for pointing out this one, and to Cláudio Gomes for additional correction!*
+*Thanks to Mariia at Microsoft for pointing out this one, and to Cláudio Gomes at Universidade de Coimbra for additional correction!*
 
 > **Incorrect**: "Any spy who tries to read one of these qubits has a <mark>25%</mark> chance of getting caught. So even if Alice and Bob only use 50 of them in the whole transfer, the spy’s chances of getting away are far less than one in a million."
 
@@ -28,7 +28,7 @@ Take careful note of how HAD acts on these states.
 <img src="Figure3-16-corrected.png">
 
 ### Figure 7-6
-*Thanks to Cláudio Gomes for pointing out this one in Github issue [#15](https://github.com/oreilly-qc/oreilly-qc.github.io/issues/15)*!
+*Thanks to Cláudio Gomes at Universidade de Coimbra for pointing out this one in Github issue [#15](https://github.com/oreilly-qc/oreilly-qc.github.io/issues/15)*!
 
 In Figure 7-6, the final column was accidentally cropped out, so there were only 15 columns instead of 16.
 
