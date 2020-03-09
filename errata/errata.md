@@ -10,6 +10,36 @@ This document contains information about errors we've identified in the book's f
 
 > **Corrected**: "Any spy who tries to read one of these qubits has a <mark>12.5%</mark> chance of getting caught. So even if Alice and Bob only use 100 of them in the whole transfer, the spy’s chances of getting away are close to one in a million."
 
+### Page 28: QPU Instruction: PHASE(θ)
+*Thanks to Dr. Moez AbdelGawad at Rice University for spotting this!*
+
+> **Incorrect**: "These four states will be used in Example 2-4"
+
+> **Corrected**: "Some of these states will be used in Example 2-4"
+
+### Page 35: Spy Hunter
+*Thanks to Dr. Moez AbdelGawad at Rice University for spotting this!*
+
+> **Incorrect**: "She sets it to `value`, ..."
+
+> **Corrected**: "She sets it to `send_val`, ..."
+
+### Page 40: Drawing a Multi-Qubit Register
+*Thanks to Dr. Moez AbdelGawad at Rice University for spotting this!*
+
+> **Incorrect**: "... the random eight-qubyte circuit ..."
+
+> **Corrected**: "... the random eight-qubit circuit ..."
+
+### Text for Example 3-6: Hands-on: Remote-Controlled Randomness
+*Thanks to Dr. Moez AbdelGawad at Rice University for spotting this!*
+
+Text discussing Example 3-6 first, correctly, mentions the probabilities are 85%/15%, but then later, incorrectly, mentions the probabilities are 70%/30% and sticks to these figures.  Luckily, the *code* in the book and online sticks to the correct 85%/15% probabilities.
+
+> **Incorrect**: "70%/30%"
+
+> **Corrected**: "85%/15%"
+
 ### Page 157: Eigenphases Teach Us Something Useful
 
 > **Incorrect**:
@@ -26,6 +56,20 @@ Take careful note of how HAD acts on these states.
 
 > **Corrected**:
 <img src="Figure3-16-corrected.png">
+
+### Figure 3-28 Caption:
+*Thanks to Dr. Moez AbdelGawad at Rice University for spotting this!*
+
+> **Incorrect**: "Walthrough of the constructed CPHASE operation"
+
+> **Corrected**: "Walkthrough of the constructed CPHASE operation"
+
+### Page 87: Arithmetic on a QPU
+*Thanks to Dr. Moez AbdelGawad at Rice University for spotting this!*
+
+> **Incorrect**: "(a single gate which performs NOT(b AND b))"
+
+> **Corrected**: "(a single gate which performs NOT(a AND b))"
 
 ### Figure 7-6
 *Thanks to Cláudio Gomes at Universidade de Coimbra for pointing out this one in Github issue [#15](https://github.com/oreilly-qc/oreilly-qc.github.io/issues/15)*!
