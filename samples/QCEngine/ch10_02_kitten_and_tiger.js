@@ -31,7 +31,7 @@ qc.nop();
 qc.label('');
 qc.nop();
 
-// Put the phase-logic ancolla qubit into the |+> state
+// Put the phase-logic ancilla qubit into the |-> state
 anc.not();
 anc.hadamard();
 
