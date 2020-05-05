@@ -3,7 +3,7 @@
 This document contains information about errors we've identified in the book's first edition. If you have more, please feel free to contact us [via email](octopus@machinelevel.com) or by logging a [Github issue](https://github.com/oreilly-qc/oreilly-qc.github.io/issues)! Many thanks from EJ, Nic and Mercedes.
 
 ### Table 2-2
-*Thanks to 이해일 for pointing this out!* The value 0.35 in the fourth row of the table should be 0.31
+*Thanks to Haeil Yi for pointing this out!* The value 0.35 in the fourth row of the table should be 0.31
 
 ### Page 32: Spy Hunter
 *Thanks to Mariia at Microsoft for pointing out this one, and to Cláudio Gomes at Universidade de Coimbra for additional correction!*
