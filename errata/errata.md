@@ -5,6 +5,9 @@ This document contains information about errors we've identified in the book's f
 ### Table 2-2
 *Thanks to Haeil Yi for pointing this out!* The value 0.35 in the fourth row of the table should be 0.31
 
+### Example 2-3
+*Thanks to checky2010 (Jonas) for pointing this out!* The sign of the `phase(90)` operation doesn't match the sign of the online example `phase -90`. This is also an issue in Figure 2-16 and Figure 2-18. Might be good to add a note that the operation works eiother way, so long as you're consistent.
+
 ### Page 32: Spy Hunter
 *Thanks to Mariia at Microsoft for pointing out this one, and to Cláudio Gomes at Universidade de Coimbra for additional correction!*
 
