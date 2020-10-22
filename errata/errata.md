@@ -37,7 +37,7 @@ This document contains information about errors we've identified in the book's f
 > **Corrected**: "... the random eight-qubit circuit ..."
 
 ### Text for Example 3-6: Hands-on: Remote-Controlled Randomness
-*Thanks to Dr. Moez AbdelGawad at Rice University for spotting this!*
+*Thanks to Dr. Moez AbdelGawad at Rice University and Angelica Semenec for spotting this!*
 
 Text discussing Example 3-6 first, correctly, mentions the probabilities are 85%/15%, but then later, incorrectly, mentions the probabilities are 70%/30% and sticks to these figures.  Luckily, the *code* in the book and online sticks to the correct 85%/15% probabilities.
 
