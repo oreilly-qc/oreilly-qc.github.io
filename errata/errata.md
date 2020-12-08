@@ -36,6 +36,13 @@ This document contains information about errors we've identified in the book's f
 
 > **Corrected**: "... the random eight-qubit circuit ..."
 
+### Comment in Example 3-4: The Swap Test
+*Thanks to Ilya Krepky for spotting this*
+
+> **Unclear**: `The output register is 1 only if inputs are equal`
+
+> **Better**: `The output register has probability 1 only if inputs are equal`
+
 ### Text for Example 3-6: Hands-on: Remote-Controlled Randomness
 *Thanks to Dr. Moez AbdelGawad at Rice University and Angelica Semenec for spotting this!*
 
