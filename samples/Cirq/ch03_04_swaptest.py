@@ -25,7 +25,7 @@ def main():
     qc.exchange(input1, input2, output)
     qc.had(output)
     qc.x(output)
-    # The output register is 1 only if inputs are equal
+    # The output register has probability 1 only if inputs are equal
     qc.read(output)
 
     qc.draw() # draw the circuit

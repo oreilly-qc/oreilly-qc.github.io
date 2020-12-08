@@ -25,7 +25,7 @@ output.had();
 input1.exchange(input2, 0x1, output.bits());
 output.had();
 output.not();
-// The output register is 1 only if inputs are equal
+// The output register has probability 1 only if inputs are equal
 output.read();
 qc.label('');
 qc.nop();
