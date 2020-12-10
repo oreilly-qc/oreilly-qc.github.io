@@ -33,7 +33,7 @@ function amplitude_encode(vec, qreg)
     var remaining_power = vec_mag_sqr;
     var first_phase = (vec[0] >= 0) ? 0 : 180;
 
-    if (first_phase != 0)
+    if (first_phase !== 0)
     {
         qreg.not(1);
         qreg.phase(first_phase, 1);
@@ -63,14 +63,14 @@ function amplitude_encode(vec, qreg)
             var not_mask = reg_mask ^ top_bit;
             var cnot_mask = i ^ top_bit;
 
-            if (phase == 180)
+            if (phase === 180)
                 theta = -theta;
             if (cnot_mask)
                 qc.cnot(cnot_mask, top_bit);
             if (not_mask)
                 qc.not(not_mask);
             qc.roty(theta, top_bit, cond_bits);
-            if (phase != 0 && phase != 180)
+            if (phase !== 0 && phase !== 180)
                 qreg.cphase(phase);
             if (not_mask)
                 qc.not(not_mask);
