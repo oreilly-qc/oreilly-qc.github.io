@@ -83,6 +83,11 @@ Take careful note of how HAD acts on these states.
 
 > **Corrected**: "(a single gate which performs NOT(a AND b))"
 
+### Teleportation Example 4-1 and Figure 4-4
+*Thanks to Fabio Salvi for spotting this!*
+
+> **Issue**: It looks like the IBM QX system has changed since the book's publication, and the example may no longer run as written. Changing the OpenQASM sample to match the QCEngine sample, or alternatively using the Qiskit version solves the problem, but the OpenQASM version should be revisited and updated.
+
 ### Figure 7-6
 *Thanks to Cláudio Gomes at Universidade de Coimbra for pointing out this one in Github issue [#15](https://github.com/oreilly-qc/oreilly-qc.github.io/issues/15)*!
 
