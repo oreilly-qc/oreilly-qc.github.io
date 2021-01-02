@@ -52,6 +52,15 @@ Text discussing Example 3-6 first, correctly, mentions the probabilities are 85%
 
 > **Corrected**: "85%/15%"
 
+### Page 79: Teleportation
+*Thanks to Shawn Bayern at Florida State University College of Law for spotting this one!*
+
+> **Incorrect**:
+Bob always performs both a `HAD` and a `PHASE(180)` on his qubit
+
+> **Corrected**:
+Bob always performs both a `NOT` and a `PHASE(180)` on his qubit
+
 ### Page 157: Eigenphases Teach Us Something Useful
 
 > **Incorrect**:
