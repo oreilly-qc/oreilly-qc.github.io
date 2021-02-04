@@ -17,18 +17,17 @@ a.write(1);
 a.hadamard(0x4);
 a.phase(45, 0x4);
 qc.nop();
-
 qc.label('');
 qc.nop();
+
 qc.label('increment');
 // increment
 a.add(1);
-
 qc.label('');
 qc.nop();
+
 qc.label('decrement');
 // decrement
 a.subtract(1);
-
 qc.label('');
 qc.nop();
