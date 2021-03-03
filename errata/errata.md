@@ -108,6 +108,10 @@ In Figure 7-6, the final column was accidentally cropped out, so there were only
 > **Corrected**:
 <img src="Figure7-6-corrected.png">
 
+### Figure 8-8
+*Thanks to Greg Byrd from NC State University for pointing out this one in Github issue [#32](https://github.com/oreilly-qc/oreilly-qc.github.io/issues/32)*!
+> **Issue**: In Figure 8-8 and the relating text, "invQFT" should be "QFT".
+
 ### Figure 9-2
 *Thanks to Mariia at Microsoft for pointing out this one!*
 
