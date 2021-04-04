@@ -1,10 +1,15 @@
-// Example 7-5: Converting frequency into state
+namespace QSharp.Chapter7
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Arithmetic;
-open Microsoft.Quantum.Diagnostics;
+    // Example 7-5: Converting frequency into state
 
-operation FrequencyToState () : Unit {
-    using (register = Qubit[4]) {
+    open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Diagnostics;
+
+    operation FrequencyToState () : Unit {
+        use register = Qubit[4];
         // Write frequency to register
         X(register[0]);
         X(register[1]);

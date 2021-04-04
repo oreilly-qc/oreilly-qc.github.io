@@ -1,10 +1,15 @@
-// Example 7-7: QFT frequency manipulation
+namespace QSharp.Chapter7
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Arithmetic;
-open Microsoft.Quantum.Diagnostics;
+    // Example 7-7: QFT frequency manipulation
 
-operation QFTFrequencyManipulation () : Unit {
-    using (register = Qubit[4]) {
+    open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Diagnostics;
+
+    operation QFTFrequencyManipulation () : Unit {
+        use register = Qubit[4];
         // Write frequency to register
         X(register[1]);
         // Uncomment the line below to observe the amplitudes of the prepared state

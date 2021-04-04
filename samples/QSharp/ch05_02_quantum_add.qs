@@ -1,12 +1,17 @@
-// Example 5-2: Adding two quantum integers
+namespace QSharp.Chapter5
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Diagnostics;
+    // Example 5-2: Adding two quantum integers
 
-// Open namespace which defines arithmetic operations
-open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Diagnostics;
 
-operation QuantumAddition () : Unit {
-    using ((a, b) = (Qubit[4], Qubit[2])) {
+    // Open namespace which defines arithmetic operations
+    open Microsoft.Quantum.Arithmetic;
+
+    operation QuantumAddition () : Unit {
+        use (a, b) = (Qubit[4], Qubit[2]);
         // Initialize the inputs
         X(a[0]);
         H(a[2]);
@@ -26,8 +31,8 @@ operation QuantumAddition () : Unit {
         AddI(LittleEndian(b), LittleEndian(a));
         
         // Note that now the registers a and b are entangled, so you can not look at just the state of the register b.
-        Message("Stage of the system after computing a += b");
-        DumpMachine(());
+        Message("State of the system after computing a += b");
+        DumpMachine();
         // The output of this operation is a bit tricky to decipher, since it represents both registers a and b.
         // Register a is the lowest 4 bits of the overall state, and register b is the highest 2 bits.
         // Thus, the non-zero amplitude 0.5 of the basis state |18❭ corresponds to the little-endian bit mask 010010,

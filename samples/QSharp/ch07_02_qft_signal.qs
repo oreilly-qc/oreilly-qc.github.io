@@ -1,24 +1,29 @@
-// Example 7-2: QFT of simple QPU register signal
+namespace QSharp.Chapter7
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Arithmetic;
-open Microsoft.Quantum.Diagnostics;
+    // Example 7-2: QFT of simple QPU register signal
 
-operation PrepareState (register : Qubit[], state : String) : Unit {
-    ApplyToEach(H, register);
-    if (state == "A") {
-        Z(register[0]);
-    } elif (state == "B") {
-        S(register[0]);
-        Z(register[1]);
-    } else {
-        T(register[0]);
-        S(register[1]);
-        Z(register[2]);
+    open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Diagnostics;
+
+    operation PrepareState (register : Qubit[], state : String) : Unit {
+        ApplyToEach(H, register);
+        if (state == "A") {
+            Z(register[0]);
+        } elif (state == "B") {
+            S(register[0]);
+            Z(register[1]);
+        } else {
+            T(register[0]);
+            S(register[1]);
+            Z(register[2]);
+        }
     }
-}
 
-operation SimpleStateQFT () : Unit {
-    using (register = Qubit[4]) {
+    operation SimpleStateQFT () : Unit {
+        use register = Qubit[4];
         // use PrepareState operation from the previous sample to prepare the state
         PrepareState(register, "C");
         

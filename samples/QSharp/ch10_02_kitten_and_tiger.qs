@@ -1,21 +1,26 @@
-// Example 10-2: Kittens and tigers
+namespace QSharp.Chapter10
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Arrays;
-open Microsoft.Quantum.Diagnostics;
-open Microsoft.Quantum.Measurement;
+    // Example 10-2: Kittens and tigers
 
-operation MirrorRegister (register : Qubit[]) : Unit {
-    within {
-        ApplyToEachA(H, register);
-        ApplyToEachA(X, register);
-    } apply {
-        Controlled Z(Most(register), Tail(register));
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Measurement;
+
+    operation MirrorRegister (register : Qubit[]) : Unit {
+        within {
+            ApplyToEachA(H, register);
+            ApplyToEachA(X, register);
+        } apply {
+            Controlled Z(Most(register), Tail(register));
+        }
     }
-}
 
-operation KittensAndTigers () : Unit {
-    // Allocate the qubits
-    using ((boxes, noteA, scratch) = (Qubit[2], Qubit(), Qubit())) {
+    operation KittensAndTigers () : Unit {
+        // Allocate the qubits
+        use (boxes, noteA, scratch) = (Qubit[2], Qubit(), Qubit());
         // Prepare the boxes in a superposition of all states
         ApplyToEach(H, boxes);
         

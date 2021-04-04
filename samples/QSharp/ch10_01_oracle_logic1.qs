@@ -1,10 +1,15 @@
-// Example 10-1: Encoding "(a OR NOT b) AND c" example in phase logic
+namespace QSharp.Chapter10
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Diagnostics;
+    // Example 10-1: Encoding "(a OR NOT b) AND c" example in phase logic
 
-operation RunExample101 () : Unit {
-    // Allocate the qubits a, b and c and a qubit for storing the result
-    using ((a, b, c, scratch) = (Qubit(), Qubit(), Qubit(), Qubit())) {
+    open Microsoft.Quantum.Diagnostics;
+
+    operation RunExample101 () : Unit {
+        // Allocate the qubits a, b and c and a qubit for storing the result
+        use (a, b, c, scratch) = (Qubit(), Qubit(), Qubit(), Qubit());
         // Prepare the "input" - a superposition of all states
         ApplyToEach(H, [a, b, c]);
         

@@ -1,11 +1,16 @@
-// Example 3-5: Custom conditional phase
+namespace QSharp.Chapter3
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-// open namespace which defines diagnostic routines
-open Microsoft.Quantum.Diagnostics;
+    // Example 3-5: Custom conditional phase
 
-operation CustomConditionalPhase () : Unit {
-    // allocate two qubits
-    using ((q1, q2) = (Qubit(), Qubit())) {
+    // open namespace which defines diagnostic routines
+    open Microsoft.Quantum.Diagnostics;
+
+    operation CustomConditionalPhase () : Unit {
+        // allocate two qubits
+        use (q1, q2) = (Qubit(), Qubit());
         // put each of the qubits into superposition of 0 and 1
         H(q1);
         H(q2);

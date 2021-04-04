@@ -1,25 +1,30 @@
-// Example 4-1: Teleport and verify
+namespace QSharp.Chapter4
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Diagnostics;
-open Microsoft.Quantum.Measurement;
+    // Example 4-1: Teleport and verify
 
-// Helper operation to prepare Bell state on two qubits
-operation PrepareBellState (q1 : Qubit, q2 : Qubit) : Unit is Adj {
-    H(q1);
-    CNOT(q1, q2);
-}
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Measurement;
 
-// Helper operation to perform measurement in Bell basis
-operation MeasureBellBasis (q1 : Qubit, q2 : Qubit) : (Result, Result) {
-    // convert the qubits from Bell basis to computational basis
-    Adjoint PrepareBellState(q1, q2);
-    // measure both qubits and return results
-    return (MResetZ(q1), MResetZ(q2));
-}
+    // Helper operation to prepare Bell state on two qubits
+    operation PrepareBellState (q1 : Qubit, q2 : Qubit) : Unit is Adj {
+        H(q1);
+        CNOT(q1, q2);
+    }
 
-operation TeleportAndVerify () : Unit {
-    // allocate the qubits: the pair that will be entangled and shared between Alice and Bob and Alice's data qubit
-    using ((aliceEPR, bobEPR, data) = (Qubit(), Qubit(), Qubit())) {
+    // Helper operation to perform measurement in Bell basis
+    operation MeasureBellBasis (q1 : Qubit, q2 : Qubit) : (Result, Result) {
+        // convert the qubits from Bell basis to computational basis
+        Adjoint PrepareBellState(q1, q2);
+        // measure both qubits and return results
+        return (MResetZ(q1), MResetZ(q2));
+    }
+
+    operation TeleportAndVerify () : Unit {
+        // allocate the qubits: the pair that will be entangled and shared between Alice and Bob and Alice's data qubit
+        use (aliceEPR, bobEPR, data) = (Qubit(), Qubit(), Qubit());
         // prepare the data qubit in some superposition state
         Ry(1.0, data);
         Message("The state to be teleported:");

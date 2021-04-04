@@ -1,10 +1,15 @@
-// Example 5-3: Some interesting arithmetic
+namespace QSharp.Chapter5
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Diagnostics;
-open Microsoft.Quantum.Arithmetic;
+    // Example 5-3: Some interesting arithmetic
 
-operation AddBSquared () : Unit {
-    using ((a, b) = (Qubit[4], Qubit[2])) {
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arithmetic;
+
+    operation AddBSquared () : Unit {
+        use (a, b) = (Qubit[4], Qubit[2]);
         // Initialize the inputs
         X(a[0]);
         H(a[2]);
@@ -22,20 +27,18 @@ operation AddBSquared () : Unit {
 
         // Allocate extra qubits to hold the value of b² temporarily;
         // note that the register has to have twice the number of qubits in register b.
-        using (anc = Qubit[4]) {
+        use anc = Qubit[4];
+        within {
             // Compute anc = b * b
             SquareI(LittleEndian(b), LittleEndian(anc));
-            
+        } apply {
             // Compute a += anc
             AddI(LittleEndian(anc), LittleEndian(a));
-            
-            // Uncompute the extra qubits, so that they can be released
-            Adjoint SquareI(LittleEndian(b), LittleEndian(anc));
         }
 
         // Note that now the registers a and b are entangled, so you can not look at just the state of the register b.
-        Message("Stage of the system after computing a += b * b");
-        DumpMachine(());
+        Message("State of the system after computing a += b * b");
+        DumpMachine();
         // The output of this operation can be deciphered in a same way as the previous one:
         // basis states |18❭ and |22❭ remain unchanged, since they correspond to the number 1 written in register b;
         // basis state |58❭ corresponds to little-endian binary 010111, which represents b = 3 and a + b * b = 1 + 3² = 10,

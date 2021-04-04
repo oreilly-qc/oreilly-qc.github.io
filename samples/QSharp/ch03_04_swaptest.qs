@@ -1,14 +1,19 @@
-// Example 3-4: The swap test
+namespace QSharp.Chapter3
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-// open namespace which defines type conversion functions
-open Microsoft.Quantum.Convert;
-// open namespace which defines MResetZ
-open Microsoft.Quantum.Measurement;
+    // Example 3-4: The swap test
 
-// Returns True if the states of the input qubits are equal
-operation SwapTest (input1 : Qubit, input2 : Qubit) : Bool {
-    // allocate the output qubit
-    using (output = Qubit()) {
+    // open namespace which defines type conversion functions
+    open Microsoft.Quantum.Convert;
+    // open namespace which defines MResetZ
+    open Microsoft.Quantum.Measurement;
+
+    // Returns True if the states of the input qubits are equal
+    operation SwapTest (input1 : Qubit, input2 : Qubit) : Bool {
+        // allocate the output qubit
+        use output = Qubit();
         // initialize the output qubit
         H(output);
         
@@ -19,17 +24,16 @@ operation SwapTest (input1 : Qubit, input2 : Qubit) : Bool {
         H(output);
         X(output);
         
-        return MResetZ(output) == One;
+        return M(output) == One;
     }
-}
 
-operation RunSwapTest () : Unit {
-    let attempts = 100;
-    mutable reportedEqual = 0;
-    // repeat the test multiple times to observe the probability of the states being reported equal
-    for (i in 1..attempts) {
-        // allocate qubits to be tested
-        using ((input1, input2) = (Qubit(), Qubit())) {
+    operation RunSwapTest () : Unit {
+        let attempts = 100;
+        mutable reportedEqual = 0;
+        // repeat the test multiple times to observe the probability of the states being reported equal
+        for i in 1..attempts {
+            // allocate qubits to be tested
+            use (input1, input2) = (Qubit(), Qubit());
             // initialize the qubits in the states we want to compare
             // leave input1 in the |0⟩ state and rotate input2 - the larger the angle, the further away are the states
             // try replacing 0.1 with 0.0 (when the states will be equal) 
@@ -46,6 +50,6 @@ operation RunSwapTest () : Unit {
 
             ResetAll([input1, input2]);
         }
+        Message($"The states were reported equal {IntAsDouble(reportedEqual) / IntAsDouble(attempts) * 100.0 }% of the time");
     }
-    Message($"The states were reported equal {IntAsDouble(reportedEqual) / IntAsDouble(attempts) * 100.0 }% of the time");
 }
