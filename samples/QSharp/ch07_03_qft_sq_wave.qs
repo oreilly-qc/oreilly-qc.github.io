@@ -1,10 +1,15 @@
-// Example 7-3: Square-wave QFT
+namespace QSharp.Chapter7
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Arithmetic;
-open Microsoft.Quantum.Diagnostics;
+    // Example 7-3: Square-wave QFT
 
-operation SquareWaveQFT () : Unit {
-    using (register = Qubit[4]) {
+    open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Diagnostics;
+
+    operation SquareWaveQFT () : Unit {
+        use register = Qubit[4];
         let wavePeriod = 2;   // can range from 1 to 4
         // Prepare the state
         ApplyToEach(H, register);

@@ -1,11 +1,16 @@
-// Example 3-1: Creating a multi-qubit state that can be expressed in terms of its qubits
+namespace QSharp.Chapter3
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-// open namespace which defines diagnostic routines
-open Microsoft.Quantum.Diagnostics;
+    // Example 3-1: Creating a multi-qubit state that can be expressed in terms of its qubits
 
-operation SeparableState () : Unit {
-    // allocate the qubits
-    using ((q1, q2, q3) = (Qubit(), Qubit(), Qubit())) {
+    // open namespace which defines diagnostic routines
+    open Microsoft.Quantum.Diagnostics;
+
+    operation SeparableState () : Unit {
+        // allocate the qubits
+        use (q1, q2, q3) = (Qubit(), Qubit(), Qubit());
         // put each of the qubits q2 and q3 into superposition of 0 and 1
         H(q2);
         H(q3);

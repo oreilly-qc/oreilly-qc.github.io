@@ -1,11 +1,16 @@
-// Example 3-3: Phase kickback
+namespace QSharp.Chapter3
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-// open namespace which defines diagnostic routines
-open Microsoft.Quantum.Diagnostics;
+    // Example 3-3: Phase kickback
 
-operation PhaseKickback () : Unit {
-    // allocate two registers, control and target
-    using ((reg1, reg2) = (Qubit[2], Qubit())) {
+    // open namespace which defines diagnostic routines
+    open Microsoft.Quantum.Diagnostics;
+
+    operation PhaseKickback () : Unit {
+        // allocate two registers, control and target
+        use (reg1, reg2) = (Qubit[2], Qubit());
         // put each qubit of the control register into superposition of 0 and 1
         ApplyToEach(H, reg1);
         

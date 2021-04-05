@@ -1,10 +1,15 @@
-// Example 5-5: Phase-encoding the result
+namespace QSharp.Chapter5
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Diagnostics;
-open Microsoft.Quantum.Arithmetic;
+    // Example 5-5: Phase-encoding the result
 
-operation PhaseEncoding () : Unit {
-    using ((a, b) = (Qubit[3], Qubit[2])) {
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Arithmetic;
+
+    operation PhaseEncoding () : Unit {
+        use (a, b) = (Qubit[3], Qubit[2]);
         // Initialize the inputs
         H(a[0]);
         H(a[1]);
@@ -31,8 +36,8 @@ operation PhaseEncoding () : Unit {
         IncrementByInteger(3, LittleEndian(a));
         
         // Note that now the registers a and b are entangled, so you can not look at just the state of the register b.
-        Message("Stage of the system after the computation");
-        DumpMachine(());
+        Message("State of the system after the computation");
+        DumpMachine();
         
         // Make sure the qubits are back to the |0❭ state
         ResetAll(a + b);

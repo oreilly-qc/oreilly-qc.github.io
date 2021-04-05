@@ -1,34 +1,30 @@
-// Example 10-3: Satisfiable 3-SAT problem
+namespace QSharp.Chapter10
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Arrays;
-open Microsoft.Quantum.Convert;
-open Microsoft.Quantum.Diagnostics;
-open Microsoft.Quantum.Measurement;
+    // Example 10-3: Satisfiable 3-SAT problem
 
-// Helper operation to compute OR of several inputs and write it to the output
-// negate[i] = true if variable i is included in the clause negated
-operation ComputeOrClause (inputs : Qubit[], negate : Bool[], output : Qubit) : Unit is Adj {
-    within {
-        // Flip the inputs that have to be negated, so as to calculate a normal OR of inputs
-        ApplyPauliFromBitString(PauliX, true, negate, inputs);
-    } apply {
-        (ControlledOnInt(0, X))(inputs, output);
-        X(output);
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Measurement;
+
+    // Helper operation to compute OR of several inputs and write it to the output
+    // negate[i] = true if variable i is included in the clause negated
+    operation ComputeOrClause (inputs : Qubit[], negate : Bool[], output : Qubit) : Unit is Adj {
+        within {
+            // Flip the inputs that have to be negated, so as to calculate a normal OR of inputs
+            ApplyPauliFromBitString(PauliX, true, negate, inputs);
+        } apply {
+            (ControlledOnInt(0, X))(inputs, output);
+            X(output);
+        }
     }
-}
 
-operation MirrorRegister (register : Qubit[]) : Unit {
-    within {
-        ApplyToEachA(H, register);
-        ApplyToEachA(X, register);
-    } apply {
-        Controlled Z(Most(register), Tail(register));
-    }
-}
-
-operation SolveSatisfiableSAT () : Unit {
-    // Allocate the qubits
-    using ((inputs, clauses) = (Qubit[3], Qubit[4])) {
+    operation SolveSatisfiableSAT () : Unit {
+        // Allocate the qubits
+        use (inputs, clauses) = (Qubit[3], Qubit[4]);
         // Prepare the inputs in a superposition of all states
         ApplyToEach(H, inputs);
         

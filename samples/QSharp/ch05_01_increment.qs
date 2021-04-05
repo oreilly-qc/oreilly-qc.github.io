@@ -1,11 +1,16 @@
-// Example 5-1: Integer increment-by-one operation (using library operation)
+namespace QSharp.Chapter5
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Arithmetic;
-open Microsoft.Quantum.Diagnostics;
+    // Example 5-1: Integer increment-by-one operation (using library operation)
 
-operation LibraryIncrementAndDecrement () : Unit {
-    // allocate the qubit register
-    using (register = Qubit[4]) {
+    open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Diagnostics;
+
+    operation LibraryIncrementAndDecrement () : Unit {
+        // allocate the qubit register
+        use register = Qubit[4];
         // initialize the inputs
         X(register[0]);
         H(register[2]);

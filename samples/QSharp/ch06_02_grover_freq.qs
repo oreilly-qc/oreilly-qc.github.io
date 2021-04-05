@@ -1,22 +1,27 @@
-// Example 6-2: Repeated amplitude amplification iterations
+namespace QSharp.Chapter6
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Arrays;
-open Microsoft.Quantum.Convert;
-open Microsoft.Quantum.Diagnostics;
+    // Example 6-2: Repeated amplitude amplification iterations
 
-operation RepeatedIterations () : Unit {
-    let markedState = 3;
-    let numberOfIterations = 4;
-    // Allocate the qubit register
-    using (register = Qubit[4]) {
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
+
+    operation RepeatedIterations () : Unit {
+        let markedState = 3;
+        let numberOfIterations = 4;
+        // Allocate the qubit register
+        use register = Qubit[4];
         // Prep
         ApplyToEach(H, register);
-        DumpMachine(());
+        DumpMachine();
         
-        for (i in 1 .. numberOfIterations) {
+        for i in 1 .. numberOfIterations {
             Flip(markedState, register);
             Mirror(register);
-            DumpMachine(());
+            DumpMachine();
             // Observe how the probability of measuring the marked state changes after each iteration
         }
         

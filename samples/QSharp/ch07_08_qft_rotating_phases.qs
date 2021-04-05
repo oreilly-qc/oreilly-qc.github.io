@@ -1,19 +1,24 @@
-// Example 7-8: Rotating phases by different angles
+namespace QSharp.Chapter7
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Convert;
-open Microsoft.Quantum.Diagnostics;
-open Microsoft.Quantum.Math;
+    // Example 7-8: Rotating phases by different angles
 
-operation RotatingPhases () : Unit {
-    // Rotate k-th basis state by k*20 degrees
-    let phi = 20.0 / 180.0 * PI();  // the rotation angle in radians
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Math;
+
+    operation RotatingPhases () : Unit {
+        // Rotate k-th basis state by k*20 degrees
+        let phi = 20.0 / 180.0 * PI();  // the rotation angle in radians
     
-    using (register = Qubit[4]) {
+        use register = Qubit[4];
         // Put the register in superposition of all basis states to see all results at once
         ApplyToEach(H, register);
         // DumpMachine();
         
-        for (i in 0 .. 3) {
+        for i in 0 .. 3 {
             R1(phi * IntAsDouble(1 <<< i), register[i]);
         }
         

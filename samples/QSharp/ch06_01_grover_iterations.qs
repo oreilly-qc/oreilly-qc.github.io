@@ -1,41 +1,47 @@
-// Example 6-1: Applying the mirror subroutine to a flipped phase
+namespace QSharp.Chapter6
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Arrays;
-open Microsoft.Quantum.Convert;
-open Microsoft.Quantum.Diagnostics;
+    // Example 6-1: Applying the mirror subroutine to a flipped phase
 
-// Operation that flips the sign of the marked value in the register
-operation Flip (markedValue : Int, register : Qubit[]) : Unit is Adj {
-    let bits = IntAsBoolArray(markedValue, Length(register));
-    ApplyPauliFromBitString(PauliX, false, bits, register);
-    Controlled Z(Most(register), Tail(register));
-    ApplyPauliFromBitString(PauliX, false, bits, register);    
-}
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Convert;
+    open Microsoft.Quantum.Diagnostics;
 
-// "Mirror" operation
-operation Mirror (register : Qubit[]) : Unit is Adj {
-    ApplyToEachA(H, register);
-    ApplyToEachA(X, register);
-    Controlled Z(Most(register), Tail(register));
-    ApplyToEachA(X, register);
-    ApplyToEachA(H, register);
-}
+    // Operation that flips the sign of the marked value in the register
+    operation Flip (markedValue : Int, register : Qubit[]) : Unit is Adj {
+        let bits = IntAsBoolArray(markedValue, Length(register));
+        ApplyPauliFromBitString(PauliX, false, bits, register);
+        Controlled Z(Most(register), Tail(register));
+        ApplyPauliFromBitString(PauliX, false, bits, register);    
+    }
 
-operation OneIteration () : Unit {
-    let markedState = 3;
-    // Allocate the qubit register
-    using (register = Qubit[4]) {
+    // "Mirror" operation
+    operation Mirror (register : Qubit[]) : Unit is Adj {
+        within {
+            ApplyToEachA(H, register);
+            ApplyToEachA(X, register);
+        } apply {
+            Controlled Z(Most(register), Tail(register));    
+        }
+    }
+
+    operation OneIteration () : Unit {
+        let markedState = 3;
+        // Allocate the qubit register
+        use register = Qubit[4];
         // Prep
         ApplyToEach(H, register);
         
         // Flip
         Flip(markedState, register);
-        DumpMachine(());
+        DumpMachine();
         // Note that at this point the marked state will have negative amplitude
 
         // Mirror
         Mirror(register);
-        DumpMachine(());
+        DumpMachine();
         // Note that after mirroring step the probability of measuring the marked state 
         // (the first column in square brackets, also indicated by a row of asterisks before it)
         // is larger than the others

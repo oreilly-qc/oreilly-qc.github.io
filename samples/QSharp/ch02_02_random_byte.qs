@@ -10,17 +10,14 @@
 
     operation RandomByte () : Unit {
         // allocate 8 qubits
-        using (qs = Qubit[8]) {
-            // put each qubit into superposition of 0 and 1
-            ApplyToEach(H, qs);
+        use qs = Qubit[8];
+        // put each qubit into superposition of 0 and 1
+        ApplyToEach(H, qs);
 
-            // measure the register and store the result
-            let randomByte = MeasureInteger(LittleEndian(qs));
+        // measure the register and store the result
+        // MeasureInteger returns the qubits to the |0⟩ state, so no separate Reset is required
+        let randomByte = MeasureInteger(LittleEndian(qs));
         
-            // make sure the qubits are back to the 0 state
-            ResetAll(qs);
-        
-            Message($"{randomByte}");
-        }
+        Message($"{randomByte}");
     }
 }

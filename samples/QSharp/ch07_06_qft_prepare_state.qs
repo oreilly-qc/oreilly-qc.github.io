@@ -1,11 +1,16 @@
-// Example 7-6: Prepare a state with varying ampitudes using QFT
+namespace QSharp.Chapter7
+{
+    open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Intrinsic;
 
-open Microsoft.Quantum.Arithmetic;
-open Microsoft.Quantum.Arrays;
-open Microsoft.Quantum.Diagnostics;
+    // Example 7-6: Prepare a state with varying amplitudes using QFT
 
-operation PrepareStateWithQFT () : Unit {
-    using (register = Qubit[4]) {
+    open Microsoft.Quantum.Arithmetic;
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Diagnostics;
+
+    operation PrepareStateWithQFT () : Unit {
+        use register = Qubit[4];
         // Write the frequencies we want to register (a superposition of |1❭ and |15❭)
         H(register[0]);
         ApplyToEach(CNOT(Head(register), _), Rest(register));
