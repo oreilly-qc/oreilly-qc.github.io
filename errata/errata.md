@@ -70,7 +70,7 @@ Take careful of note how HAD acts on these states.
 Take careful note of how HAD acts on these states.
 
 ### Figure 3-16
-*Thanks to [Nomad on Amazon](https://www.amazon.com/gp/customer-reviews/RH7J6KC7VZHGS/ref=cm_cr_dp_d_rvw_ttl?ie=UTF8&ASIN=1492039683) for pointing out this one*.
+*Thanks to [Nomad on Amazon](https://www.amazon.com/gp/customer-reviews/RH7J6KC7VZHGS/ref=cm_cr_dp_d_rvw_ttl?ie=UTF8&ASIN=1492039683) and also @toshaf and @dyordan1 for pointing out this one*.
 
 > **Incorrect**:
 <img src="Figure3-16-incorrect.png">
