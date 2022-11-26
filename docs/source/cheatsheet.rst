@@ -16,7 +16,7 @@ This page gives a summary of essential QCEngine commands. For more detail on how
 Working with qubits
 -------------------
 
-A number of methods exist for helping setup and create qubits for use in QCEngine programs. In many commands qubits from either the whole QPU or a QInt object (introduced below) can be specified using either hexadecimal, binary, or decimal notation. For example, :code:`0x4`, :code:`0b001` and :code:`4` would all specify the third of three qubits (having a weight of :math:`2^2=4`). Multiple qubits can be selected using JavaScript's bitwise OR operation between hexadecimal or binary values (for example, :code:`0x2|0x4`, :code:`0b010|0b001` and :code:`3` all specify the second two of three qubits (having weights :math:`2^1=2` and :math:`2^2=4`).
+A number of methods exist for helping setup and create qubits for use in QCEngine programs. In many commands qubits from either the whole QPU or a QInt object (introduced below) can be specified using either hexadecimal, binary, or decimal notation. For example, :code:`0x4`, :code:`0b100` and :code:`4` would all specify the third of three qubits (having a weight of :math:`2^2=4`). Multiple qubits can be selected using JavaScript's bitwise OR operation between hexadecimal or binary values (for example, :code:`0x2|0x4`, :code:`0b010|0b100` and :code:`3` all specify the second two of three qubits (having weights :math:`2^1=2` and :math:`2^2=4`).
 
 :code:`qc.reset(num_qubits)`
     Reset the QPU and initialize it with :code:`num_qubits` qubits. |br|
