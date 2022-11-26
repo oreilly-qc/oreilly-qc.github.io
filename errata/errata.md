@@ -108,6 +108,33 @@ In Figure 7-6, the final column was accidentally cropped out, so there were only
 > **Corrected**:
 <img src="Figure7-6-corrected.png">
 
+### Figure 7-10 and surrounding text
+*Thanks to Dr. Joshua Guerin at The University of Tennessee at Martin for pointing out this one in Github issue [#47](https://github.com/oreilly-qc/oreilly-qc.github.io/issues/47)*!
+
+In Figure 7-10, the 256-sample sine wave shown contains 6 cycles, but the text and labels refer to it as a one-second sample at 8Hz. As Figure 7-11 contains "a few more examples" including one at 8Hz, the best correction here is to adjust the text and labels for Figure 7-10 to 6Hz.
+
+**Incorrect**:
+> <img src="Figure7-10-incorrect.png">
+
+**Corrected**:
+> <img src="Figure7-10-corrected.png">
+
+**Incorrect**:
+> The DFT has transformed the signal into frequency space, where we can see all the frequency components present inside a signal. Since the input signal completes <mark>eight</mark> full oscillations within the sample time (1s), we expect it to have a frequency of <mark>8</mark> Hz, and this is precisely what the DFT returns to us in the output register.
+>
+> **Real and Complex DFT Inputs**
+> Looking at our example DFT output, you may notice the <mark>248</mark> Hz elephant in the room. Alongside the expected <mark>8</mark> Hz frequency, the DFT also produces a conspicuous second mirror-image peak in frequency space.
+>
+> This is a property of the DFT of any real signal (one where the samples are all real numbers, as is the case for most conventional signals). In such cases, only the first half of the DFT result is actually useful. So in our example, we should only take note of the first 256/2 = 128 points that the DFT returns. Everything else in the DFT after that point will be the mirror image of the first half (which is why we see the second peak symmetrically at 256 – <mark>8</mark> = <mark>248</mark> Hz). Figure 7-11 shows a few more examples of the DFTs of real signals, further highlighting this symmetry.
+
+**Corrected**:
+> The DFT has transformed the signal into frequency space, where we can see all the frequency components present inside a signal. Since the input signal completes <mark>six</mark> full oscillations within the sample time (1s), we expect it to have a frequency of <mark>6</mark> Hz, and this is precisely what the DFT returns to us in the output register.
+>
+> **Real and Complex DFT Inputs**
+> Looking at our example DFT output, you may notice the <mark>250</mark> Hz elephant in the room. Alongside the expected <mark>6</mark> Hz frequency, the DFT also produces a conspicuous second mirror-image peak in frequency space.
+>
+> This is a property of the DFT of any real signal (one where the samples are all real numbers, as is the case for most conventional signals). In such cases, only the first half of the DFT result is actually useful. So in our example, we should only take note of the first 256/2 = 128 points that the DFT returns. Everything else in the DFT after that point will be the mirror image of the first half (which is why we see the second peak symmetrically at 256 – <mark>6</mark> = <mark>250</mark> Hz). Figure 7-11 shows a few more examples of the DFTs of real signals, further highlighting this symmetry.
+
 ### Figure 8-8
 *Thanks to Greg Byrd from NC State University for pointing out this one in Github issue [#32](https://github.com/oreilly-qc/oreilly-qc.github.io/issues/32)*!
 > **Issue**: In Figure 8-8 and the relating text, "invQFT" should be "QFT".
