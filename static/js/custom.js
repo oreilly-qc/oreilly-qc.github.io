@@ -27,6 +27,7 @@ var last_editor_div_height = 0;
 var last_circle_div_width = 0;
 var last_circle_div_height = 0;
 var check_serial = 0;
+var vim_mode = false;
 function check_for_editor_resize()
 {
     // Editor
@@ -331,6 +332,20 @@ function make_sample_menu()
     // Note: Using jquery $('#example_choice_dropdown').append(str) to build the menu
     //       breakds the Kindle version
     try_to_get_program_from_passed_in_url();
+}
+
+function set_vim_mode()
+{
+    vim_mode = !vim_mode;
+    if(vim_mode)
+    {
+	editor.setKeyboardHandler('ace/keyboard/vim');
+	document.getElementById('vim_button').classList.add('active');
+    } else
+    {
+	editor.setKeyboardHandler('');
+	document.getElementById('vim_button').classList.remove('active');
+    }
 }
 
 function set_current_engine(engine)
