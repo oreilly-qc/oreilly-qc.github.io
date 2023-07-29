@@ -82,6 +82,6 @@ qc.nop();
 // him her had setting and value.
 // If the had setting matches and the
 // value does not, there's a spy!
-if (send_had == recv_had)
-    if (send_value != recv_val)
+if (send_had === recv_had)
+    if (send_value !== recv_val)
         qc.print('Caught a spy!\n');

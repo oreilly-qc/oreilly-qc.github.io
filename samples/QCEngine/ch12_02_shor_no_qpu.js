@@ -18,7 +18,7 @@ function ShorNoQPU(N, precision_bits, coprime) {
     var max_loops = Math.pow(2, precision_bits);
     for (iter = 0; iter < max_loops; ++iter) {
         work = (work * coprime) % N;
-        if (work == 1) // found the repeat
+        if (work === 1) // found the repeat
             return [iter + 1];
     }
     return 0;
@@ -61,9 +61,9 @@ function check_result(N, factor_candidates)
     for (var i = 0; i < factor_candidates.length; ++i)
     {
         var factors = factor_candidates[i];
-        if (factors[0] * factors[1] == N)
+        if (factors[0] * factors[1] === N)
         {
-            if (factors[0] != 1 && factors[1] != 1)
+            if (factors[0] !== 1 && factors[1] !== 1)
             {
                 // Success!
                 return factors;
