@@ -6,7 +6,6 @@
 
 
 qc.reset(3);
-qc.discard();
 var a = qint.new(1, 'alice');
 var fiber = qint.new(1, 'fiber');
 var b = qint.new(1, 'bob');
