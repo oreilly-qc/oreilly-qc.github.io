@@ -16,12 +16,12 @@ var which_signal = 'A';
 qc.label('prepare');
 signal.write(0);
 signal.hadamard();
-if (which_signal == 'A') {
+if (which_signal === 'A') {
     signal.phase(180, 1);
-} else if (which_signal == 'B') {
+} else if (which_signal === 'B') {
     signal.phase(90, 1);
     signal.phase(180, 2);
-} else if (which_signal == 'C') {
+} else if (which_signal === 'C') {
     signal.phase(45, 1);
     signal.phase(90, 2);
     signal.phase(180, 4);

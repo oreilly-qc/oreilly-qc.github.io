@@ -63,11 +63,11 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
     var is_ball = hbin >= (ball_pos[0] - ball_radius) && hbin < (ball_pos[0] + ball_radius)
                          && vbin >= (ball_pos[1] - ball_radius) && vbin < (ball_pos[1] + ball_radius);
 //    var is_sky = (vbin & 4) == 0;// && !is_ball;
-    var is_sky = vbin == 2 || vbin == 3;
+    var is_sky = vbin === 2 || vbin === 3;
     var is_ground = vbin >= 4 && vbin < 8;
 //    var is_ground = !is_ball && !is_sky;
 
-    if (color_plane == 'blue')
+    if (color_plane === 'blue')
     {
       ball_radius = 9;
       is_ball = vbin < 4;
@@ -102,7 +102,7 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
 //        qacc.add(dx + dy - br);
         var acc_sign_bit = 1 << (accum_bits - 1);
         var mask = qacc.bits(acc_sign_bit);
-        if (color_plane == 'blue')
+        if (color_plane === 'blue')
           mask.orEquals(qy.bits(0x1));
         mask.orEquals(condition);
         xor_color(null, mask, out_color);
@@ -119,7 +119,7 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
         if (ty < by)
             qy.not();
     }
-    if (is_sky && color_plane == 'green')
+    if (is_sky && color_plane === 'green')
     {
         // sky
         if (1) {
@@ -153,7 +153,7 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
     }
     if (1 && is_ground)
     {
-        if (color_plane == 'red')
+        if (color_plane === 'red')
         {
             // 50% gray
             qx.cnot(qy, 0x1);
@@ -162,7 +162,7 @@ function shader_quantum(qx, qy, tx, ty, qacc, condition, out_color)
             xor_color(null, mask, out_color);
             qx.cnot(qy, 0x1);
         }
-        else if (color_plane == 'blue')
+        else if (color_plane === 'blue')
         {
             // 75% gray
             qx.cnot(qy);
@@ -709,17 +709,17 @@ function DisplayBox(canvas_name)
         var h = this.canvas.height / this.resolution_y;
         var x1 = x * w;
         var y1 = y * h;
-        if (color_plane == 'red')
+        if (color_plane === 'red')
         {
             this.ctx.fillStyle = 'rgb('+bright+','+0+','+0+')';
             this.ctx.globalCompositeOperation = 'source-over';
         }
-        else if (color_plane == 'green')
+        else if (color_plane === 'green')
         {
             this.ctx.fillStyle = 'rgb('+0+','+bright+','+0+')';
             this.ctx.globalCompositeOperation = 'lighter';
         }
-        else if (color_plane == 'blue')
+        else if (color_plane === 'blue')
         {
             this.ctx.fillStyle = 'rgb('+0+','+0+','+bright+')';
             this.ctx.globalCompositeOperation = 'lighter';

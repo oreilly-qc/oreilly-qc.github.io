@@ -49,7 +49,7 @@ var image6 = [ '..X.',
                '.XX.',
                'X...'];
 
-var image = (num_fly_qubits == 8) ? image8 : image6;
+var image = (num_fly_qubits === 8) ? image8 : image6;
 
 // This is the classic teleport example, but with an interesting
 // payload, and some controllable error.
@@ -104,7 +104,7 @@ function prepare_fly(fly)
     {
         for (var x = 0; x < image[0].length; ++x)
         {
-            if (image[y][x] == 'X')
+            if (image[y][x] === 'X')
                 pixel(fly, x + 0, y);
         }
     }
