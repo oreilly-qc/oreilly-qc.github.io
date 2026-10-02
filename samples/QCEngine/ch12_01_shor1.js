@@ -227,10 +227,10 @@ function ShorQPU_WithModulo(N, precision_bits, coprime)
 
                 // Here's the modulo code.
                 num.subtract(N, condition); // subtract N, causing this to go negative if we HAVEN'T wrapped.
-                scratch.cnot(N_sign_bit_with_condition); // Skim off the sign bit
+                qc.cnot(scratch.bits(), N_sign_bit_with_condition); // Skim off the sign bit
                 num.add(N, wrap_mask_with_condition); // If we went negative, undo the subtraction.
                 num.not(1);
-                scratch.cnot(num, 1, condition); // If it's odd, then we wrapped, so clear the wrap bit
+                qc.cnot(scratch.bits(), num.bits(1) | condition); // If it's odd, then we wrapped, so clear the wrap bit
                 num.not(1);
             }
         }
